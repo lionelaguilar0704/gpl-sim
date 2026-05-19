@@ -1,4 +1,4 @@
-# Great Pirate Life Sim v4.1 — Polished Risk + BitLife UI Fix
+# Great Pirate Life Sim v4.2 — Battle Engine + Move System
 
 ## Major UI / immersion update
 - Appearance system: face, hair, color, build, outfit, accessory, scars, age stage, power effects.
@@ -24,10 +24,21 @@ Replace:
 - README.md
 
 
-## v4.1 Fixes
+## v4.2 Fixes
 - Fixed Look/Appearance page stability for older saves.
-- Added v4.1 save slot with v4.0 fallback.
+- Added v4.2 save slot with v4.0 fallback.
 - Added fatal risk checks to dangerous actions.
 - Added mobile bottom navigation with large Age button.
 - Added stronger injury/death risk for travel failures, raids, naval battles, smuggling, rival duels, and black market fruit deals.
 - Fixed appearance scar/presence bug.
+
+## v4.2 Battle Engine
+- Added Pokémon-style battle screen.
+- Player/enemy HP, stamina, and Haki bars.
+- Usable moves from stats, weapons, Haki, Devil Fruit skills, and crew.
+- Observation, Armament, and Conqueror Haki now have battle effects.
+- Devil Fruit skills become combat moves.
+- Crew Assist move added.
+- Move mastery tracks repeated use.
+- Battle losses can injure or kill you.
+- Bounty hunts, rival duels, raids, and naval boardings now open battle encounters.

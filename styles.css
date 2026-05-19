@@ -170,3 +170,24 @@ input,select{width:100%;padding:14px;border-radius:14px;background:#0c0f1a;borde
     margin-top:0;
   }
 }
+
+
+/* v4.2 Battle Engine */
+.battleArena{display:grid;gap:14px}
+.battleHeader{text-align:center;letter-spacing:2px;color:var(--gold)}
+.battleStage{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
+.fighterCard{border:1px solid var(--line);border-radius:20px;padding:14px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));position:relative;overflow:hidden}
+.fighterCard.player{border-color:rgba(99,210,151,.65)}
+.fighterCard.enemy{border-color:rgba(239,100,97,.65)}
+.fighterSprite{height:105px;display:grid;place-items:center;font-size:4.2rem;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45));animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.hpBar,.staminaBar,.hakiBar{height:13px;border:1px solid var(--line);border-radius:999px;background:#0b0e18;overflow:hidden;margin:5px 0 8px}
+.hpBar i,.staminaBar i,.hakiBar i{display:block;height:100%;transition:.25s}
+.hpBar i{background:linear-gradient(90deg,#1fcf55,#f0c15b)}
+.staminaBar i{background:linear-gradient(90deg,#62a8ff,#5de0e6)}
+.hakiBar i{background:linear-gradient(90deg,#b58cff,#f0c15b)}
+.battleLog{min-height:96px;max-height:150px;overflow:auto;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.22);padding:10px;color:var(--muted)}
+.battleLog b{color:var(--gold)}
+.battleMoves{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.moveBtn small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
+@media(max-width:700px){.battleStage{grid-template-columns:1fr}.battleMoves{grid-template-columns:1fr}.fighterSprite{height:84px;font-size:3.5rem}}
