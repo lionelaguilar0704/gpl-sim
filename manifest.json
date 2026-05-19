@@ -1,0 +1,9 @@
+{
+  "name": "Great Pirate Life Sim",
+  "short_name": "PirateSim",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#090b13",
+  "theme_color": "#141827",
+  "icons": []
+}
