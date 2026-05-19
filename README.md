@@ -1,4 +1,4 @@
-# Great Pirate Life Sim v4.0 — Living Interface
+# Great Pirate Life Sim v4.1 — Polished Risk + BitLife UI Fix
 
 ## Major UI / immersion update
 - Appearance system: face, hair, color, build, outfit, accessory, scars, age stage, power effects.
@@ -22,3 +22,12 @@ Replace:
 - script.js
 - manifest.json
 - README.md
+
+
+## v4.1 Fixes
+- Fixed Look/Appearance page stability for older saves.
+- Added v4.1 save slot with v4.0 fallback.
+- Added fatal risk checks to dangerous actions.
+- Added mobile bottom navigation with large Age button.
+- Added stronger injury/death risk for travel failures, raids, naval battles, smuggling, rival duels, and black market fruit deals.
+- Fixed appearance scar/presence bug.

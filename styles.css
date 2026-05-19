@@ -103,3 +103,70 @@ input,select{width:100%;padding:14px;border-radius:14px;background:#0c0f1a;borde
   .tabs{grid-template-columns:repeat(4,1fr)}.tabs button{font-size:.78rem;padding:10px 4px}
   .topActions button{padding:10px 11px}.menuGrid,.cardGrid{grid-template-columns:1fr}.toastStack{left:12px;right:12px;top:auto;bottom:12px;max-width:none}
 }
+
+
+/* v4.1 BitLife-style mobile bottom navigation */
+.bottomNav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:86px;
+  background:linear-gradient(180deg,#07304a,#062237);
+  border-top:1px solid rgba(255,255,255,.18);
+  display:grid;
+  grid-template-columns:1fr 1fr 1.25fr 1fr 1fr;
+  gap:0;
+  z-index:70;
+  box-shadow:0 -8px 25px rgba(0,0,0,.35);
+}
+.bottomNav button{
+  border-radius:0;
+  border:0;
+  border-right:1px solid rgba(255,255,255,.13);
+  background:transparent;
+  text-align:center;
+  display:grid;
+  place-items:center;
+  color:#dcecff;
+  font-size:.9rem;
+  padding:8px 3px;
+  box-shadow:none;
+}
+.bottomNav .ageBubble{
+  width:92px;
+  height:92px;
+  border-radius:999px;
+  place-self:center;
+  margin-top:-38px;
+  background:linear-gradient(180deg,#16c64e,#02932e);
+  border:6px solid #f3f4f8;
+  color:white;
+  font-size:2.1rem;
+  line-height:.9;
+  box-shadow:0 6px 20px rgba(0,0,0,.5);
+}
+.bottomNav .ageBubble span{
+  font-size:1.05rem;
+}
+@media(min-width:1051px){
+  .bottomNav{display:none}
+}
+@media(max-width:1050px){
+  body{padding-bottom:104px}
+  .tabs{
+    position:sticky;
+    top:0;
+    z-index:15;
+    background:rgba(8,11,23,.94);
+    padding:8px;
+    border-radius:16px;
+    backdrop-filter:blur(8px);
+  }
+  .screen{
+    border-radius:20px;
+  }
+  .wanted{
+    margin-top:0;
+  }
+}

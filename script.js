@@ -46,6 +46,51 @@ function newPlayer(){return{
  memories:{islands:{},npcs:{},world:[]},timeline:[],feed:[],log:[],newspapers:[],dead:false
 }}
 
+
+function ensureAppearance(){
+ if(!p)return;
+ if(!p.appearance)p.appearance=randAppearance();
+ if(!p.appearance.face)p.appearance.face=pick(DATA.appearance.faces);
+ if(!p.appearance.hair)p.appearance.hair=pick(DATA.appearance.hair);
+ if(!p.appearance.hairColor)p.appearance.hairColor=pick(DATA.appearance.colors);
+ if(!p.appearance.body)p.appearance.body=pick(DATA.appearance.bodies);
+ if(!p.appearance.outfit)p.appearance.outfit=pick(DATA.appearance.outfits);
+ if(!p.appearance.accessory)p.appearance.accessory="None";
+ if(!p.appearance.scar)p.appearance.scar="None";
+ if(!p.appearance.marks)p.appearance.marks=[];
+ if(!p.hakiSkills)p.hakiSkills={observation:[],armament:[],conqueror:[]};
+ if(!p.kingTraits)p.kingTraits={leadership:0,ambition:0,defiance:0,courage:0,presence:0,sacrifice:0,independence:0};
+ if(!p.personality)p.personality={mercy:0,greed:0,freedom:0,ruthless:0,loyalty:0,ego:0};
+ if(!p.feed)p.feed=[];
+ if(!p.timeline)p.timeline=[];
+ if(!p.territories)p.territories=[];
+ if(!p.memories)p.memories={islands:{},npcs:{},world:[]};
+ if(!p.memories.islands)p.memories.islands={};
+}
+function death(title,detail){
+ p.dead=true;
+ p.health=0;
+ fx("shake");
+ major(detail||title);
+ $("screen").innerHTML=`<h2>${title}</h2><div class="alert">${detail||"Your journey ended."}</div><div class="choices"><button class="primary" onclick="setup()">Start New Life</button></div>`;
+ render();
+}
+function dangerCheck(label, fatalChance=0, injuryChance=0){
+ if(p.dead)return true;
+ const regionRisk=(currentRegion().danger||1)*0.005;
+ const heatRisk=(p.heat||0)*0.003;
+ const finalFatal=fatalChance+regionRisk+heatRisk;
+ if(Math.random()<finalFatal){
+   death("You Died",`${label} went horribly wrong. The sea claimed your story at age ${p.age}.`);
+   return true;
+ }
+ if(Math.random()<injuryChance){
+   injuryRoll();
+   p.health=clamp(p.health-10,0,100);
+ }
+ return false;
+}
+
 function toast(msg,major=false){const stack=$("toastStack");if(!stack)return;const d=document.createElement("div");d.className="toast";if(major)d.style.borderLeftColor="var(--purple)";d.textContent=msg;stack.appendChild(d);setTimeout(()=>d.remove(),3600)}
 function fx(type){const el=$("fxLayer");if(!el)return;el.className="fxLayer "+type;setTimeout(()=>el.className="fxLayer",1100)}
 function addFeed(t,major=false){p.feed.unshift({age:p.age,text:t,major});p.feed=p.feed.slice(0,90);toast(t,major)}
@@ -196,8 +241,8 @@ const EVENTS=[
 {title:"Marine Inspection",tags:["marine","justice"],text:"Marines lock down the streets and begin checking papers. Something about you makes them stare too long.",choices:[["Cooperate",{marineRep:1,discipline:1},"Cooperated with a Marine inspection."],["Run across the rooftops",{speed:2,bounty:3000,heat:1,independence:1},"Escaped Marines across rooftops."],["Lie confidently",{charisma:2,sneak:1},"Bluffed through an inspection."],["Laugh in their face and fight",{strength:2,bounty:10000,infamy:2,heat:3,defiance:2,courage:1},"Started a fight with Marines."]]},
 {title:"Secret Training",tags:["haki","fighter"],text:"An old traveler notices something in your spirit and offers brutal training.",choices:[["Accept brutal spirit training",{discipline:2,observationXP:1,armamentXP:1,health:-10,courage:1},"Accepted brutal spirit training."],["Ask for perception training",{intelligence:1,observationXP:2},"Studied spiritual perception."],["Train impact coating",{strength:1,armamentXP:2,health:-8},"Trained impact and hardening."],["Declare you need no master",{defiance:1,independence:1,conquerorXP:1},"Rejected the old traveler's lesson."]]},
 {title:"Crew Dispute",tags:["crew"],text:"Two allies argue over supplies and loyalty. The crew watches how you handle it.",choices:[["Mediate fairly",{charisma:1,honor:1,crewLoyalty:1,leadership:1},"Mediated a crew dispute."],["Punish both",{discipline:2,infamy:1,crewLoyalty:-1,ruthless:1},"Punished both sides of a crew dispute."],["Take a side",{charisma:1,crewLoyalty:-1},"Took a side in a crew dispute."],["Give a captain's speech",{leadership:2,presence:1,conquerorXP:1},"Gave a commanding speech to the crew."]]},
-{title:"Sea Beast Attack",tags:["sea","fighter"],text:"A sea beast rises beside your vessel, large enough to crack the hull in one bite.",choices:[["Fight it head-on",{strength:2,bounty:5000,shipDamage:20,health:-10,courage:2,armamentXP:1},"Fought off a sea beast."],["Outmaneuver it",{navigation:2,shipXP:1,observationXP:1},"Outmaneuvered a sea beast."],["Sacrifice cargo",{berries:-3000},"Sacrificed cargo to escape a sea beast."],["Use your crew as bait",{infamy:3,honor:-3,crewLoss:1,ruthless:3},"Used someone as bait."]]},
-{title:"Emperor Scout",tags:["newworld","fame","rival"],text:"A scout from a terrifying New World power offers you protection in exchange for loyalty.",choices:[["Refuse proudly",{honor:2,bounty:30000,rivalRoll:1,defiance:3,independence:2},"Refused an emperor scout."],["Accept temporarily",{infamy:1,berries:20000},"Accepted an ugly alliance."],["Attack the scout",{strength:2,armamentXP:2,conquerorXP:2,bounty:50000,health:-20,courage:2,ambition:1},"Attacked an emperor scout."],["Gather intel",{sneak:2,mystery:1,observationXP:1},"Gathered intel on an emperor crew."]]}
+{title:"Sea Beast Attack",tags:["sea","fighter"],text:"A sea beast rises beside your vessel, large enough to crack the hull in one bite.",choices:[["Fight it head-on",{strength:2,bounty:5000,shipDamage:25,health:-18,courage:2,armamentXP:1},"Fought off a sea beast."],["Outmaneuver it",{navigation:2,shipXP:1,observationXP:1},"Outmaneuvered a sea beast."],["Sacrifice cargo",{berries:-3000},"Sacrificed cargo to escape a sea beast."],["Use your crew as bait",{infamy:3,honor:-3,crewLoss:1,ruthless:3},"Used someone as bait."]]},
+{title:"Emperor Scout",tags:["newworld","fame","rival"],text:"A scout from a terrifying New World power offers you protection in exchange for loyalty.",choices:[["Refuse proudly",{honor:2,bounty:30000,rivalRoll:1,defiance:3,independence:2},"Refused an emperor scout."],["Accept temporarily",{infamy:1,berries:20000},"Accepted an ugly alliance."],["Attack the scout",{strength:2,armamentXP:2,conquerorXP:2,bounty:50000,health:-30,courage:2,ambition:1},"Attacked an emperor scout."],["Gather intel",{sneak:2,mystery:1,observationXP:1},"Gathered intel on an emperor crew."]]}
 ];
 function showEvent(e){$("screen").innerHTML=`<h2>${e.title}</h2><p>${e.text}</p><div class="choices">${e.choices.map((c,i)=>`<button onclick="chooseEvent(${EVENTS.indexOf(e)},${i})">${c[0]}</button>`).join("")}</div>`;render()}
 function chooseEvent(ei,ci){let c=EVENTS[ei].choices[ci];apply(c[1]);major(c[2]);postEventConsequences();showMenu()}
@@ -205,7 +250,7 @@ function postEventConsequences(){if(Math.random()<.12&&p.health<70)injuryRoll();
 
 function setup(){
  p=newPlayer();
- $("screen").innerHTML=`<h2>Start a New Life</h2><p><b>v4.0 Living Interface</b> adds appearance evolution, animated dashboard, live notifications, interactive maps, newspapers, timeline, Haki effects, visual character stages, and smoother menus.</p><input id="nameInput" placeholder="Character name, or leave blank for random"><div class="choices"><button class="primary" onclick="randomStart()">Random Life</button><button onclick="chooseOriginScreen()">Choose Origin</button>${localStorage.getItem("gpls_save_v40")?'<button onclick="loadGame()">Load Saved Life</button>':''}<button class="danger" onclick="clearSave()">Clear Save</button></div>`;
+ $("screen").innerHTML=`<h2>Start a New Life</h2><p><b>v4.0 Living Interface</b> adds appearance evolution, animated dashboard, live notifications, interactive maps, newspapers, timeline, Haki effects, visual character stages, and smoother menus.</p><input id="nameInput" placeholder="Character name, or leave blank for random"><div class="choices"><button class="primary" onclick="randomStart()">Random Life</button><button onclick="chooseOriginScreen()">Choose Origin</button>${(localStorage.getItem("gpls_save_v41")||localStorage.getItem("gpls_save_v40"))?'<button onclick="loadGame()">Load Saved Life</button>':''}<button class="danger" onclick="clearSave()">Clear Save</button></div>`;
  render();
 }
 function randomStart(){p=newPlayer();p.name=$("nameInput").value.trim()||pick(DATA.names);p.dream=pick(DATA.dreams);let o=pick(DATA.origins);startWithOrigin(o)}
@@ -267,15 +312,15 @@ function changeOutfit(){if(!spendAction())return;p.appearance.outfit=pick(DATA.a
 function changeHair(){if(!spendAction())return;p.appearance.hair=pick(DATA.appearance.hair);p.appearance.hairColor=pick(DATA.appearance.colors);silent(`Changed hair: ${p.appearance.hairColor} ${p.appearance.hair}.`);showMenu()}
 function changeAccessory(){if(!spendAction())return;p.appearance.accessory=pick(DATA.appearance.accessories);silent(`Changed accessory: ${p.appearance.accessory}.`);showMenu()}
 function poseForPoster(){if(!spendAction())return;p.charisma++;p.bounty+=Math.floor(p.bounty*.05)+1000;addNews("NEW WANTED PHOTO RELEASED",`${p.name}'s new poster has begun circulating across ${p.region}.`);showMenu()}
-function embraceScar(){if(!spendAction())return;p.appearance.scar=pick(DATA.appearance.scars.filter(x=>x!=="None"));p.charisma++;p.presence=(p.presence||0)+1;silent(`New defining scar: ${p.appearance.scar}.`);showMenu()}
+function embraceScar(){if(!spendAction())return;p.appearance.scar=pick(DATA.appearance.scars.filter(x=>x!=="None"));p.charisma++;p.kingTraits.presence=(p.kingTraits.presence||0)+1;silent(`New defining scar: ${p.appearance.scar}.`);showMenu()}
 function gambleMenu(){submenu("Gambling Den","Risk berries for a chance at profit. Uses 1 energy.",[`<button onclick="doGamble(500)">Low Table — ฿500</button>`,`<button onclick="doGamble(2500)">Mid Table — ฿2,500</button>`,`<button onclick="doGamble(10000)">High Roller — ฿10,000</button>`])}
 function doGamble(amount){if(!spendAction())return;if(p.berries<amount){notice("Not enough berries","You cannot cover the bet.");return}p.berries-=amount;let skill=(p.charisma+p.sneak+p.intelligence)/30;if(Math.random()<.42+skill){let win=amount*(2+Math.floor(Math.random()*3));p.berries+=win;silent(`Won ฿${fmt(win)} gambling.`)}else{silent(`Lost ฿${fmt(amount)} gambling.`);if(Math.random()<.2)gainRival()}showMenu()}
 function sail(){if(!spendAction())return;if(p.ship.name==="None"){silent("Bought passage to another island.");p.berries=Math.max(0,p.berries-1000)}else{p.ship.xp++;if(Math.random()<.25)damageShip(5+Math.floor(Math.random()*20))}let list=DATA.islands.filter(i=>i.region===p.region);let isl=pick(list);p.island=isl.name;silent(`Sailed to ${isl.name}: ${isl.desc}.`);if(p.memories.islands[p.island])silent(`This island remembers you: ${pick(p.memories.islands[p.island]).text}`);if(Math.random()<.25)showEvent(chooseWeightedEvent());else showMenu()}
-function travelRegion(i){if(!spendAction())return;let r=DATA.regions[i];let ok=p.navigation+crewBonus("navigator")*2>=r.req.nav && p.ship.maxHp>=r.req.ship;if(!ok){p.health-=10;damageShip(20);major(`Failed to safely reach ${r.name}. Need Navigation ${r.req.nav} and ship HP ${r.req.ship}.`);showMenu();return}p.region=r.name;let islands=DATA.islands.filter(x=>x.region===r.name);p.island=pick(islands).name;major(`Reached ${r.name}. ${r.desc}`);addNews("NEW SEA REACHED",`${p.name} has entered ${r.name}.`);showMenu()}
+function travelRegion(i){if(!spendAction())return;let r=DATA.regions[i];let ok=p.navigation+crewBonus("navigator")*2>=r.req.nav && p.ship.maxHp>=r.req.ship;if(!ok){p.health-=15;damageShip(25);major(`Failed to safely reach ${r.name}. Need Navigation ${r.req.nav} and ship HP ${r.req.ship}.`);if(dangerCheck('Failed Grand Line travel',0.06,0.35))return;showMenu();return}p.region=r.name;let islands=DATA.islands.filter(x=>x.region===r.name);p.island=pick(islands).name;major(`Reached ${r.name}. ${r.desc}`);addNews("NEW SEA REACHED",`${p.name} has entered ${r.name}.`);showMenu()}
 function huntBounty(){if(!spendAction())return;let power=25+currentRegion().danger*8;resolveCombat("duel",power,{berries:9000+currentRegion().danger*3000,marineRep:1,strength:1,armamentXP:1});showMenu()}
-function duelRival(){if(!spendAction())return;if(!p.rivals.length)gainRival();let power=30+currentRegion().danger*10+p.rivals.length*3;let win=resolveCombat("duel",power,{bounty:12000,infamy:1,armamentXP:1,conquerorXP:1,courage:1});if(win&&Math.random()<.35){let r=p.rivals.shift();major(`Defeated rival permanently: ${r}.`);p.legacy+=2}showMenu()}
-function navalBattle(){if(!spendAction())return;if(p.ship.name==="None"){notice("No Ship","You need a ship for naval battles.");return}let power=30+currentRegion().danger*12;resolveCombat("naval",power,{berries:15000,bounty:18000,shipXP:2,infamy:1,leadership:1});damageShip(Math.floor(Math.random()*15));showMenu()}
-function raidTarget(){if(!spendAction())return;let power=35+currentRegion().danger*10;resolveCombat("duel",power,{berries:22000,bounty:25000,infamy:2,heat:2,ruthless:1});showMenu()}
+function duelRival(){if(!spendAction())return;if(dangerCheck("Rival duel",0.018,0.18))return;if(!p.rivals.length)gainRival();let power=30+currentRegion().danger*10+p.rivals.length*3;let win=resolveCombat("duel",power,{bounty:12000,infamy:1,armamentXP:1,conquerorXP:1,courage:1});if(win&&Math.random()<.35){let r=p.rivals.shift();major(`Defeated rival permanently: ${r}.`);p.legacy+=2}showMenu()}
+function navalBattle(){if(!spendAction())return;if(dangerCheck("Naval battle",0.025,0.18))return;if(p.ship.name==="None"){notice("No Ship","You need a ship for naval battles.");return}let power=30+currentRegion().danger*12;resolveCombat("naval",power,{berries:15000,bounty:18000,shipXP:2,infamy:1,leadership:1});damageShip(Math.floor(Math.random()*15));showMenu()}
+function raidTarget(){if(!spendAction())return;if(dangerCheck("Raid",0.035,0.22))return;let power=35+currentRegion().danger*10;resolveCombat("duel",power,{berries:22000,bounty:25000,infamy:2,heat:2,ruthless:1});showMenu()}
 function escapeHeat(){if(!spendAction())return;let power=25+p.heat*8;let win=resolveCombat("escape",power,{heat:-3,sneak:1,observationXP:1});if(win)p.heat=clamp(p.heat-3,0,99);showMenu()}
 function recruit(){if(!spendAction())return;if(Math.random()<.55+(p.charisma/30)+(p.conqueror*.08)){gainCrewRole();p.mood+=3;apply({leadership:1})}else{silent("Failed to recruit anyone useful.");if(Math.random()<.25)gainRival()}showMenu()}
 function crewBond(){if(!spendAction())return;if(!p.crew.length){notice("No Crew","You have no crew yet.");return}p.crew.forEach(c=>c.loyalty=clamp(c.loyalty+1,0,10));p.mood=clamp(p.mood+8,0,100);silent("Spent time bonding with the crew.");apply({leadership:1,loyalty:1});showMenu()}
@@ -296,9 +341,9 @@ function buyBusiness(i){if(!spendAction())return;let b=DATA.businesses[i];if(p.b
 function shop(){submenu("Item Shop","Buy useful items. Purchases use 1 energy.",DATA.items.map((it,i)=>`<button onclick="buyItem(${i})">${it.name} — ฿${fmt(it.cost)}</button>`))}
 function buyItem(i){if(!spendAction())return;let it=DATA.items[i];if(p.berries<it.cost)return notice("Not enough berries",`Need ฿${fmt(it.cost)}.`);p.berries-=it.cost;p.items.push(it.name);apply(it.effect);silent(`Bought ${it.name}.`);showMenu()}
 function payDebt(){if(!spendAction())return;if(p.debt<=0)return notice("No Debt","You have no debt.");let amount=Math.min(p.berries,p.debt);p.berries-=amount;p.debt-=amount;silent(`Paid ฿${fmt(amount)} toward debt.`);showMenu()}
-function blackFruit(){if(!spendAction())return;if(p.berries<15000)return notice("Not enough berries","Need ฿15,000 to search black market fruit sellers.");p.berries-=15000;apply({fruitRoll:1,heat:1});showMenu()}
+function blackFruit(){if(!spendAction())return;if(dangerCheck("Black market fruit deal",0.01,0.08))return;if(p.berries<15000)return notice("Not enough berries","Need ฿15,000 to search black market fruit sellers.");p.berries-=15000;apply({fruitRoll:1,heat:1});showMenu()}
 function buySecret(){if(!spendAction())return;if(p.berries<8000)return notice("Not enough berries","Need ฿8,000.");p.berries-=8000;apply({mystery:1});showMenu()}
-function smuggleRun(){if(!spendAction())return;let power=25+currentRegion().danger*8;let win=resolveCombat("escape",power,{berries:25000,infamy:1,heat:2});if(win)silent("Completed smuggling run.");showMenu()}
+function smuggleRun(){if(!spendAction())return;if(dangerCheck("Smuggling run",0.02,0.15))return;let power=25+currentRegion().danger*8;let win=resolveCombat("escape",power,{berries:25000,infamy:1,heat:2});if(win)silent("Completed smuggling run.");showMenu()}
 function bribeOfficials(){if(!spendAction())return;let cost=5000+p.heat*2000;if(p.berries<cost)return notice("Not enough berries",`Need ฿${fmt(cost)}.`);p.berries-=cost;p.heat=clamp(p.heat-4,0,99);silent("Bribed officials to reduce heat.");showMenu()}
 function makeFriend(){if(!spendAction())return;let rel={name:pick(DATA.names),type:"Friend",bond:3+Math.floor(Math.random()*4)};p.relationships.push(rel);p.mood+=5;silent(`Made a friend: ${rel.name}.`);showMenu()}
 function findMentor(){if(!spendAction())return;let rel={name:pick(DATA.names),type:"Mentor",bond:4};p.relationships.push(rel);apply({discipline:1,observationXP:1,armamentXP:1});silent(`Found a mentor: ${rel.name}.`);showMenu()}
@@ -310,7 +355,7 @@ function claimTerritory(){if(!spendAction())return;let power=70+currentRegion().
 function retire(){ending("Retired Legend")}
 
 function render(){
- if(!p)return;
+ if(!p)return; ensureAppearance();
  document.body.className="region-"+String(p.region||"").toLowerCase().replaceAll(" ","-");
  $("characterStage").className="characterStage "+(p.conqueror>0?"hasConq ":"")+(p.fruit!=="None"?"hasFruit ":"")+(p.appearance?.scar&&p.appearance.scar!=="None"?"hasScar":"");
  $("portrait").textContent=avatarIcon();$("avatarDetails").textContent=(p.appearance?.accessory==="Eyepatch"?"🏴":p.appearance?.accessory==="Cape"?"🧥":fruitEffect());
@@ -320,12 +365,12 @@ function render(){
  $("healthMeter").style.width=clamp(p.health,0,100)+"%";$("moodMeter").style.width=clamp(p.mood,0,100)+"%";$("energyMeter").style.width=clamp(p.actionsLeft*16,0,100)+"%";
  let stats=["strength","speed","durability","intelligence","charisma","navigation","sneak","discipline","sword","marksmanship","medicine","craft"];
  $("stats").innerHTML=stats.map(s=>`<div class="stat"><div class="statTop"><span>${s}</span><b>${p[s]}</b></div><div class="bar"><div class="fill" style="width:${Math.min(100,p[s]*10)}%"></div></div></div>`).join("");
- localStorage.setItem("gpls_save_v40",JSON.stringify(p));
+ localStorage.setItem("gpls_save_v41",JSON.stringify(p));
  showTab(currentTab,true);
 }
 function hakiSummary(){let h=[];if(p.observation>0)h.push("Obs "+p.observation);if(p.armament>0)h.push("Arm "+p.armament);if(p.conqueror>0)h.push("Conq "+p.conqueror);return h.length?h.join(" / "):"Dormant"}
 function showTab(tab,silentRender=false){
- currentTab=tab;if(!p)return;let html="";
+ currentTab=tab;if(!p)return; ensureAppearance();let html="";
  if(tab==="feed")html=`<h3>Recent Feed</h3>${p.feed.map(x=>`<div class="feedEntry ${x.major?'major':''}">Age ${x.age}: ${x.text}</div>`).join("")||"<p>No recent updates.</p>"}`;
  if(tab==="appearance")html=`<h3>Appearance</h3><div class="cardGrid"><div class="miniCard"><h4>Visual Identity</h4><p>${p.appearance.ageStage} · ${p.appearance.face} face · ${p.appearance.hairColor} ${p.appearance.hair} hair · ${p.appearance.body} build</p></div><div class="miniCard"><h4>Outfit</h4><p>${p.appearance.outfit} · ${p.appearance.accessory}</p></div><div class="miniCard"><h4>Battle Marks</h4><p>${p.appearance.scar}</p></div><div class="miniCard"><h4>Power Effects</h4><p>${p.fruit!=="None"?fruitEffect()+" "+p.fruit:"No fruit aura"} ${p.conqueror>0?" · King's aura":""}</p></div></div>`;
  if(tab==="life")html=`<h3>Reputation & Personality</h3><div class="badgeRow"><span class="badge">Honor ${p.honor}</span><span class="badge">Infamy ${p.infamy}</span><span class="badge">Marine Rep ${p.marineRep}</span><span class="badge">Revolutionary Rep ${p.revolutionaryRep}</span><span class="badge">Heat ${p.heat}</span><span class="badge">Mystery ${p.mystery}/5</span><span class="badge">Legacy ${p.legacy}</span><span class="badge">Destiny ${p.destiny}</span><span class="badge">Debt ฿${fmt(p.debt)}</span></div><h3>Hidden Traits Revealed</h3><div class="badgeRow">${p.hiddenTraits.map(t=>`<span class="badge">${t}</span>`).join("")||"<span class='badge'>None yet</span>"}</div>${p.quest?`<div class="notice"><b>Active Quest:</b> ${p.quest.name}<br><span class="small">${p.quest.theme}</span></div>`:""}<h3>Relationships</h3>${p.relationships.length?p.relationships.map(r=>`<div class="line"><span>${r.type}</span><b>${r.name} · Bond ${r.bond}</b></div>`).join(""):"<p>No relationships yet.</p>"}`;
@@ -340,7 +385,7 @@ function showTab(tab,silentRender=false){
 }
 function ending(forcedTitle=null){let title=forcedTitle||"Unknown Drifter";if(!forcedTitle){if(p.conqueror>=5&&p.bounty>500000000)title="Emperor Candidate";else if(p.bounty>300000000)title="Legendary Pirate";else if(p.bounty>100000000)title="Supernova";else if(p.marineRep>35)title="Admiral Candidate";else if(p.revolutionaryRep>25)title="World Government Threat";else if(p.berries>600000)title="Underworld Tycoon";else if(p.infamy>25)title="Sea Menace";else if(p.honor>25)title="Local Legend";else if(p.crew.length>=10)title="Beloved Captain"}$("screen").innerHTML=`<h2>Ending: ${title}</h2><p>Your life reaches its final chapter. Legacy: ${p.legacy}. Future versions can let old lives become world legends.</p><div class="choices"><button class="primary" onclick="setup()">Start New Life</button></div>`;major(`Final title: ${title}.`);addNews("LIFE OF A LEGEND",`${p.name}'s story ends with the title: ${title}.`);render()}
 function help(){ $("screen").innerHTML=`<h2>How to Play v4.0</h2><div class="notice"><b>Living UI:</b> Watch the poster, appearance, background, feed, map, and newspapers evolve.<br><br><b>Appearance:</b> Your look changes from age, wounds, outfit, career, Devil Fruit, and Haki.<br><br><b>Notifications:</b> Small updates appear as toasts; major events still interrupt.<br><br><b>Haki:</b> Observation, Armament, and Conqueror unlock usable actions.</div><div class="choices"><button class="primary" onclick="showMenu()">Back</button></div>`}
-function manualSave(){localStorage.setItem("gpls_save_v40",JSON.stringify(p));silent("Game saved.");showMenu()}
-function loadGame(){p=JSON.parse(localStorage.getItem("gpls_save_v40"));if(!p.appearance)p.appearance=randAppearance();showMenu()}
-function clearSave(){localStorage.removeItem("gpls_save_v40");setup()}
+function manualSave(){localStorage.setItem("gpls_save_v41",JSON.stringify(p));silent("Game saved.");showMenu()}
+function loadGame(){p=JSON.parse(localStorage.getItem("gpls_save_v41"))||JSON.parse(localStorage.getItem("gpls_save_v40"));ensureAppearance();showMenu()}
+function clearSave(){localStorage.removeItem("gpls_save_v41");localStorage.removeItem("gpls_save_v40");setup()}
 $("saveBtn").onclick=manualSave;$("newBtn").onclick=setup;$("helpBtn").onclick=help;setup();

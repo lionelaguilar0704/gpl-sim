@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Great Pirate Life Sim v4.0</title>
+  <title>Great Pirate Life Sim v4.1</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,7 +15,7 @@
     <header class="topbar">
       <div>
         <h1>Great Pirate Life Sim <span>v4.0</span></h1>
-        <p>Living Interface + Appearance Update</p>
+        <p>Polished Risk + BitLife UI Fix</p>
       </div>
       <div class="topActions">
         <button id="saveBtn">Save</button>
@@ -86,6 +86,15 @@
       </section>
     </main>
   </div>
+
+    <nav class="bottomNav">
+      <button onclick="careerMenu()">Career</button>
+      <button onclick="assetsMenu()">Assets</button>
+      <button class="ageBubble" onclick="ageUp()">+<br><span>Age</span></button>
+      <button onclick="relationshipsMenu()">Social</button>
+      <button onclick="activitiesMenu()">More</button>
+    </nav>
+
   <script src="game-data.js"></script>
   <script src="script.js"></script>
 </body>
