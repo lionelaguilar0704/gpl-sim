@@ -3,7 +3,7 @@
   "short_name": "PirateSim",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#080a12",
+  "background_color": "#070914",
   "theme_color": "#141827",
   "icons": []
 }
