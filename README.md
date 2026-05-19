@@ -1,4 +1,4 @@
-# Great Pirate Life Sim v4.2 — Battle Engine + Move System
+# Great Pirate Life Sim v5.2 — Loot + Battle Tiers
 
 ## Major UI / immersion update
 - Appearance system: face, hair, color, build, outfit, accessory, scars, age stage, power effects.
@@ -42,3 +42,14 @@ Replace:
 - Move mastery tracks repeated use.
 - Battle losses can injure or kill you.
 - Bounty hunts, rival duels, raids, and naval boardings now open battle encounters.
+
+
+v5.1 Added dynamic combat visuals, damage popups, boss intros.
+## v5.2 Loot + Battle Tiers
+- Added loot rarity tiers: Common, Uncommon, Rare, Epic, Legendary, Mythic.
+- Loot scales with battle difficulty and region danger.
+- Added battle tiers: Easy, Normal, Hard, Deadly, Impossible.
+- Higher tiers have stronger enemies, better loot, and much higher death risk.
+- Retreat now has consequences: reputation/bounty/mood loss.
+- Defeat fatality chance now scales with tier.
+- Loot inventory appears in Powers/Assets area.

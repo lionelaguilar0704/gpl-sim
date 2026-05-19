@@ -285,7 +285,7 @@ function enemyFor(kind){
 function startBattle(kind="random",reward=null){
  const maxHP=maxBattleHP();
  p.battle={kind,player:{hp:Math.max(10,Math.min(maxHP,p.health/100*maxHP)),maxHp:maxHP,stamina:maxBattleStamina(),maxStamina:maxBattleStamina(),haki:maxBattleHaki(),maxHaki:maxBattleHaki()},enemy:enemyFor(kind),reward:reward||{},log:[`A fight started.`],turn:"player"};
- renderBattle();
+ if(kind==="rival"||kind==="raid"){bossIntro(enemyFor(kind).name)}else{renderBattle();}
 }
 function battlePct(a,b){return Math.max(0,Math.min(100,(a/Math.max(1,b))*100))}
 function renderBattle(){
@@ -311,7 +311,7 @@ function useBattleMove(i){
  let crit=Math.random()<0.08+(p.observation*0.015);if(crit)dmg*=1.65;
  if(move.id==="predict"){b.enemy.stunned=Math.random()<0.55;b.player.stamina+=5}
  if(move.id==="willburst"&&Math.random()<0.45+p.conqueror*.05)b.enemy.stunned=true;
- b.enemy.hp-=dmg;p.movesMastery[move.id]=(p.movesMastery[move.id]||0)+1;
+ b.enemy.hp-=dmg;damagePopup(dmg);p.movesMastery[move.id]=(p.movesMastery[move.id]||0)+1;
  b.log.push(`<b>${move.name}</b> dealt ${Math.round(dmg)} damage${crit?" — CRITICAL!":""}`);
  fx(move.type==="haki"?"flash":move.type==="fruit"?"conq":"shake");
  if(b.enemy.hp<=0)return winBattle();
@@ -322,6 +322,23 @@ function battleEscape(){const b=p.battle;if(!b)return;const chance=0.45+(p.speed
 function enemyTurn(){const b=p.battle;if(!b)return;if(b.enemy.stunned){b.log.push(`${b.enemy.name} is stunned and loses a turn.`);b.enemy.stunned=false;return renderBattle()}let dmg=b.enemy.power+Math.random()*16;if(p.observation>0&&Math.random()<0.08+p.observation*.04){dmg*=0.35;b.log.push("Observation Haki softened the hit.")}if(p.armament>0&&Math.random()<0.08+p.armament*.035){dmg*=0.55;b.log.push("Armament Haki blocked part of the damage.")}b.player.hp-=dmg;b.enemy.stamina=Math.max(0,b.enemy.stamina-4);b.log.push(`${b.enemy.name} attacked for ${Math.round(dmg)} damage.`);if(b.player.hp<=0)return loseBattle();renderBattle()}
 function winBattle(){const b=p.battle;major(`Won battle against ${b.enemy.name}.`);apply(b.reward||{});p.health=clamp(Math.round((b.player.hp/b.player.maxHp)*100),1,100);if(b.kind==="rival")apply({conquerorXP:1,armamentXP:1,courage:1,bounty:8000});if(b.kind==="raid")apply({berries:8000,bounty:12000,infamy:1});if(b.kind==="bounty")apply({berries:10000,marineRep:1});p.battle=null;showMenu()}
 function loseBattle(){const b=p.battle;p.health=0;const fatal=0.18+(currentRegion().danger*0.035)+(b.enemy.boss?0.12:0);if(Math.random()<fatal){p.battle=null;return death("Defeated in Battle",`${b.enemy.name} finished you. Your journey ended in combat.`)}p.battle=null;p.health=10;injuryRoll();major(`You were defeated by ${b.enemy.name}, but survived.`);showMenu()}
+
+
+function damagePopup(num){
+ let d=document.createElement("div");
+ d.className="damagePop";
+ d.innerText="-"+Math.round(num);
+ document.body.appendChild(d);
+ setTimeout(()=>d.remove(),1000);
+}
+function bossIntro(name){
+ $("screen").innerHTML=`<div class="bossIntro">
+ <h1>👑 BOSS ENCOUNTER 👑</h1>
+ <h2>${name}</h2>
+ <p>The battlefield trembles...</p>
+ </div>`;
+ setTimeout(()=>renderBattle(),1800);
+}
 
 function setup(){
  p=newPlayer();

@@ -191,3 +191,55 @@ input,select{width:100%;padding:14px;border-radius:14px;background:#0c0f1a;borde
 .battleMoves{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .moveBtn small{display:block;color:var(--muted);font-weight:600;margin-top:3px}
 @media(max-width:700px){.battleStage{grid-template-columns:1fr}.battleMoves{grid-template-columns:1fr}.fighterSprite{height:84px;font-size:3.5rem}}
+
+
+/* v5.1 Dynamic Combat */
+.battleFlash{animation:flashfx .5s ease}
+@keyframes flashfx{
+0%{filter:brightness(1)}
+50%{filter:brightness(2)}
+100%{filter:brightness(1)}
+}
+.damagePop{
+position:fixed;
+left:50%;
+top:40%;
+font-size:2rem;
+font-weight:bold;
+animation:floatdmg 1s forwards;
+z-index:999;
+}
+@keyframes floatdmg{
+0%{transform:translate(-50%,0)}
+100%{transform:translate(-50%,-90px);opacity:0}
+}
+.bossIntro{
+padding:20px;
+border:2px solid gold;
+border-radius:20px;
+text-align:center;
+animation:flashfx 1s infinite alternate;
+}
+
+
+/* v5.2 Loot + Battle Tiers */
+.lootCommon{border-color:#aeb6ca!important}
+.lootUncommon{border-color:#63d297!important;box-shadow:0 0 10px rgba(99,210,151,.15)}
+.lootRare{border-color:#62a8ff!important;box-shadow:0 0 12px rgba(98,168,255,.22)}
+.lootEpic{border-color:#b58cff!important;box-shadow:0 0 14px rgba(181,140,255,.28)}
+.lootLegendary{border-color:#f0c15b!important;box-shadow:0 0 18px rgba(240,193,91,.35)}
+.lootMythic{border-color:#ff5df7!important;box-shadow:0 0 22px rgba(255,93,247,.4)}
+.tierWarning{
+  border:1px solid var(--red);
+  background:rgba(239,100,97,.08);
+  color:#ffcccc;
+  border-radius:14px;
+  padding:10px;
+  margin:10px 0;
+}
+.battleTierGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+@media(max-width:700px){.battleTierGrid{grid-template-columns:1fr}}
