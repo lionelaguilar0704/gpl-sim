@@ -1,3 +1,24 @@
+
+/* v6 Power Expansion */
+const FRUITS=[
+{name:"Flame-Flame Fruit",type:"Logia",rarity:"Legendary",desc:"Become, create and control fire.",passives:["Intangible body","Fire resistance","Flight"],moves:["Fire Spear","Flame Dragon"],weak:"Water"},
+{name:"Wolf-Wolf Fruit",type:"Zoan",rarity:"Uncommon",desc:"Transform into a wolf.",passives:["Tracking","Speed"],moves:["Hybrid Form","Beast Form"],weak:"None"},
+{name:"Barrier-Barrier Fruit",type:"Paramecia",rarity:"Rare",desc:"Generate barriers.",passives:["Defense"],moves:["Barrier Wall"],weak:"Overwhelming force"}
+];
+const WEAPONS=[
+{name:"Enketsu",rarity:"Mythic",type:"Cursed Blade",desc:"Burns with hatred.",effects:"+25 damage",history:"Crimson Executioner"},
+{name:"Storm Fang",rarity:"Legendary",type:"Spear",desc:"Forged from storm iron.",effects:"+15 crit",history:"Thunder King"}
+];
+function codexMenu(){
+ $("screen").innerHTML="<h2>📖 Pirate Codex</h2><button onclick='fruitMenu()'>Fruit Encyclopedia</button><button onclick='weaponMenu()'>Weapon Encyclopedia</button>";
+}
+function fruitMenu(){
+ $("screen").innerHTML="<h2>🍎 Fruit Encyclopedia</h2>"+FRUITS.map(f=>`<div class='miniCard'><h3>${f.name}</h3><p>${f.type} • ${f.rarity}</p><p>${f.desc}</p><p>Passives: ${f.passives.join(', ')}</p><p>Moves: ${f.moves.join(', ')}</p></div>`).join("")+"<button onclick='codexMenu()'>Back</button>";
+}
+function weaponMenu(){
+ $("screen").innerHTML="<h2>⚔️ Weapon Encyclopedia</h2>"+WEAPONS.map(w=>`<div class='miniCard'><h3>${w.name}</h3><p>${w.rarity} ${w.type}</p><p>${w.desc}</p><p>${w.effects}</p><p>${w.history}</p></div>`).join("")+"<button onclick='codexMenu()'>Back</button>";
+}
+
 const DATA = window.GPL_DATA;
 const $=id=>document.getElementById(id);
 const fmt=n=>Math.round(n).toLocaleString();
