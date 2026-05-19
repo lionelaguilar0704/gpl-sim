@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Great Pirate Life Sim</title>
+  <title>Great Pirate Life Sim v0.4</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -11,10 +11,13 @@
   <div class="app">
     <header class="topbar">
       <div>
-        <h1>Great Pirate Life Sim</h1>
-        <p>Randomized pirate-era life simulator</p>
+        <h1>Great Pirate Life Sim <span>v0.4</span></h1>
+        <p>BitLife-style randomized pirate life simulator</p>
       </div>
-      <button id="saveBtn">Save</button>
+      <div class="topActions">
+        <button id="saveBtn">Save</button>
+        <button id="newBtn" class="danger">New</button>
+      </div>
     </header>
 
     <main class="layout">
@@ -25,17 +28,23 @@
           <h3 id="posterName">UNKNOWN</h3>
           <p>DEAD OR ALIVE</p>
           <h4 id="posterBounty">฿0</h4>
+          <small id="epithet">No Epithet</small>
         </section>
 
         <section class="card">
           <h3>Status</h3>
           <div class="line"><span>Age</span><b id="age">—</b></div>
+          <div class="line"><span>Year Energy</span><b id="energy">—</b></div>
           <div class="line"><span>Origin</span><b id="origin">—</b></div>
           <div class="line"><span>Path</span><b id="path">Undecided</b></div>
           <div class="line"><span>Sea</span><b id="sea">—</b></div>
+          <div class="line"><span>Island</span><b id="island">—</b></div>
+          <div class="line"><span>Ship</span><b id="ship">None</b></div>
           <div class="line"><span>Berries</span><b id="berries">0</b></div>
           <div class="line"><span>Fruit</span><b id="fruit">None</b></div>
           <div class="line"><span>Haki</span><b id="haki">Dormant</b></div>
+          <div class="line"><span>Health</span><b id="health">100%</b></div>
+          <div class="line"><span>Mood</span><b id="mood">50%</b></div>
         </section>
 
         <section class="card">
@@ -48,8 +57,10 @@
         <section id="screen" class="screen"></section>
 
         <nav class="tabs">
+          <button onclick="showMenu()">Menu</button>
           <button onclick="showTab('life')">Life</button>
           <button onclick="showTab('crew')">Crew</button>
+          <button onclick="showTab('ship')">Ship</button>
           <button onclick="showTab('world')">World</button>
           <button onclick="showTab('log')">Log</button>
         </nav>
