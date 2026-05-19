@@ -288,7 +288,9 @@ function setup(){
  render();
 }
 function randomStart(){p=newPlayer();p.name=$("nameInput").value.trim()||pick(DATA.names);let o=pick(DATA.origins);startWithOrigin(o)}
-function chooseOriginScreen(){p=newPlayer();p.name=$("nameInput").value.trim()||pick(DATA.names);$("screen").innerHTML=`<h2>Choose Origin</h2><p>Your origin gives bonuses and shapes your event pool.</p><div class="choices">${DATA.origins.map((o,i)=>`<button onclick="startWithOrigin(DATA.origins[${i}])">${o[1]} ${o[0]}</button>`).join("")}</div>`}
+function chooseOriginScreen(){p=newPlayer();p.name=$("nameInput").value.trim()||pick(DATA.names);$("screen").innerHTML=`<h2>Choose Origin</h2><p>Your origin gives bonuses and shapes your event pool.</p><div class="choices">${DATA.origins.map((o,i)=>`<button onclick="chooseOrigin(${i})">${o[1]} ${o[0]}</button>`).join("")}</div>`}
+
+function chooseOrigin(i){startWithOrigin(DATA.origins[i])}
 function startWithOrigin(o){p.origin=o[0];p.portrait=o[1];let starts=DATA.islands.filter(i=>i.region==="Home Sea");let isl=pick(starts);p.region=isl.region;p.island=isl.name;apply(o[2]);p.epithet=pick(["the Unwritten","the Small Storm","Iron Will","Chainbreaker","Sea Rat","the Runaway","the Quiet Spark","No-Name","the Dawn Rookie"]);addLog(`Born as a ${p.origin}, starting on ${p.island}.`);if(Math.random()<.25){p.items.push(pick(DATA.mysteries));p.mystery=1;addLog("Started life already carrying a strange clue.")}showMenu()}
 function choosePath(){$("screen").innerHTML=`<h2>Age 16: Choose Your Path</h2><p>This shapes ranks, events, promotion, enemies, and endings.</p><div class="choices">${DATA.paths.map((x,i)=>`<button onclick="setPath(${i})">${x[1]} ${x[0]}</button>`).join("")}</div>`;render()}
 function setPath(i){let x=DATA.paths[i];p.path=x[0];p.portrait=x[1];p.rank=DATA.careers[p.path][0];apply(x[2]);addLog(`Chose the path of ${p.path}.`);showMenu()}
@@ -411,4 +413,6 @@ function help(){ $("screen").innerHTML=`<h2>How to Play</h2><div class="notice">
 function manualSave(){localStorage.setItem("gpls_save_v10",JSON.stringify(p));addLog("Game saved.");showMenu()}
 function loadGame(){p=JSON.parse(localStorage.getItem("gpls_save_v10"));showMenu()}
 function clearSave(){localStorage.removeItem("gpls_save_v10");setup()}
+
+Object.assign(window,{setup,randomStart,chooseOriginScreen,chooseOrigin,startWithOrigin,showMenu,showTab,ageUp,randomEventAction,activitiesMenu,trainingMenu,travelMenu,combatMenu,crewMenu,careerMenu,assetsMenu,blackMarketMenu,relationshipsMenu,legacyMenu,work,explore,rest,gambleMenu,investigate,newspaperInterview,train,study,fruitTrain,hakiTrain,swordTrain,shootTrain,sail,travelRegion,huntBounty,duelRival,navalBattle,raidTarget,escapeHeat,recruit,crewBond,payBonus,disciplineCrew,fireLowest,careerWork,seekPromotion,changePath,setPath,layLow,shipyard,buyShip,repairShip,upgradeShip,businessMenu,buyBusiness,shop,buyItem,payDebt,blackFruit,buySecret,smuggleRun,bribeOfficials,makeFriend,findMentor,romance,betrayContact,writeWill,trainSuccessor,retire,doGamble,chooseEvent,manualSave,loadGame,clearSave,help});
 $("saveBtn").onclick=manualSave;$("newBtn").onclick=setup;$("helpBtn").onclick=help;setup();
