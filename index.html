@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Great Pirate Life Sim v1.0</title>
+  <title>Great Pirate Life Sim v3.0</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -11,8 +11,8 @@
   <div class="app">
     <header class="topbar">
       <div>
-        <h1>Great Pirate Life Sim <span>v1.0</span></h1>
-        <p>Grand Line Foundation Update</p>
+        <h1>Great Pirate Life Sim <span>v3.0</span></h1>
+        <p>Living World Engine</p>
       </div>
       <div class="topActions">
         <button id="saveBtn">Save</button>
@@ -37,6 +37,7 @@
           <div class="line"><span>Age</span><b id="age">—</b></div>
           <div class="line"><span>Energy</span><b id="energy">—</b></div>
           <div class="line"><span>Origin</span><b id="origin">—</b></div>
+          <div class="line"><span>Dream</span><b id="dream">—</b></div>
           <div class="line"><span>Career</span><b id="path">Undecided</b></div>
           <div class="line"><span>Rank</span><b id="rank">None</b></div>
           <div class="line"><span>Region</span><b id="region">—</b></div>
@@ -60,11 +61,13 @@
 
         <nav class="tabs">
           <button onclick="showMenu()">Menu</button>
+          <button onclick="showTab('feed')">Feed</button>
           <button onclick="showTab('life')">Life</button>
           <button onclick="showTab('crew')">Crew</button>
+          <button onclick="showTab('haki')">Haki</button>
           <button onclick="showTab('powers')">Powers</button>
-          <button onclick="showTab('assets')">Assets</button>
           <button onclick="showTab('world')">World</button>
+          <button onclick="showTab('legacy')">Legacy</button>
           <button onclick="showTab('log')">Log</button>
         </nav>
 
@@ -72,6 +75,7 @@
       </section>
     </main>
   </div>
+  <script src="game-data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,9 +1,22 @@
-# Great Pirate Life Sim v1.0.1
+# Great Pirate Life Sim v3.0 — Living World Engine
 
-Polished fix build for the Grand Line Foundation.
+## Major leap
+- Silent BitLife-style feed: most actions no longer interrupt with popups.
+- Full Haki split: Observation, Armament, and Conqueror.
+- Haki actions: use Observation, Armament, or Conqueror once awakened.
+- Conqueror's Haki is action-based: leadership, ambition, defiance, courage, presence, sacrifice, and independence raise your chance.
+- Hidden traits develop from repeated behavior.
+- Crew now have traits, salaries, loyalty changes, and can awaken Haki.
+- World timeline simulates events with or without you.
+- Island memory tracks your past actions.
+- Destiny value and “main character” pattern recognition.
+- Cleaner architecture: game-data.js + script.js.
 
-## Fixes
-- Fixed mobile/Safari start button reliability by avoiding inline access to non-window constants.
-- Exposed all menu/action functions safely to the browser window.
-- Verified JavaScript syntax and core menu startup flow.
-- Keeps all v1.0 systems: Grand Line map, ranks, combat, ships, businesses, debt, relationships, legacy, Haki/Devil Fruit trees, newspapers, and crew management.
+## Upload files
+Replace:
+- index.html
+- styles.css
+- game-data.js
+- script.js
+- manifest.json
+- README.md
