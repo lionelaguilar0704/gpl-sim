@@ -1,16 +1,18 @@
-# Great Pirate Life Sim v3.0 — Living World Engine
+# Great Pirate Life Sim v4.0 — Living Interface
 
-## Major leap
-- Silent BitLife-style feed: most actions no longer interrupt with popups.
-- Full Haki split: Observation, Armament, and Conqueror.
-- Haki actions: use Observation, Armament, or Conqueror once awakened.
-- Conqueror's Haki is action-based: leadership, ambition, defiance, courage, presence, sacrifice, and independence raise your chance.
-- Hidden traits develop from repeated behavior.
-- Crew now have traits, salaries, loyalty changes, and can awaken Haki.
-- World timeline simulates events with or without you.
-- Island memory tracks your past actions.
-- Destiny value and “main character” pattern recognition.
-- Cleaner architecture: game-data.js + script.js.
+## Major UI / immersion update
+- Appearance system: face, hair, color, build, outfit, accessory, scars, age stage, power effects.
+- Animated wanted poster and character stage.
+- Dynamic background by region.
+- Live toast notifications.
+- Haki visual effects.
+- Interactive map tab.
+- Newspaper tab and timeline UI.
+- Appearance menu actions.
+- Crew pop-in moments on the home screen.
+- Better dashboard with meters.
+- New Look tab.
+- Preserves v3.0 systems: Haki split, Conqueror traits, crew lives, world timeline, island memory.
 
 ## Upload files
 Replace:

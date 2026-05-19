@@ -1,6 +1,15 @@
 window.GPL_DATA = {
  names:["Kaid","Rook","Vera","Mako","Lian","Sora","Dax","Namiro","Vale","Rin","Cale","Juno","Arashi","Toma","Kira","Zeno","Mira","Dante","Koji","Namiya","Vex","Orin","Talia","Saiko","Crowe","Milo","Nero","Yuna","Cass","Bram","Ari","Kael","Nox","Luma","Torren","Basil","Ember","Iris","Vlad","Orion","Levi","Kaito"],
  dreams:["Become Pirate King","Become the strongest swordsman","Destroy corrupt justice","Free the oppressed","Build the greatest ship","Cure an incurable disease","Map the entire sea","Become the richest person alive","Uncover forbidden history","Become an Admiral","Create a country with no chains","Defeat an Emperor","Find a lost ancient weapon","Become a legend no one can erase"],
+ appearance:{
+  faces:["Youthful","Sharp","Round","Calm","Intimidating","Tired","Scarred","Serious"],
+  hair:["Curly","Messy","Short","Long","Braided","Wild","Buzzcut","Topknot"],
+  colors:["Black","Brown","White","Red","Blue","Green","Blond","Silver"],
+  bodies:["Lean","Muscular","Massive","Agile","Heavy","Compact"],
+  outfits:["Street Clothes","Marine Uniform","Samurai Robe","Noble Coat","Pirate Coat","Fighter Wraps","Doctor Coat","Shipwright Apron"],
+  accessories:["None","Bandana","Goggles","Earring","Mask","Cape","Gloves","Necklace","Eyepatch"],
+  scars:["None","Eye Scar","Burn Mark","Bite Scar","Blade Scar","Bullet Scar","Lightning Scar"]
+ },
  regions:[
  {name:"Home Sea",danger:1,req:{nav:0,ship:0},desc:"The four Blues: safer routes, rookie pirates, corrupt towns, and local Marines."},
  {name:"Reverse Mountain",danger:3,req:{nav:3,ship:40},desc:"The violent gateway into the Grand Line."},
@@ -66,21 +75,18 @@ window.GPL_DATA = {
 ["Wandering Swordsman","🗡️",{sword:3,bounty:3000,ambition:1}],["Treasure Diver","🫧",{navigation:2,berries:3000}],["Gambler","🎲",{charisma:1,berries:2500,sneak:1}],["News Courier","📰",{navigation:1,intelligence:1,charisma:1}]
  ],
  fruits:[
-{name:"Carve-Carve Fruit",type:"Paramecia",power:"engrave symbols that create seals, traps, and summons",tree:["Mark","Trap","Seal","Summon","Awakening: Living Sigils"]},
-{name:"Smoke Body Fruit",type:"Logia-like",power:"turn into drifting smoke and obscure battlefields",tree:["Smoke Dodge","Fog Cloud","Smoke Bind","Choke Field","Awakening: City of Smoke"]},
-{name:"Iron Body Fruit",type:"Paramecia",power:"harden flesh into living metal",tree:["Iron Skin","Metal Fist","Magnet Grip","Iron Fortress","Awakening: Living Armory"]},
-{name:"Mist-Mist Fruit",type:"Logia-like",power:"create mist clones and fog ambushes",tree:["Mist Veil","Clone","Drown Sight","Ghost Step","Awakening: Endless Fog"]},
-{name:"Panther Zoan",type:"Zoan",power:"become a black panther hybrid",tree:["Claws","Pounce","Predator Eye","Full Beast","Awakening: Apex Predator"]},
-{name:"Hawk Zoan",type:"Zoan",power:"gain flight, talons, and predator vision",tree:["Talons","Glide","Divebomb","Sky Sight","Awakening: Storm Hawk"]},
-{name:"Wall-Wall Fruit",type:"Paramecia",power:"raise defensive walls from surfaces",tree:["Wall","Rampart","Crush Wall","Maze","Awakening: Fortress Island"]},
-{name:"Pulse-Pulse Fruit",type:"Paramecia",power:"send shockwaves through touch",tree:["Pulse Jab","Shock Step","Rupture","Quake Palm","Awakening: Heartbeat Field"]},
-{name:"Thread-Thread Fruit",type:"Paramecia",power:"control razor-thin threads",tree:["Thread Grip","Wire Cut","Puppet Line","Sky String","Awakening: Thread World"]},
-{name:"Glide-Glide Fruit",type:"Paramecia",power:"slide through air and redirect momentum",tree:["Slide","Air Skim","Redirect","Friction Break","Awakening: Momentum Domain"]},
-{name:"Mend-Mend Fruit",type:"Paramecia",power:"rapidly stitch wounds and repair objects",tree:["Patch","Stitch","Field Surgery","Repair Burst","Awakening: Restoration Field"]},
-{name:"Grav-Grav Fruit",type:"Paramecia",power:"briefly increase or reduce gravity around targets",tree:["Heavy Palm","Light Step","Crush Zone","Orbit Pull","Awakening: Gravity Well"]},
-{name:"Mirror-Mirror Fruit",type:"Paramecia",power:"reflect attacks and create false rooms",tree:["Reflect","False Room","Mirror Step","Copy Image","Awakening: Mirror Labyrinth"]},
-{name:"Rust-Rust Fruit",type:"Paramecia",power:"decay weapons, locks, and armor by touch",tree:["Rust Touch","Lock Rot","Armor Decay","Weapon Dust","Awakening: Corrosion City"]},
-{name:"Ink-Ink Fruit",type:"Paramecia",power:"bring ink drawings to temporary life",tree:["Ink Shot","Draw Beast","Ink Wall","Living Script","Awakening: Painted Reality"]}
+{name:"Carve-Carve Fruit",type:"Paramecia",power:"engrave symbols that create seals, traps, and summons",tree:["Mark","Trap","Seal","Summon","Awakening: Living Sigils"],effect:"🔣"},
+{name:"Smoke Body Fruit",type:"Logia-like",power:"turn into drifting smoke and obscure battlefields",tree:["Smoke Dodge","Fog Cloud","Smoke Bind","Choke Field","Awakening: City of Smoke"],effect:"💨"},
+{name:"Iron Body Fruit",type:"Paramecia",power:"harden flesh into living metal",tree:["Iron Skin","Metal Fist","Magnet Grip","Iron Fortress","Awakening: Living Armory"],effect:"⚙️"},
+{name:"Mist-Mist Fruit",type:"Logia-like",power:"create mist clones and fog ambushes",tree:["Mist Veil","Clone","Drown Sight","Ghost Step","Awakening: Endless Fog"],effect:"🌫️"},
+{name:"Panther Zoan",type:"Zoan",power:"become a black panther hybrid",tree:["Claws","Pounce","Predator Eye","Full Beast","Awakening: Apex Predator"],effect:"🐾"},
+{name:"Hawk Zoan",type:"Zoan",power:"gain flight, talons, and predator vision",tree:["Talons","Glide","Divebomb","Sky Sight","Awakening: Storm Hawk"],effect:"🪶"},
+{name:"Wall-Wall Fruit",type:"Paramecia",power:"raise defensive walls from surfaces",tree:["Wall","Rampart","Crush Wall","Maze","Awakening: Fortress Island"],effect:"🧱"},
+{name:"Pulse-Pulse Fruit",type:"Paramecia",power:"send shockwaves through touch",tree:["Pulse Jab","Shock Step","Rupture","Quake Palm","Awakening: Heartbeat Field"],effect:"💥"},
+{name:"Thread-Thread Fruit",type:"Paramecia",power:"control razor-thin threads",tree:["Thread Grip","Wire Cut","Puppet Line","Sky String","Awakening: Thread World"],effect:"🧵"},
+{name:"Glide-Glide Fruit",type:"Paramecia",power:"slide through air and redirect momentum",tree:["Slide","Air Skim","Redirect","Friction Break","Awakening: Momentum Domain"],effect:"🪽"},
+{name:"Mend-Mend Fruit",type:"Paramecia",power:"rapidly stitch wounds and repair objects",tree:["Patch","Stitch","Field Surgery","Repair Burst","Awakening: Restoration Field"],effect:"🩹"},
+{name:"Grav-Grav Fruit",type:"Paramecia",power:"briefly increase or reduce gravity around targets",tree:["Heavy Palm","Light Step","Crush Zone","Orbit Pull","Awakening: Gravity Well"],effect:"🪐"}
  ],
  hakiTrees:{
  observation:["Presence Sense","Danger Pulse","Emotion Read","Lie Read","Future Flicker","Future Sight"],
@@ -99,10 +105,7 @@ window.GPL_DATA = {
 {name:"Yume",role:"Swordsman",bonus:{sword:2},loyalty:5,salary:1200,traits:["Proud","Restless"]},
 {name:"Boro",role:"Navigator",bonus:{navigation:2},loyalty:6,salary:1000,traits:["Patient","Superstitious"]},
 {name:"Grit",role:"Cook",bonus:{charisma:1},loyalty:5,salary:700,traits:["Explosive","Funny"]},
-{name:"Lace",role:"Informant",bonus:{sneak:1,intelligence:1},loyalty:4,salary:800,traits:["Secretive","Greedy"]},
-{name:"Bastion",role:"Helmsman",bonus:{navigation:1,durability:1},loyalty:5,salary:900,traits:["Steady","Old-Soul"]},
-{name:"Kuroh",role:"Sniper",bonus:{marksmanship:2},loyalty:5,salary:900,traits:["Quiet","Precise"]},
-{name:"Elia",role:"Archaeologist",bonus:{intelligence:2},loyalty:4,salary:1100,traits:["Forbidden Knowledge","Nervous"]}
+{name:"Lace",role:"Informant",bonus:{sneak:1,intelligence:1},loyalty:4,salary:800,traits:["Secretive","Greedy"]}
  ],
  rivals:["hotheaded Marine prodigy","laughing pirate captain","masked government agent","bounty hunter with twin pistols","noble swordsman","fishman bruiser","revolutionary extremist","black market queen","giant-blooded brawler","silent assassin child","fallen dojo champion","smiling CP trainee","steel-jawed pirate butcher","sky island sniper","false priest with a cannon staff","ghost captain with no flag","emperor scout","rogue warlord candidate"],
  ships:[
@@ -121,7 +124,8 @@ window.GPL_DATA = {
 {name:"Fake Papers",cost:4000,effect:{heat:-2}}, {name:"Armor Vest",cost:6000,effect:{durability:1}},
 {name:"Black Market Intel",cost:9000,effect:{mystery:1}}, {name:"Quality Rifle",cost:6500,effect:{marksmanship:2}},
 {name:"Weighted Cloak",cost:5000,effect:{discipline:1,durability:1}}, {name:"Rare Medical Text",cost:12000,effect:{medicine:2,intelligence:1}},
-{name:"Cursed Blade Rumor",cost:25000,effect:{mystery:2,sword:1}}, {name:"Crew Feast",cost:3000,effect:{mood:15,crewLoyalty:1}}
+{name:"Cursed Blade Rumor",cost:25000,effect:{mystery:2,sword:1}}, {name:"Crew Feast",cost:3000,effect:{mood:15,crewLoyalty:1}},
+{name:"Captain Coat",cost:18000,effect:{charisma:1,leadership:1,appearanceItem:"Captain Coat"}}, {name:"Masked Identity",cost:14000,effect:{sneak:2,appearanceItem:"Mask"}}
  ],
  businesses:[
 {name:"Dockside Tavern",cost:45000,income:3500,risk:"street"},
