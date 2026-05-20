@@ -31,7 +31,7 @@ function silent(msg){ log(msg); toast(msg,false); render(); }
 
 function newPlayer(){
   return {
-    build:"v8.1", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
+    build:"v8.3", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
     portrait:"🙂", epithet:"No Epithet", region:"Home Sea", island:"Syrup Harbor",
     health:100, mood:55, energy:5, actionsLeft:5, berries:0, debt:0, bounty:0, heat:0, infamy:0, honor:0,
     strength:1, speed:1, durability:1, intelligence:1, charisma:1, sneak:1, discipline:1, leadership:0,
@@ -103,7 +103,7 @@ function checkUnlocks(){
 
 function save(){
   ensure();
-  p.build="v8.1";
+  p.build="v8.3";
   localStorage.setItem(SAVE_KEY,JSON.stringify(p));
   toast("Game saved.");
 }
@@ -115,7 +115,7 @@ function load(){
   if(!data){ setup(); return; }
   p=JSON.parse(data);
   ensure();
-  p.build="v8.1";
+  p.build="v8.3";
   save();
   mainMenu();
 }
@@ -191,7 +191,7 @@ function baseShowTab_v81(tab,silent=false){
     <h3>Inventory</h3><div class="cardGrid">${p.loot.slice(-8).map(l=>`<div class="miniCard rarity${l.rarity}"><h4>${l.rarity} ${l.name}</h4><p>Value ฿${fmt(l.value)}</p></div>`).join("")||"<p>No loot yet.</p>"}</div>`;
   if(tab==="codex")$("tab").innerHTML=`<h3>Codex</h3><div class="choices"><button onclick="fruitCodex()">Devil Fruits</button><button onclick="weaponCodex()">Weapons</button><button onclick="ownedWeapons()">Owned Weapons</button></div>`;
   if(tab==="map")$("tab").innerHTML=`<h3>Map</h3>${DATA.islands.map(i=>`<div class="line"><span>${i.name}</span><b>${i.region} · Danger ${i.danger}</b></div>`).join("")}`;
-  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.1<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
+  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.3<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
 }
 
 function roleSummary(){
@@ -211,7 +211,7 @@ function baseSetup_v81(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Start a New Life</h2>
-    <p><b>v8.1 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
+    <p><b>v8.3 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
     <div class="safeNotice notice">This version uses a clean save slot. Old saves can still be loaded, but a new life is recommended for testing.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -626,7 +626,7 @@ boot();
 
 
 /* =========================
-   v8.1 Narrative Foundation — Birth to Legend
+   v8.3 Narrative Foundation — Birth to Legend
    ========================= */
 
 const LIFE_FAMILIES=[
@@ -749,7 +749,7 @@ function v81Ensure(){
   if(!p.lifeFlags)p.lifeFlags={dreamChosen:false,traitMilestones:{},birthGenerated:false};
   if(!p.chapterLog)p.chapterLog=[];
   if(p.potential===undefined)p.potential=1;
-  p.build="v8.1";
+  p.build="v8.3";
 }
 function trait(k,v=1){
   v81Ensure();
@@ -795,7 +795,7 @@ function setup(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Begin a New Life</h2>
-    <p><b>v8.1 Narrative Foundation</b> starts at birth and builds your legend through age-up life events.</p>
+    <p><b>v8.3 Narrative Foundation</b> starts at birth and builds your legend through age-up life events.</p>
     <div class="chapterCard"><b>Concept:</b> BitLife-style aging at the core, with One Piece dreams, powers, combat, crew, rivals, and fate layered on top.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -1007,8 +1007,186 @@ function showTab(tab,silent=false){
     return;
   }
   if(tab==="log"){
-    $("tab").innerHTML=`<h3>Life Chapters</h3>${(p.chapterLog||[]).slice(0,12).map(c=>`<div class="line"><span>Age ${c.age}: ${c.title}</span><b>${c.choice}</b></div>`).join("")||"<p>No chapters yet.</p>"}<h3>Game Info</h3><div class="notice">Version: v8.1<br>Save Build: ${p.build}<br>Core: BitLife-style aging, One Piece narrative systems.</div>`;
+    $("tab").innerHTML=`<h3>Life Chapters</h3>${(p.chapterLog||[]).slice(0,12).map(c=>`<div class="line"><span>Age ${c.age}: ${c.title}</span><b>${c.choice}</b></div>`).join("")||"<p>No chapters yet.</p>"}<h3>Game Info</h3><div class="notice">Version: v8.3<br>Save Build: ${p.build}<br>Core: BitLife-style aging, One Piece narrative systems.</div>`;
     return;
   }
   return baseShowTab_v81(tab,silent);
+}
+
+/* v8.3 UI Corrective Patch */
+function mainMenu(){
+ v81Ensure();render();
+ if(p.dead)return deathScreen();
+ $("screen").innerHTML=`<h2>Age ${p.age}: ${p.name}'s Life</h2>
+ <div class="chapterCard"><b>${lifePhaseName()}</b> • Dream: ${p.dream}</div>
+ <div class="cardGrid">
+ <div class="miniCard">❤️ Health<br>${p.health}</div>
+ <div class="miniCard">😊 Morale<br>${p.mood}</div>
+ <div class="miniCard">🧠 Intelligence<br>${p.intelligence}</div>
+ <div class="miniCard">💪 Physical<br>${Math.floor((p.strength+p.speed+p.durability)/3)}</div>
+ <div class="miniCard">✨ Charisma<br>${p.charisma}</div>
+ <div class="miniCard">⚡ Potential<br>${p.potential}</div>
+ </div>
+ <div class='choices'>
+ <button class='primary' onclick='ageUp()'>⭐ Age Up</button>
+ <button onclick='lifeActionsMenu()'>Activities</button>
+ <button onclick='relationshipsMenu()'>Relationships</button>
+ <button onclick='ownedWeapons()'>Inventory</button>
+ <button onclick='crewMenu()'>Crew</button>
+ <button onclick='trainingMenu()'>Training</button>
+ <button onclick='assetsMenu()'>Assets</button>
+ <button onclick='travelMenu()'>Travel</button>
+ </div>`
+}
+
+/* =========================
+   v8.3 UI Target Build
+   ========================= */
+function v83EnsureRightPanel(){
+  if(document.getElementById("rightPanelV83"))return;
+  const main=document.querySelector(".layout");
+  if(!main)return;
+  const right=document.createElement("aside");
+  right.id="rightPanelV83";
+  main.appendChild(right);
+}
+function v83Bar(label,val,max=100,icon=""){
+  const pct=clamp((val/max)*100,0,100);
+  return `<div class="v83StatLine"><b>${icon} ${label}</b><div class="v83Bar"><i style="width:${pct}%"></i></div><span>${Math.round(val)}/${max}</span></div>`;
+}
+function renderDashboard(){
+  if(!p){$("dashboard").innerHTML="<h2>Character</h2><p>No life started.</p>";return;}
+  v81Ensure();
+  const physical=Math.floor((p.strength+p.speed+p.durability)/3);
+  $("dashboard").innerHTML=`
+  <div class="v83CharacterCard">
+    <h3 class="v83PanelTitle">Character</h3>
+    <div class="v83PortraitRow">
+      <div class="v83Portrait">${p.portrait||"🙂"}</div>
+      <div>
+        <h2 style="margin:0">${p.name}</h2>
+        <div>Age: ${p.age}</div>
+        <div>${p.region}</div>
+        <div>${lifePhaseName?lifePhaseName():p.origin}</div>
+        <div>Bounty: ฿${fmt(p.bounty)}</div>
+      </div>
+    </div>
+  </div>
+  <div class="v83CharacterCard" style="margin-top:10px">
+    <h3 class="v83PanelTitle">Stats</h3>
+    ${v83Bar("Health",p.health,100,"❤️")}
+    ${v83Bar("Morale",p.mood,100,"😊")}
+    ${v83Bar("Intelligence",p.intelligence*10,100,"📘")}
+    ${v83Bar("Physical",physical*10,100,"💪")}
+    ${v83Bar("Charisma",p.charisma*10,100,"✨")}
+    ${v83Bar("Potential",(p.potential||1)*15,100,"⚡")}
+  </div>`;
+}
+function v83RenderRightPanel(){
+  v83EnsureRightPanel();
+  const right=document.getElementById("rightPanelV83");
+  if(!right||!p)return;
+  const faction = `
+    <div class="v83SideCard">
+      <h3 class="v83PanelTitle">Faction Reputation</h3>
+      <div class="line"><span>Marines</span><b>${p.marineRep||0}</b></div>
+      <div class="line"><span>Pirates</span><b>${p.infamy||0}</b></div>
+      <div class="line"><span>Revolutionaries</span><b>${p.revolutionaryRep||0}</b></div>
+      <div class="line"><span>Underworld</span><b>${p.heat||0}</b></div>
+    </div>`;
+  const dream = `
+    <div class="v83SideCard">
+      <h3 class="v83PanelTitle">Dream</h3>
+      <div class="v83DreamIcon">☠️</div>
+      <h2>${p.dream||"Not Set"}</h2>
+      <p>${p.dream==="Undiscovered"||!p.dream?"Find your path in life and decide what you truly seek.":"Your dream quietly shapes the events that find you."}</p>
+      <button onclick="dreamChoiceEvent&&dreamChoiceEvent()">Set / Reflect</button>
+    </div>`;
+  const upcoming = `
+    <div class="v83SideCard">
+      <h3 class="v83PanelTitle">World Hints</h3>
+      <div class="line"><span>Pirate ship spotted near Shells Town.</span><b>soon</b></div>
+      <div class="line"><span>Marine recruitment drive rumored.</span><b>teen</b></div>
+      <div class="line"><span>A fighting tournament may arrive.</span><b>later</b></div>
+      <button onclick="showTab('log')">View Life Log</button>
+    </div>`;
+  right.innerHTML=dream+faction+upcoming;
+}
+const baseRenderV83 = render;
+function render(){
+  baseRenderV83();
+  v83RenderRightPanel();
+}
+function v83HomeEventText(){
+  const last=(p.chapterLog&&p.chapterLog[0])?p.chapterLog[0]:null;
+  if(last)return `<h2>${last.title}</h2><p>${last.result||"Your story continues."}</p>`;
+  if(p.age===0)return `<h2>Birth</h2><p>You have been born into the world. The sea does not know your name yet.</p>`;
+  return `<h2>Life Event</h2><p>Press Age Up to move into the next chapter of your life.</p>`;
+}
+function mainMenu(){
+  v81Ensure();render();
+  if(p.dead)return deathScreen();
+  $("screen").innerHTML=`
+  <div class="v83Scene">
+    <div class="v83SceneHeader">
+      <div>
+        <div class="v83Age">AGE ${p.age}</div>
+        <div>Year ${p.age} of Your Life</div>
+        <div class="v83Location">📍 ${p.island||"Unknown Island"}, ${p.region||"Unknown Sea"}</div>
+      </div>
+      <div style="text-align:right">
+        <div>Dream: <b>${p.dream||"Undiscovered"}</b></div>
+        <div>Bounty: <b>฿${fmt(p.bounty)}</b></div>
+      </div>
+    </div>
+    <div class="v83EventWrap">
+      <div class="v83Parchment">
+        ${v83HomeEventText()}
+        <div class="choices">
+          <button onclick="ageUp()">⭐ Continue Life / Age Up</button>
+          <button onclick="lifeActionsMenu()">Do something this year</button>
+          <button onclick="showTab('life')">Review your life</button>
+        </div>
+      </div>
+    </div>
+    <div class="v83History">
+      <h3>Recent History</h3>
+      ${(p.feed||[]).slice(0,5).map(x=>`<div>• ${x}</div>`).join("")||"<div>No history yet.</div>"}
+    </div>
+  </div>
+  <div class="v83BottomActions">
+    <button onclick="lifeActionsMenu()">🧭<br>Activities</button>
+    <button onclick="relationshipsMenu()">👥<br>Relationships</button>
+    <button onclick="ownedWeapons()">🎒<br>Inventory</button>
+    <button class="v83AgeButton" onclick="ageUp()">⭐<br>Age Up</button>
+    <button onclick="crewMenu()">☠️<br>Crew</button>
+    <button onclick="trainingMenu()">🏋️<br>Training</button>
+    <button onclick="assetsMenu()">🏠<br>Assets</button>
+    <button onclick="travelMenu()">⛵<br>Travel</button>
+  </div>`;
+}
+function setup(){
+  p=newPlayer();
+  render();
+  $("screen").innerHTML=`
+  <div class="v83Scene">
+    <div class="v83SceneHeader">
+      <div>
+        <div class="v83Age">BEGIN LIFE</div>
+        <div class="v83Location">🌊 A new legend is about to be born</div>
+      </div>
+    </div>
+    <div class="v83EventWrap">
+      <div class="v83Parchment">
+        <h2>Great Pirate Life Sim</h2>
+        <p>Start at birth. Grow through choices. Let the sea shape your story.</p>
+        <input id="nameInput" placeholder="Character name, or leave blank for random">
+        <div class="choices">
+          <button onclick="createBirth()">Be Born</button>
+          ${hasSave()?'<button onclick="load()">Load Saved Life</button>':''}
+          <button onclick="clearSave()">Clear Save</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
 }

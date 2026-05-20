@@ -45,3 +45,12 @@ This is a clean rebuild of the core game files to reduce freezing, duplicate sta
 - Adds fate events: strange fruit, village raid, legendary mentor.
 - Adds triggered combat from life events.
 - Adds chapter log and stronger legacy direction.
+
+
+## v8.3 UI Target Build
+- Mockup-inspired layout.
+- Left character/stat panel.
+- Center life event parchment scene.
+- Right dream/reputation/world hints panel.
+- Bottom action bar with Age Up centerpiece.
+- Keeps v8.1 narrative foundation underneath.
