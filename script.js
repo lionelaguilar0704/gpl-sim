@@ -62,7 +62,7 @@ function newPlayer(){return{
  hiddenTraits:[],personality:{mercy:0,greed:0,freedom:0,ruthless:0,loyalty:0,ego:0},
  destiny:0,health:100,mood:50,
  strength:1,speed:1,durability:1,intelligence:1,charisma:1,navigation:0,sneak:0,discipline:0,sword:0,medicine:0,craft:0,marksmanship:0,
- honor:0,infamy:0,marineRep:0,revolutionaryRep:0,heat:0,crew:[],rivals:[],relationships:[],items:[],mystery:0,quest:null,
+ honor:0,infamy:0,marineRep:0,revolutionaryRep:0,heat:0,crew:[],rivals:[],relationships:[],items:[],loot:[],weapons:[],equippedWeapon:null,codex:{fruits:[],weapons:[]},injuries:[],reckless:0,mystery:0,quest:null,
  ship:{name:"None",hp:0,maxHp:0,cannons:0,cargo:0,xp:0,tier:0},businesses:[],territories:[],debt:0,legacy:0,
  memories:{islands:{},npcs:{},world:[]},timeline:[],feed:[],log:[],newspapers:[],dead:false
 }}
@@ -88,6 +88,13 @@ function ensureAppearance(){
  if(!p.memories)p.memories={islands:{},npcs:{},world:[]};
  if(!p.memories.islands)p.memories.islands={};
  if(!p.movesMastery)p.movesMastery={};
+ if(!p.loot)p.loot=[];
+ if(!p.weapons)p.weapons=[];
+ if(!p.codex)p.codex={fruits:[],weapons:[]};
+ if(!p.codex.fruits)p.codex.fruits=[];
+ if(!p.codex.weapons)p.codex.weapons=[];
+ if(!p.injuries)p.injuries=[];
+ if(p.reckless===undefined)p.reckless=0;
 }
 function death(title,detail){
  p.dead=true;
@@ -271,7 +278,7 @@ function chooseEvent(ei,ci){let c=EVENTS[ei].choices[ci];apply(c[1]);major(c[2])
 function postEventConsequences(){if(Math.random()<.12&&p.health<70)injuryRoll();if(p.bounty>0&&Math.random()<.18)addNews("BOUNTY UPDATED",`${p.name}, ${p.epithet}, now carries a bounty of ฿${fmt(p.bounty)}.`);if(p.infamy>=10&&["No Epithet","the Unwritten"].includes(p.epithet)){p.epithet=pick(["the Menace","Red-Hand","the Problem","Stormbringer","Black Wake"]);major(`Earned epithet: ${p.epithet}.`)}if(p.honor>=10&&["No Epithet","the Unwritten"].includes(p.epithet)){p.epithet=pick(["the Kind Blade","Harbor Saint","the Shield","the Gentle Storm","Dawn Hand"]);major(`Earned epithet: ${p.epithet}.`)}}
 
 
-/* v4.2 Battle Engine */
+/* v6.5 Corrected Power + Survival Build */
 function maxBattleHP(){return 80+p.durability*8+p.health}
 function maxBattleStamina(){return 40+p.discipline*5+p.speed*2}
 function maxBattleHaki(){return 20+(p.observation+p.armament+p.conqueror)*12+p.kingTraits.presence*2}
@@ -363,7 +370,7 @@ function bossIntro(name){
 
 function setup(){
  p=newPlayer();
- $("screen").innerHTML=`<h2>Start a New Life</h2><p><b>v4.2 Battle Engine</b> adds appearance evolution, animated dashboard, live notifications, interactive maps, newspapers, timeline, Haki effects, visual character stages, and smoother menus.</p><input id="nameInput" placeholder="Character name, or leave blank for random"><div class="choices"><button class="primary" onclick="randomStart()">Random Life</button><button onclick="chooseOriginScreen()">Choose Origin</button>${(localStorage.getItem("gpls_save_v42")||localStorage.getItem("gpls_save_v41")||localStorage.getItem("gpls_save_v40"))?'<button onclick="loadGame()">Load Saved Life</button>':''}<button class="danger" onclick="clearSave()">Clear Save</button></div>`;
+ $("screen").innerHTML=`<h2>Start a New Life</h2><p><b>v6.5 Corrected Power + Survival Build</b> adds appearance evolution, animated dashboard, live notifications, interactive maps, newspapers, timeline, Haki effects, visual character stages, and smoother menus.</p><input id="nameInput" placeholder="Character name, or leave blank for random"><div class="choices"><button class="primary" onclick="randomStart()">Random Life</button><button onclick="chooseOriginScreen()">Choose Origin</button>${(localStorage.getItem("gpls_save_v42")||localStorage.getItem("gpls_save_v41")||localStorage.getItem("gpls_save_v40"))?'<button onclick="loadGame()">Load Saved Life</button>':''}<button class="danger" onclick="clearSave()">Clear Save</button></div>`;
  render();
 }
 function randomStart(){p=newPlayer();p.name=$("nameInput").value.trim()||pick(DATA.names);p.dream=pick(DATA.dreams);let o=pick(DATA.origins);startWithOrigin(o)}
@@ -478,7 +485,7 @@ function render(){
  $("healthMeter").style.width=clamp(p.health,0,100)+"%";$("moodMeter").style.width=clamp(p.mood,0,100)+"%";$("energyMeter").style.width=clamp(p.actionsLeft*16,0,100)+"%";
  let stats=["strength","speed","durability","intelligence","charisma","navigation","sneak","discipline","sword","marksmanship","medicine","craft"];
  $("stats").innerHTML=stats.map(s=>`<div class="stat"><div class="statTop"><span>${s}</span><b>${p[s]}</b></div><div class="bar"><div class="fill" style="width:${Math.min(100,p[s]*10)}%"></div></div></div>`).join("");
- localStorage.setItem("gpls_save_v42",JSON.stringify(p));
+ localStorage.setItem("gpls_save_v65",JSON.stringify(p));
  showTab(currentTab,true);
 }
 function hakiSummary(){let h=[];if(p.observation>0)h.push("Obs "+p.observation);if(p.armament>0)h.push("Arm "+p.armament);if(p.conqueror>0)h.push("Conq "+p.conqueror);return h.length?h.join(" / "):"Dormant"}
@@ -497,8 +504,347 @@ function showTab(tab,silentRender=false){
  $("tab").innerHTML=html;
 }
 function ending(forcedTitle=null){let title=forcedTitle||"Unknown Drifter";if(!forcedTitle){if(p.conqueror>=5&&p.bounty>500000000)title="Emperor Candidate";else if(p.bounty>300000000)title="Legendary Pirate";else if(p.bounty>100000000)title="Supernova";else if(p.marineRep>35)title="Admiral Candidate";else if(p.revolutionaryRep>25)title="World Government Threat";else if(p.berries>600000)title="Underworld Tycoon";else if(p.infamy>25)title="Sea Menace";else if(p.honor>25)title="Local Legend";else if(p.crew.length>=10)title="Beloved Captain"}$("screen").innerHTML=`<h2>Ending: ${title}</h2><p>Your life reaches its final chapter. Legacy: ${p.legacy}. Future versions can let old lives become world legends.</p><div class="choices"><button class="primary" onclick="setup()">Start New Life</button></div>`;major(`Final title: ${title}.`);addNews("LIFE OF A LEGEND",`${p.name}'s story ends with the title: ${title}.`);render()}
-function help(){ $("screen").innerHTML=`<h2>How to Play v4.2</h2><div class="notice"><b>Living UI:</b> Watch the poster, appearance, background, feed, map, and newspapers evolve.<br><br><b>Appearance:</b> Your look changes from age, wounds, outfit, career, Devil Fruit, and Haki.<br><br><b>Notifications:</b> Small updates appear as toasts; major events still interrupt.<br><br><b>Haki:</b> Observation, Armament, and Conqueror unlock usable actions.</div><div class="choices"><button class="primary" onclick="showMenu()">Back</button></div>`}
-function manualSave(){localStorage.setItem("gpls_save_v42",JSON.stringify(p));silent("Game saved.");showMenu()}
-function loadGame(){p=JSON.parse(localStorage.getItem("gpls_save_v42"))||JSON.parse(localStorage.getItem("gpls_save_v41"))||JSON.parse(localStorage.getItem("gpls_save_v40"));ensureAppearance();if(!p.movesMastery)p.movesMastery={};showMenu()}
+function help(){ $("screen").innerHTML=`<h2>How to Play v6.5</h2><div class="notice"><b>Living UI:</b> Watch the poster, appearance, background, feed, map, and newspapers evolve.<br><br><b>Appearance:</b> Your look changes from age, wounds, outfit, career, Devil Fruit, and Haki.<br><br><b>Notifications:</b> Small updates appear as toasts; major events still interrupt.<br><br><b>Haki:</b> Observation, Armament, and Conqueror unlock usable actions.</div><div class="choices"><button class="primary" onclick="showMenu()">Back</button></div>`}
+function manualSave(){localStorage.setItem("gpls_save_v65",JSON.stringify(p));silent("Game saved.");showMenu()}
+function loadGame(){p=JSON.parse(localStorage.getItem("gpls_save_v42"))||JSON.parse(localStorage.getItem("gpls_save_v41"))||JSON.parse(localStorage.getItem("gpls_save_v40"));ensureAppearance();if(!p.movesMastery)p.movesMastery={};
+ if(!p.loot)p.loot=[];
+ if(!p.weapons)p.weapons=[];
+ if(!p.codex)p.codex={fruits:[],weapons:[]};
+ if(!p.codex.fruits)p.codex.fruits=[];
+ if(!p.codex.weapons)p.codex.weapons=[];
+ if(!p.injuries)p.injuries=[];
+ if(p.reckless===undefined)p.reckless=0;showMenu()}
 function clearSave(){localStorage.removeItem("gpls_save_v42");localStorage.removeItem("gpls_save_v41");localStorage.removeItem("gpls_save_v40");setup()}
+
+/* =========================
+   v6.5 Corrected Power + Survival Build
+   ========================= */
+const POWER_FRUITS=[
+ {name:"Flame-Flame Fruit",type:"Logia",rarity:"Legendary",desc:"Create, control, and become fire itself.",passives:["Logia intangibility vs non-Haki attacks","Fire resistance","Burst movement"],moves:["Fire Spear","Flame Dragon","Inferno Burst"],weakness:"Water, sea-prism, Armament Haki",scaling:"High damage and area control"},
+ {name:"Storm-Storm Fruit",type:"Logia",rarity:"Mythic",desc:"Become a living storm of wind, cloud, and lightning.",passives:["Logia intangibility","Lightning movement","Storm aura"],moves:["Thunder Spear","Storm Prison","Heavenly Judgment"],weakness:"Rubber-like counters, sea-prism, Armament Haki",scaling:"Extreme late-game damage"},
+ {name:"Smoke Body Fruit",type:"Logia",rarity:"Epic",desc:"Turn into smoke to evade, bind, and blind enemies.",passives:["Logia intangibility","Escape bonus","Fog concealment"],moves:["Smoke Bind","Whiteout","Choke Field"],weakness:"Strong wind, sea-prism, Armament Haki",scaling:"Control and evasion"},
+ {name:"Barrier-Barrier Fruit",type:"Paramecia",rarity:"Rare",desc:"Create nearly indestructible barriers.",passives:["Defense bonus","Protect allies","Block heavy strikes"],moves:["Barrier Wall","Barrier Cage","Barrier Crash"],weakness:"Limited early offense",scaling:"Defense and utility"},
+ {name:"Gravity-Gravity Fruit",type:"Paramecia",rarity:"Legendary",desc:"Manipulate gravity around targets and terrain.",passives:["Crush zones","Control bonus","Heavy pressure"],moves:["Heavy Palm","Meteor Pull","Gravity Well"],weakness:"High stamina cost",scaling:"Elite control"},
+ {name:"Wolf-Wolf Fruit",type:"Zoan",rarity:"Uncommon",desc:"Transform into a wolf or wolf hybrid.",passives:["Hybrid Form: speed and claws","Beast Form: tracking","Enhanced senses"],moves:["Savage Fang","Pack Rush","Moon Howl"],weakness:"Lower utility than rare fruits",scaling:"Consistent physical growth"},
+ {name:"Spinosaurus Fruit",type:"Ancient Zoan",rarity:"Epic",desc:"Ancient Zoan with monstrous durability and brutal strength.",passives:["Hybrid Form: armor and strength","Beast Form: huge HP","Bleed resistance"],moves:["Tail Cleaver","Ancient Charge","Bone Breaker"],weakness:"Slow speed",scaling:"Tank/bruiser"},
+ {name:"Phoenix Fruit",type:"Mythical Zoan",rarity:"Mythic",desc:"A mythical bird fruit with blue healing flames.",passives:["Flight","Healing flames","Regeneration chance"],moves:["Phoenix Talon","Healing Flame","Rebirth Burst"],weakness:"High mastery requirement",scaling:"Elite survival/support"}
+];
+
+const POWER_WEAPONS=[
+ {name:"Rusty Cutlass",type:"Sword",rarity:"Common",desc:"A chipped blade used by dock thugs and rookies.",effects:["Small sword damage"],moves:["Basic Slash"],special:"None",power:4,history:"No known history."},
+ {name:"Marine Saber",type:"Sword",rarity:"Uncommon",desc:"A reliable military saber used by trained officers.",effects:["Sword damage","Parry bonus"],moves:["Officer Slash","Guard Break"],special:"Discipline scaling",power:9,history:"Standard Marine issue."},
+ {name:"Iron Knuckle Gauntlets",type:"Gauntlets",rarity:"Uncommon",desc:"Heavy iron gauntlets built for brawlers.",effects:["Punch damage","Stun chance"],moves:["Iron Jab","Rib Breaker"],special:"Pairs well with Armament",power:10,history:"Popular in underground fight pits."},
+ {name:"Sea King's Tooth Club",type:"Heavy Weapon",rarity:"Epic",desc:"A brutal club carved from the tooth of a Sea King.",effects:["Stun","Armor break"],moves:["Skull Tide","Bone Quake"],special:"Bonus vs beasts",power:26,history:"Taken from a monster that sank seven ships."},
+ {name:"Storm Fang",type:"Spear",rarity:"Legendary",desc:"A spear forged from storm iron, known to spark during violent clashes.",effects:["High crit chance","Lightning damage"],moves:["Thunder Pierce","Sky Splitter","Storm Fang Lance"],special:"Can evolve with Observation Haki",power:32,history:"Wielded by the Thunder King."},
+ {name:"Enketsu",type:"Cursed Blade",rarity:"Mythic",desc:"A cursed blade that burns with the hatred of fallen warriors.",effects:["Massive slash damage","Blood Flame"],moves:["Blood Flame Cut","Soul Ignition","Crimson Execution"],special:"Hidden curse may drain stamina",power:42,history:"Wielded by the Crimson Executioner."},
+ {name:"Supreme Grade Blade Lead",type:"Legendary Clue",rarity:"Mythic",desc:"A clue pointing toward a Supreme Grade Blade.",effects:["Unlocks future weapon quest"],moves:["Unknown"],special:"Black Blade potential",power:50,history:"Only legends know where it points."}
+];
+
+function rarityClassName(r){return "rarity"+String(r||"Common").replace(/\s/g,"")}
+function ensurePowerFields(){
+ if(!p)return;
+ if(!p.loot)p.loot=[];
+ if(!p.weapons)p.weapons=[];
+ if(!p.codex)p.codex={fruits:[],weapons:[]};
+ if(!p.codex.fruits)p.codex.fruits=[];
+ if(!p.codex.weapons)p.codex.weapons=[];
+ if(!p.injuries)p.injuries=[];
+ if(p.reckless===undefined)p.reckless=0;
+}
+function discoverFruit(f){ensurePowerFields();if(!p.codex.fruits.some(x=>x.name===f.name))p.codex.fruits.push(f)}
+function discoverWeapon(w){ensurePowerFields();if(!p.codex.weapons.some(x=>x.name===w.name))p.codex.weapons.push(w)}
+function weaponPowerBonus(){ensurePowerFields();return p.equippedWeapon?Math.floor((p.equippedWeapon.power||0)/4):0}
+function weaponMoveButtons(){
+ ensurePowerFields();
+ if(!p.equippedWeapon)return [];
+ return (p.equippedWeapon.moves||[]).map((m,i)=>({id:"weapon_"+i,name:m,type:"weapon",cost:8+i*3,power:(p.equippedWeapon.power||5)+p.sword*2,desc:p.equippedWeapon.name}));
+}
+function powerCodexMenu(){
+ ensurePowerFields();
+ $("screen").innerHTML=`<h2>📖 Pirate Codex</h2>
+ <p>This is where fruits, weapon tiers, movesets, passives, weaknesses, and lore are tracked.</p>
+ <div class="cardGrid">
+ <div class="miniCard"><h4>Fruits Discovered</h4><p>${p.codex.fruits.length}/${POWER_FRUITS.length}</p></div>
+ <div class="miniCard"><h4>Weapons Discovered</h4><p>${p.codex.weapons.length}/${POWER_WEAPONS.length}</p></div>
+ </div>
+ <div class="choices">
+ <button onclick="fruitCodex()">🍎 Devil Fruit Encyclopedia</button>
+ <button onclick="weaponCodex()">⚔️ Weapon Tier Encyclopedia</button>
+ <button onclick="ownedWeapons()">🎒 Owned Weapons</button>
+ <button class="primary" onclick="showMenu()">Back</button>
+ </div>`;
+ render();
+}
+function fruitCodex(){
+ $("screen").innerHTML=`<h2>🍎 Devil Fruit Encyclopedia</h2>
+ <p><b>Logia Rule:</b> non-Haki physical attacks should miss Logia bodies unless the attacker uses Armament Haki, sea-prism, or a natural counter.</p>
+ ${POWER_FRUITS.map(f=>`<div class="powerCard ${rarityClassName(f.rarity)}">
+ <h3>${f.name}</h3>
+ <p><b>${f.type}</b> • ${f.rarity}</p>
+ <p>${f.desc}</p>
+ <p><b>Passives:</b> ${f.passives.join(", ")}</p>
+ <p><b>Moves:</b> ${f.moves.join(", ")}</p>
+ <p><b>Weakness:</b> ${f.weakness}</p>
+ <p><b>Scaling:</b> ${f.scaling}</p>
+ </div>`).join("")}
+ <button class="primary" onclick="powerCodexMenu()">Back</button>`;
+}
+function weaponCodex(){
+ $("screen").innerHTML=`<h2>⚔️ Weapon Tier Encyclopedia</h2>
+ <p>Weapons now have rarity, lore, effects, movesets, special skills, and power scaling.</p>
+ ${POWER_WEAPONS.map(w=>`<div class="powerCard ${rarityClassName(w.rarity)}">
+ <h3>${w.name}</h3>
+ <p><b>${w.rarity}</b> ${w.type} • Power ${w.power}</p>
+ <p>${w.desc}</p>
+ <p><b>Effects:</b> ${w.effects.join(", ")}</p>
+ <p><b>Moveset:</b> ${w.moves.join(", ")}</p>
+ <p><b>Special Skill:</b> ${w.special}</p>
+ <p><b>History:</b> ${w.history}</p>
+ </div>`).join("")}
+ <button class="primary" onclick="powerCodexMenu()">Back</button>`;
+}
+function ownedWeapons(){
+ ensurePowerFields();
+ $("screen").innerHTML=`<h2>🎒 Owned Weapons</h2>
+ ${p.equippedWeapon?`<div class="weaponEquipped"><b>Equipped:</b> ${p.equippedWeapon.rarity} ${p.equippedWeapon.name} — ${p.equippedWeapon.type}</div>`:"<p>No weapon equipped.</p>"}
+ <div class="choices">
+ ${p.weapons.map((w,i)=>`<button onclick="equipWeapon(${i})">${w.rarity} ${w.name}<small>${w.type} • Power ${w.power}</small></button>`).join("")||"<p>No weapons owned yet.</p>"}
+ <button onclick="findWeapon()">Search for Weapon</button>
+ <button class="primary" onclick="powerCodexMenu()">Back</button>
+ </div>`;
+ render();
+}
+function equipWeapon(i){ensurePowerFields();if(!p.weapons[i])return;p.equippedWeapon=p.weapons[i];major(`Equipped ${p.equippedWeapon.name}.`);showMenu()}
+function findWeapon(){
+ if(!spendAction())return;
+ ensurePowerFields();
+ const danger=currentRegion().danger||1;
+ let maxPower=10+danger*6+(p.reckless||0);
+ let pool=POWER_WEAPONS.filter(w=>w.power<=maxPower);
+ if(!pool.length)pool=POWER_WEAPONS.slice(0,3);
+ if(Math.random()<0.08)pool=POWER_WEAPONS;
+ let w=deep(pick(pool));
+ p.weapons.push(w);
+ discoverWeapon(w);
+ major(`Found weapon: ${w.rarity} ${w.name}.`);
+ ownedWeapons();
+}
+function inspectFruitEncounter(){
+ if(!spendAction())return;
+ ensurePowerFields();
+ const danger=currentRegion().danger||1;
+ const rarityOrder=["Common","Uncommon","Rare","Epic","Legendary","Mythic"];
+ let maxRank=Math.min(5,Math.floor(danger/2)+2);
+ let pool=POWER_FRUITS.filter(f=>rarityOrder.indexOf(f.rarity)<=maxRank);
+ if(!pool.length)pool=POWER_FRUITS;
+ if(Math.random()<0.05)pool=POWER_FRUITS;
+ let f=deep(pick(pool));
+ discoverFruit(f);
+ $("screen").innerHTML=`<h2>🍎 Devil Fruit Found</h2>
+ <div class="powerCard ${rarityClassName(f.rarity)}">
+ <h3>${f.name}</h3>
+ <p><b>${f.type}</b> • ${f.rarity}</p>
+ <p>${f.desc}</p>
+ <p><b>Passives:</b> ${f.passives.join(", ")}</p>
+ <p><b>Potential Moves:</b> ${f.moves.join(", ")}</p>
+ <p><b>Known Weakness:</b> ${f.weakness}</p>
+ </div>
+ <div class="choices">
+ <button onclick='eatInspectedFruit(${JSON.stringify(f)})'>Eat Fruit</button>
+ <button onclick='sellInspectedFruit(${JSON.stringify(f)})'>Sell Fruit</button>
+ <button onclick="powerCodexMenu()">Store Knowledge</button>
+ </div>`;
+ render();
+}
+function eatInspectedFruit(f){
+ if(p.fruit&&p.fruit!=="None"){notice("Already Powered","You already have a Devil Fruit power.");return}
+ p.fruit=f.name;p.fruitType=f.type;p.fruitMastery=1;p.fruitSkills=[f.moves[0]];
+ if(p.appearance)p.appearance.effect=f.type==="Logia"?"✨":f.type.includes("Zoan")?"🐾":"🔮";
+ major(`Ate the ${f.name}. Type: ${f.type}.`);
+ showMenu();
+}
+function sellInspectedFruit(f){
+ const values={Common:1000,Uncommon:5000,Rare:20000,Epic:60000,Legendary:150000,Mythic:400000};
+ let val=values[f.rarity]||5000;
+ p.berries+=val;
+ major(`Sold ${f.name} for ฿${fmt(val)}.`);
+ showMenu();
+}
+function dangerLevelText(){
+ const r=(p.reckless||0)+(100-(p.health||100))+(currentRegion().danger||1)*10;
+ if(r<50)return "🟢 Safe";
+ if(r<90)return "🟡 Risky";
+ if(r<140)return "🟠 Dangerous";
+ if(r<190)return "🔴 Deadly";
+ return "☠️ Impossible";
+}
+function addInjurySafe(name){ensurePowerFields();p.injuries.push(name);major("Injury gained: "+name)}
+function survivalDefeat(reason="You were defeated."){
+ ensurePowerFields();
+ p.health=0;
+ const rescued=p.crew&&p.crew.length&&Math.random()<0.24;
+ if(rescued)return crewRescueOutcome(reason);
+ const roll=Math.random();
+ if(roll<0.28)return capturedOutcome(reason);
+ if(roll<0.52)return robbedOutcome(reason);
+ if(roll<0.78)return scarOutcome(reason);
+ return lastChance(reason);
+}
+function capturedOutcome(reason){
+ p.health=18;p.mood=clamp((p.mood||50)-15,0,100);p.bounty=Math.max(0,(p.bounty||0)-3000);
+ major(reason+" You were captured instead of killed.");
+ $("screen").innerHTML=`<h2>⛓️ Captured</h2><div class="captureBox">You were defeated and thrown into a holding cell. You survived, but your reputation suffered.</div><div class="choices"><button onclick="p.health=25;major('Escaped captivity wounded.');showMenu()">Plan Escape</button><button onclick="p.berries=Math.max(0,p.berries-5000);p.health=35;major('Paid your way out of captivity.');showMenu()">Pay/Bribe Way Out</button></div>`;
+ render();
+}
+function robbedOutcome(reason){
+ p.health=12;let lost=Math.min(p.berries||0,Math.floor(2000+Math.random()*10000));p.berries=Math.max(0,(p.berries||0)-lost);
+ addInjurySafe("Severe bruising");major(reason+` You survived, but lost ฿${fmt(lost)}.`);
+ $("screen").innerHTML=`<h2>💰 Robbed and Left Behind</h2><div class="survivalBox">You were beaten, robbed, and left alive. Lost ฿${fmt(lost)}.</div><div class="choices"><button class="primary" onclick="showMenu()">Continue Wounded</button></div>`;
+ render();
+}
+function crewRescueOutcome(reason){
+ p.health=20;
+ let text="A stranger pulled you from danger.";
+ if(p.crew&&p.crew.length){let c=pick(p.crew);c.loyalty=clamp((c.loyalty||5)+2,0,10);text=`${c.name} dragged you out before the finishing blow.`}
+ major(text);
+ $("screen").innerHTML=`<h2>👥 Rescue</h2><div class="survivalBox">${text} You are alive, but badly wounded.</div><div class="choices"><button class="primary" onclick="showMenu()">Continue</button></div>`;
+ render();
+}
+function scarOutcome(reason){
+ p.health=10;addInjurySafe("Near-fatal wound");
+ if(p.appearance)p.appearance.scar=pick(["Eye Scar","Burn Mark","Blade Scar","Bullet Scar"]);
+ major(reason+" You survived with a permanent scar.");
+ $("screen").innerHTML=`<h2>🩸 Permanent Scar</h2><div class="survivalBox">You survived, but this will stay with you. Your appearance changed.</div><div class="choices"><button class="primary" onclick="showMenu()">Continue</button></div>`;
+ render();
+}
+function lastChance(reason="You collapse."){
+ $("screen").innerHTML=`<h2>⚠️ Last Chance</h2>
+ <p>${reason}</p>
+ <div class="survivalBox">Your vision fades. Choose how you try to survive.</div>
+ <div class='choices'>
+ <button onclick='crewRescue()'>Call Crew</button>
+ <button onclick='hakiBurst()'>Use Haki Burst</button>
+ <button onclick='crawlAway()'>Crawl Away</button>
+ <button onclick='dropLootSurvive()'>Drop Loot and Run</button>
+ <button class='danger' onclick='acceptFate()'>Accept Fate</button>
+ </div>`;
+ render();
+}
+function crewRescue(){
+ if(p.crew&&p.crew.length&&Math.random()<0.75)return crewRescueOutcome("Crew rescue succeeded.");
+ if(Math.random()<0.25)return crewRescueOutcome("Someone heard your call.");
+ addInjurySafe("Failed rescue wound");p.health=5;major("No one reached you in time, but you barely moved.");showMenu();
+}
+function hakiBurst(){
+ const hakiPower=(p.conqueror||0)+(p.armament||0)+(p.observation||0);
+ if(hakiPower>0&&Math.random()<Math.min(0.75,0.25+hakiPower*0.08)){p.health=12;major("A desperate Haki burst kept you alive.");return showMenu()}
+ addInjurySafe("Haki backlash");p.health=6;major("Your Haki failed, but the effort kept you breathing.");showMenu();
+}
+function crawlAway(){
+ if(Math.random()<0.62){p.health=8;addInjurySafe("Broken ribs");major("You crawled away from death.");return showMenu()}
+ addInjurySafe("Collapsed from blood loss");p.health=4;major("You failed to escape cleanly, but survived barely.");showMenu();
+}
+function dropLootSurvive(){
+ if(p.loot&&p.loot.length)p.loot.pop();
+ p.berries=Math.max(0,(p.berries||0)-Math.min(p.berries||0,5000));p.health=15;major("Dropped valuables and escaped.");showMenu();
+}
+function acceptFate(){death("Journey Ended","You chose to accept your fate.")}
+function dangerCheck(label,fatalChance=0,injuryChance=0){
+ if(p.dead)return true;
+ const risk=fatalChance+(currentRegion().danger||1)*0.005+(p.heat||0)*0.003;
+ if(Math.random()<risk){
+   p.reckless=(p.reckless||0)+2;p.health=Math.max(0,(p.health||100)-35);addInjurySafe(label+" wound");survivalDefeat(label+" went horribly wrong.");return true;
+ }
+ if(Math.random()<injuryChance){addInjurySafe(label+" injury");p.health=clamp((p.health||100)-10,0,100)}
+ return false;
+}
+function loseBattle(){
+ const b=p.battle;
+ p.battle=null;
+ p.reckless=(p.reckless||0)+1;
+ survivalDefeat(`You were defeated by ${b?.enemy?.name||"the enemy"}.`);
+}
+/* Override combat score and moves so weapons matter visibly. */
+function combatScore(mode="duel"){
+ ensurePowerFields();
+ let score=p.strength*2+p.speed+p.durability+p.sword*2+p.marksmanship*1.5+p.armament*5+p.observation*3+p.conqueror*6+p.fruitMastery*3+p.crew.length*1.5+weaponPowerBonus();
+ if(mode==="naval")score+=p.ship.cannons*5+p.ship.tier*8+crewBonus("navigator")*4+crewBonus("sniper")*3;
+ if(mode==="escape")score+=p.speed*2+p.sneak*2+p.navigation+crewBonus("navigator")*3+p.observation*4;
+ return score;
+}
+function buildMoves(){
+ let moves=[
+  {id:"punch",name:"Heavy Punch",type:"basic",cost:4,power:10+p.strength*2,desc:"Reliable physical strike."},
+  {id:"rush",name:"Rush Combo",type:"basic",cost:8,power:13+p.speed*2,desc:"Fast combo attack."}
+ ];
+ if(p.sword>0)moves.push({id:"slash",name:"Sword Slash",type:"style",cost:7,power:14+p.sword*3,desc:"Blade attack."});
+ if(p.marksmanship>0)moves.push({id:"shot",name:"Trick Shot",type:"style",cost:7,power:13+p.marksmanship*3,desc:"Ranged shot."});
+ if(p.armament>0)moves.push({id:"blackfist",name:"Black Iron Fist",type:"haki",cost:10,haki:6,power:22+p.armament*7+p.strength,desc:"Armament-coated blow."});
+ if(p.observation>0)moves.push({id:"predict",name:"Predict Strike",type:"haki",cost:8,haki:5,power:8+p.observation*4,desc:"Read and counter."});
+ if(p.conqueror>0)moves.push({id:"willburst",name:"Will Burst",type:"haki",cost:12,haki:10,power:18+p.conqueror*8+p.kingTraits.presence*2,desc:"Conqueror pressure."});
+ if(p.fruit!="None"){
+  let base=18+p.fruitMastery*6;
+  let label=(p.fruitSkills&&p.fruitSkills.length)?p.fruitSkills[p.fruitSkills.length-1]:"Fruit Technique";
+  moves.push({id:"fruit",name:label,type:"fruit",cost:12,haki:0,power:base,desc:p.fruit});
+ }
+ moves=moves.concat(weaponMoveButtons());
+ if(p.crew.length>0)moves.push({id:"crew",name:"Crew Assist",type:"crew",cost:6,power:10+p.crew.length*4,desc:"Call a crewmate."});
+ return moves;
+}
+/* Override main menu so the new systems are impossible to miss. */
+function showMenu(){
+ render(); if(p.dead)return; if(p.age>=80)return ending();
+ if(p.age===16&&p.path==="Undecided")return choosePath();
+ const crewPop=p.crew.length&&Math.random()<.18?`<div class="storyCard"><b>${pick(p.crew).name} approaches:</b> "${pick(["Captain, the sea feels strange today.","We should train soon.","I heard rumors in town.","Are we still chasing your dream?"])}"</div>`:"";
+ $("screen").innerHTML=`<h2>Age ${p.age}: ${p.name}'s Life</h2>${crewPop}
+ <div class="dangerMeter"><b>Danger:</b> ${dangerLevelText()} · Reckless ${p.reckless||0}</div>
+ <p><b>${p.actionsLeft}</b> energy left.</p>
+ <div class="menuGrid">
+ <button class="primary" onclick="ageUp()">Age Up</button>
+ <button onclick="randomEventAction()">Major Event</button>
+ <button onclick="combatMenu()">Combat</button>
+ <button onclick="activitiesMenu()">Activities</button>
+ <button onclick="trainingMenu()">Training</button>
+ <button onclick="hakiMenu()">Haki Actions</button>
+ <button onclick="powerCodexMenu()">📖 Pirate Codex</button>
+ <button onclick="inspectFruitEncounter()">🍎 Search Fruit</button>
+ <button onclick="ownedWeapons()">⚔️ Weapons</button>
+ <button onclick="appearanceMenu()">Appearance</button>
+ <button onclick="travelMenu()">Travel</button>
+ <button onclick="crewMenu()">Crew</button>
+ <button onclick="careerMenu()">Career</button>
+ <button onclick="assetsMenu()">Assets</button>
+ <button onclick="blackMarketMenu()">Black Market</button>
+ <button onclick="relationshipsMenu()">Relationships</button>
+ <button onclick="legacyMenu()">Legacy</button>
+ <button onclick="manualSave()">Save</button>
+ </div>`;
+}
+/* Override powers tab to show weapon systems too. */
+const originalShowTab_v65 = showTab;
+function showTab(tab,silentRender=false){
+ if(tab!=="powers")return originalShowTab_v65(tab,silentRender);
+ currentTab=tab;if(!p)return; ensureAppearance(); ensurePowerFields();
+ $("tab").innerHTML=`<h3>Powers</h3>
+ <div class="line"><span>Devil Fruit</span><b>${p.fruit}</b></div>
+ <div class="line"><span>Fruit Type</span><b>${p.fruitType||"None"}</b></div>
+ <div class="line"><span>Fruit Mastery</span><b>${p.fruitMastery}</b></div>
+ <div class="badgeRow">${p.fruitSkills.map(s=>`<span class="badge">${s}</span>`).join("")||"<span class='badge'>No fruit skills</span>"}</div>
+ <h3>Equipped Weapon</h3>
+ ${p.equippedWeapon?`<div class="weaponEquipped"><b>${p.equippedWeapon.rarity} ${p.equippedWeapon.name}</b><br>${p.equippedWeapon.type} • Power ${p.equippedWeapon.power}<br>Moves: ${p.equippedWeapon.moves.join(", ")}</div>`:"<p>No weapon equipped.</p>"}
+ <h3>Owned Weapons</h3>
+ <div class="cardGrid">${p.weapons.map((w,i)=>`<div class="miniCard ${rarityClassName(w.rarity)}"><h4>${w.rarity}: ${w.name}</h4><p>${w.type} • Power ${w.power}<br>${w.desc}</p><button onclick="equipWeapon(${i})">Equip</button></div>`).join("")||"<p>No weapons owned yet.</p>"}</div>
+ <h3>Ship & Assets</h3>
+ <div class="line"><span>Ship</span><b>${p.ship.name} · HP ${p.ship.hp}/${p.ship.maxHp} · Cannons ${p.ship.cannons}</b></div>
+ <div class="badgeRow">${p.items.map(i=>`<span class="badge">${typeof i==="string"?i:i.name}</span>`).join("")||"<span class='badge'>No items</span>"}</div>`;
+}
+
+
+function manualSave(){localStorage.setItem("gpls_save_v65",JSON.stringify(p));silent("Game saved.");showMenu()}
+function loadGame(){
+ p=JSON.parse(localStorage.getItem("gpls_save_v65"))||JSON.parse(localStorage.getItem("gpls_save_v61"))||JSON.parse(localStorage.getItem("gpls_save_v52"))||JSON.parse(localStorage.getItem("gpls_save_v42"))||JSON.parse(localStorage.getItem("gpls_save_v41"))||JSON.parse(localStorage.getItem("gpls_save_v40"));
+ ensureAppearance();ensurePowerFields();if(!p.movesMastery)p.movesMastery={};showMenu();
+}
+function clearSave(){["gpls_save_v65","gpls_save_v64","gpls_save_v63","gpls_save_v62","gpls_save_v61","gpls_save_v52","gpls_save_v42","gpls_save_v41","gpls_save_v40"].forEach(k=>localStorage.removeItem(k));setup()}
+
 $("saveBtn").onclick=manualSave;$("newBtn").onclick=setup;$("helpBtn").onclick=help;setup();
