@@ -1,34 +1,4 @@
 
-/* v6.2 survival system */
-function dangerLevel(){
- let r=(p.reckless||0)+(100-(p.health||100))+((currentRegion&&currentRegion()?.danger)||1)*10;
- if(r<50)return "🟢 Safe";
- if(r<90)return "🟡 Risky";
- if(r<140)return "🟠 Dangerous";
- if(r<190)return "🔴 Deadly";
- return "☠️ Impossible";
-}
-function addInjury(name){
- if(!p.injuries)p.injuries=[];
- p.injuries.push(name);
- major("Injury gained: "+name);
-}
-function lastChance(){
- $("screen").innerHTML=`<h2>⚠️ LAST CHANCE</h2>
- <p>You collapse and your vision fades...</p>
- <div class='choices'>
- <button onclick='crewRescue()'>Call Crew</button>
- <button onclick='hakiBurst()'>Use Haki Burst</button>
- <button onclick='crawlAway()'>Crawl Away</button>
- <button class='danger' onclick='acceptFate()'>Accept Fate</button>
- </div>`;
-}
-function crewRescue(){if(Math.random()<0.7){p.health=15;major("Your crew rescued you.");showMenu()}else acceptFate()}
-function hakiBurst(){if(((p.conqueror||0)+(p.armament||0)+(p.observation||0))>5 && Math.random()<0.5){p.health=10;major("You forced your body to move.");showMenu()}else acceptFate()}
-function crawlAway(){if(Math.random()<0.45){p.health=8;addInjury("Broken ribs");showMenu()}else acceptFate()}
-function acceptFate(){death("Journey Ended","Your wounds were too severe.");}
-
-
 /* v6 Power Expansion */
 const FRUITS=[
 {name:"Flame-Flame Fruit",type:"Logia",rarity:"Legendary",desc:"Become, create and control fire.",passives:["Intangible body","Fire resistance","Flight"],moves:["Fire Spear","Flame Dragon"],weak:"Water"},
@@ -372,7 +342,7 @@ function battleRest(){const b=p.battle;if(!b)return;b.player.stamina=Math.min(b.
 function battleEscape(){const b=p.battle;if(!b)return;const chance=0.45+(p.speed+p.sneak+p.observation)/80-currentRegion().danger*.025;if(Math.random()<chance){p.battle=null;silent("Escaped a fight.");return showMenu()}b.log.push("Escape failed.");enemyTurn()}
 function enemyTurn(){const b=p.battle;if(!b)return;if(b.enemy.stunned){b.log.push(`${b.enemy.name} is stunned and loses a turn.`);b.enemy.stunned=false;return renderBattle()}let dmg=b.enemy.power+Math.random()*16;if(p.observation>0&&Math.random()<0.08+p.observation*.04){dmg*=0.35;b.log.push("Observation Haki softened the hit.")}if(p.armament>0&&Math.random()<0.08+p.armament*.035){dmg*=0.55;b.log.push("Armament Haki blocked part of the damage.")}b.player.hp-=dmg;b.enemy.stamina=Math.max(0,b.enemy.stamina-4);b.log.push(`${b.enemy.name} attacked for ${Math.round(dmg)} damage.`);if(b.player.hp<=0)return loseBattle();renderBattle()}
 function winBattle(){const b=p.battle;major(`Won battle against ${b.enemy.name}.`);apply(b.reward||{});p.health=clamp(Math.round((b.player.hp/b.player.maxHp)*100),1,100);if(b.kind==="rival")apply({conquerorXP:1,armamentXP:1,courage:1,bounty:8000});if(b.kind==="raid")apply({berries:8000,bounty:12000,infamy:1});if(b.kind==="bounty")apply({berries:10000,marineRep:1});p.battle=null;showMenu()}
-function loseBattle(){const b=p.battle;p.health=0;const fatal=0.18+(currentRegion().danger*0.035)+(b.enemy.boss?0.12:0);if(Math.random()<fatal){p.battle=null;return lastChance();//,`${b.enemy.name} finished you. Your journey ended in combat.`)}p.battle=null;p.health=10;injuryRoll();major(`You were defeated by ${b.enemy.name}, but survived.`);showMenu()}
+function loseBattle(){const b=p.battle;p.health=0;const fatal=0.18+(currentRegion().danger*0.035)+(b.enemy.boss?0.12:0);if(Math.random()<fatal){p.battle=null;return death("Defeated in Battle",`${b.enemy.name} finished you. Your journey ended in combat.`)}p.battle=null;p.health=10;injuryRoll();major(`You were defeated by ${b.enemy.name}, but survived.`);showMenu()}
 
 
 function damagePopup(num){

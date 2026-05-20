@@ -61,3 +61,15 @@ v5.1 Added dynamic combat visuals, damage popups, boss intros.
 - Fixed gambling odds so winning is capped and losses can happen.
 - Added gambling debt/mood consequences.
 - Kept Power Expansion / Codex foundation.
+
+
+## v6.4 Power + Survival Correction
+- Fixed remaining random-death flow by overriding defeat into survival outcomes.
+- Added weapon rarity tiers: Common, Uncommon, Rare, Epic, Legendary, Mythic.
+- Added weapon descriptions, lore, effects, movesets, and special skills.
+- Added Devil Fruit encyclopedia with Logia, Paramecia, Zoan, Ancient Zoan, Mythical Zoan types.
+- Added Logia explanation: non-Haki attacks should miss in future deeper battle rules.
+- Added weapon ownership/equip system.
+- Added fruit encounter inspection screen.
+- Added Pirate Codex menu.
+- Added danger/recklessness display.
