@@ -130,3 +130,28 @@ input{
   .wanted h2{font-size:2rem}
 }
 @media(min-width:1051px){.bottomNav{display:none}#app{padding-bottom:20px}}
+
+
+/* v7.1 Sandbox Freedom */
+.freedomPanel{
+  border:1px solid var(--blue);
+  background:rgba(98,168,255,.08);
+  border-radius:16px;
+  padding:12px;
+  margin:10px 0;
+}
+.pathGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.sandboxTag{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  margin:3px;
+  font-size:.82rem;
+}
+@media(max-width:720px){.pathGrid{grid-template-columns:1fr}}

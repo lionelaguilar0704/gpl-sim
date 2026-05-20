@@ -1,8 +1,8 @@
 
 "use strict";
 
-const SAVE_KEY = "gpls_save_v70";
-const OLD_KEYS = ["gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
+const SAVE_KEY = "gpls_save_v71";
+const OLD_KEYS = ["gpls_save_v70","gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
 let p = null;
 let currentTab = "feed";
 let booted = false;
@@ -31,7 +31,7 @@ function silent(msg){ log(msg); toast(msg,false); render(); }
 
 function newPlayer(){
   return {
-    build:"v7.0", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
+    build:"v7.1", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
     portrait:"🙂", epithet:"No Epithet", region:"Home Sea", island:"Syrup Harbor",
     health:100, mood:55, energy:5, actionsLeft:5, berries:0, debt:0, bounty:0, heat:0, infamy:0, honor:0,
     strength:1, speed:1, durability:1, intelligence:1, charisma:1, sneak:1, discipline:1, leadership:0,
@@ -103,7 +103,7 @@ function checkUnlocks(){
 
 function save(){
   ensure();
-  p.build="v7.0";
+  p.build="v7.1";
   localStorage.setItem(SAVE_KEY,JSON.stringify(p));
   toast("Game saved.");
 }
@@ -115,7 +115,7 @@ function load(){
   if(!data){ setup(); return; }
   p=JSON.parse(data);
   ensure();
-  p.build="v7.0";
+  p.build="v7.1";
   save();
   mainMenu();
 }
@@ -191,7 +191,7 @@ function showTab(tab,silent=false){
     <h3>Inventory</h3><div class="cardGrid">${p.loot.slice(-8).map(l=>`<div class="miniCard rarity${l.rarity}"><h4>${l.rarity} ${l.name}</h4><p>Value ฿${fmt(l.value)}</p></div>`).join("")||"<p>No loot yet.</p>"}</div>`;
   if(tab==="codex")$("tab").innerHTML=`<h3>Codex</h3><div class="choices"><button onclick="fruitCodex()">Devil Fruits</button><button onclick="weaponCodex()">Weapons</button><button onclick="ownedWeapons()">Owned Weapons</button></div>`;
   if(tab==="map")$("tab").innerHTML=`<h3>Map</h3>${DATA.islands.map(i=>`<div class="line"><span>${i.name}</span><b>${i.region} · Danger ${i.danger}</b></div>`).join("")}`;
-  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v7.0<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
+  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v7.1<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
 }
 
 function roleSummary(){
@@ -211,7 +211,7 @@ function setup(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Start a New Life</h2>
-    <p><b>v7.0 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
+    <p><b>v7.1 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
     <div class="safeNotice notice">This version uses a clean save slot. Old saves can still be loaded, but a new life is recommended for testing.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -623,3 +623,183 @@ function boot(){
   setup();
 }
 boot();
+
+
+/* =========================
+   v7.1 Sandbox Freedom Update
+   ========================= */
+function freedomHub(){
+  $("screen").innerHTML=`<h2>🌊 Open Sea</h2>
+  <p>This is the free-play hub. Your career gives special options, but it does not control your entire life.</p>
+  <div class="freedomPanel">
+    <b>Identity:</b> ${p.path}<br>
+    <b>Role:</b> ${p.crewMode}<br>
+    <b>Location:</b> ${p.island}<br>
+    <span class="sandboxTag">Explore</span><span class="sandboxTag">Train</span><span class="sandboxTag">Scheme</span><span class="sandboxTag">Drift</span><span class="sandboxTag">Join factions</span>
+  </div>
+  <div class="pathGrid">
+    <button onclick="dailyLifeMenu()">Daily Life<small>Rest, work, socialize, gamble, lay low</small></button>
+    <button onclick="adventureMenu()">Adventure<small>Explore, rumors, travel, island events</small></button>
+    <button onclick="powerMenu()">Power Hunt<small>Fruits, weapons, Haki, mastery</small></button>
+    <button onclick="factionMenu()">Faction Choices<small>Pirates, Marines, Revolutionaries, hunters</small></button>
+    <button onclick="underworldMenu()">Underworld<small>Smuggling, crime, black market</small></button>
+    <button onclick="drifterMenu()">Drifter Life<small>Stay uncommitted and survive freely</small></button>
+    <button class="primary" onclick="mainMenu()">Back</button>
+  </div>`;
+  render();
+}
+function dailyLifeMenu(){
+  submenu("Daily Life","Low-risk actions that make the world feel alive between major events.",[
+    ["Work Odd Jobs",()=>{if(spendAction()){apply({berries:1200+Math.floor(Math.random()*1800),mood:-1});silent("Worked odd jobs.");mainMenu();}}],
+    ["Rest Properly",()=>{if(spendAction()){p.health=clamp(p.health+25,0,100);p.mood=clamp(p.mood+8,0,100);silent("You rested properly.");mainMenu();}}],
+    ["Study Maps",()=>{if(spendAction()){apply({navigation:1,intelligence:1});silent("Studied maps and sea routes.");mainMenu();}}],
+    ["Socialize",()=>{if(spendAction()){p.relationships.push({name:pick(DATA.names),status:pick(["Friend","Contact","Rival Contact","Informant"])});apply({charisma:1,mood:3});silent("Met someone new.");mainMenu();}}],
+    ["Lay Low",()=>{if(spendAction()){p.heat=clamp(p.heat-2,0,99);p.reckless=clamp(p.reckless-1,0,99);silent("You kept a low profile.");mainMenu();}}],
+    ["Gamble",()=>gambleMenu()]
+  ]);
+}
+function adventureMenu(){
+  submenu("Adventure","Open-ended ways to find trouble, stories, and secrets.",[
+    ["Explore Island",()=>{if(spendAction()){if(Math.random()<.35){const e=pick(DATA.events);showEventFree(e)}else{apply({mystery:1,mood:2});silent("Explored the island and found rumors.");mainMenu();}}}],
+    ["Follow Rumor",()=>{if(spendAction()){apply({mystery:2,heat:Math.random()<.4?1:0});silent("Followed a rumor deeper into the island.");mainMenu();}}],
+    ["Look for Trouble",()=>{if(spendAction())startBattle("random","normal")}],
+    ["Help Civilians",()=>{if(spendAction()){apply({honor:1,charisma:1,mood:2});silent("Helped civilians and earned local trust.");mainMenu();}}],
+    ["Travel",()=>travelMenu()]
+  ]);
+}
+function powerMenu(){
+  submenu("Power Hunt","Choose how you pursue strength without being locked to a faction.",[
+    ["Train Body",()=>{if(spendAction()){apply({strength:1,speed:1,health:-3});silent("Trained your body.");mainMenu();}}],
+    ["Train Haki",()=>hakiMenu()],
+    ["Search Fruit",()=>inspectFruitEncounter()],
+    ["Search Weapon",()=>findWeapon()],
+    ["Practice Weapon",()=>{if(spendAction()){apply({sword:1,armamentXP:1});silent(p.equippedWeapon?`Practiced with ${p.equippedWeapon.name}.`:"Practiced basic weapon forms.");mainMenu();}}],
+    ["Create Signature Move",()=>{if(spendAction()){const move=signatureMoveName();p.movesMastery[move]=1;major(`Created signature move: ${move}.`);mainMenu();}}]
+  ]);
+}
+function signatureMoveName(){
+  const a=pick(["Storm","Iron","Crimson","Black","Thunder","Dragon","Wolf","Phoenix","Sea"]);
+  const b=pick(["Fang","Lance","Burst","Breaker","Crash","Fist","Slash","Cannon","Judgment"]);
+  return `${a} ${b}`;
+}
+function factionMenu(){
+  submenu("Faction Choices","Interact with factions without fully changing your life path.",[
+    ["Take Pirate Job",()=>{if(spendAction()){apply({bounty:3500,infamy:1,berries:2500});silent("Took a pirate-side job.");mainMenu();}}],
+    ["Help Marines",()=>{if(spendAction()){apply({marineRep:1,honor:1,berries:2000});silent("Helped a Marine patrol.");mainMenu();}}],
+    ["Aid Revolutionaries",()=>{if(spendAction()){apply({revolutionaryRep:1,heat:1,honor:1});silent("Aided a revolutionary contact.");mainMenu();}}],
+    ["Take Bounty Contract",()=>huntBounty()],
+    ["Join / Change Career Path",()=>choosePath()],
+    ["Abandon Formal Path",()=>{p.path="Undecided";p.rank="None";p.crewMode="solo";p.roleData={};major("You abandoned your formal path and returned to the open sea.");mainMenu();}]
+  ]);
+}
+function underworldMenu(){
+  submenu("Underworld","Higher reward, higher consequence sandbox options.",[
+    ["Smuggling Run",()=>{if(spendAction()){if(Math.random()<.25)return startBattle("raid","hard");apply({berries:8500,heat:2,infamy:1});silent("Completed a smuggling run.");mainMenu();}}],
+    ["Black Market",()=>blackMarketMenu()],
+    ["Steal Supplies",()=>{if(spendAction()){apply({berries:4000,heat:2,infamy:1,sneak:1});silent("Stole valuable supplies.");mainMenu();}}],
+    ["Bribe Officials",()=>{if(spendAction()){const cost=3000+p.heat*1000;if(p.berries<cost){toast(`Need ฿${fmt(cost)}.`);return;}p.berries-=cost;p.heat=clamp(p.heat-3,0,99);silent("Bribed officials to lower heat.");mainMenu();}}],
+    ["Start Rumor Network",()=>{if(spendAction()){apply({charisma:1,sneak:1,mystery:1});p.relationships.push({name:"Underworld Contact",status:"Information broker"});silent("Started building a rumor network.");mainMenu();}}]
+  ]);
+}
+function drifterMenu(){
+  submenu("Drifter Life","Stay uncommitted. Drift, survive, and build your legend without joining anyone.",[
+    ["Sleep Under the Stars",()=>{if(spendAction()){p.health=clamp(p.health+12,0,100);p.mood=clamp(p.mood+4,0,100);silent("Slept under the stars.");mainMenu();}}],
+    ["Take Any Job",()=>{if(spendAction()){apply({berries:2000,experience:1});silent("Took whatever job the island offered.");mainMenu();}}],
+    ["Make a Local Friend",()=>{if(spendAction()){p.relationships.push({name:pick(DATA.names),status:"Local friend"});apply({charisma:1,mood:4});silent("Made a local friend.");mainMenu();}}],
+    ["Start a New Reputation",()=>{if(spendAction()){p.epithet=pick(["the Wanderer","the Free Blade","the Nameless Storm","the Sea Ghost","the Laughing Rookie"]);major(`People started calling you ${p.epithet}.`);mainMenu();}}],
+    ["Choose a Real Path",()=>choosePath()]
+  ]);
+}
+function showEventFree(e){
+  $("screen").innerHTML=`<h2>${e.title}</h2><p>${e.text}</p><div class="choices" id="eventChoices"></div>`;
+  const c=$("eventChoices");
+  e.choices.forEach(choice=>{
+    const b=document.createElement("button");
+    b.textContent=choice[0];
+    b.onclick=()=>{apply(choice[1]);major(choice[2]);mainMenu();};
+    c.appendChild(b);
+  });
+  addButton(c,"Walk Away",()=>{silent("You walked away from the situation.");mainMenu()},"primary");
+  render();
+}
+
+/* Override: age 16 no longer forces the career screen */
+function ageUp(){
+  if(!p||p.dead)return;
+  p.age++;p.actionsLeft=p.energy;p.mood=clamp(p.mood+pick([-4,-2,0,1,3]),0,100);
+  if(p.injuries.length && Math.random()<0.35){const healed=p.injuries.shift();log(`Recovered from ${healed}.`)}
+  worldTick();
+  if(p.age===16 && p.path==="Undecided"){
+    log("You are old enough to choose a path, but the open sea does not force you.");
+  }
+  randomLifeBeat();
+  save();mainMenu();
+}
+
+/* Override: career role is optional */
+function careerRoleMenu(){
+  if(p.path==="Undecided"){
+    $("screen").innerHTML=`<h2>⭐ Career Role</h2>
+    <p>You have not committed to a formal path. You can choose one, keep drifting, or do faction jobs without joining anyone.</p>
+    <div class="choices">
+      <button onclick="choosePath()">Choose a Path</button>
+      <button onclick="drifterMenu()">Stay a Drifter</button>
+      <button onclick="factionMenu()">Do Faction Jobs</button>
+      <button class="primary" onclick="mainMenu()">Back</button>
+    </div>`;
+    render();
+    return;
+  }
+  if(p.path==="Pirate")return pirateRoleMenu();
+  if(p.path==="Marine")return marineRoleMenu();
+  if(p.path==="Revolutionary")return submenu("🔥 Revolutionary Role","Liberation missions and covert work.",[
+    ["Liberation Mission",()=>{if(spendAction()){apply({revolutionaryRep:2,honor:1,heat:1,freedom:1});silent("Helped liberate civilians.");mainMenu();}}],
+    ["Covert Intel",()=>{if(spendAction()){apply({sneak:2,mystery:1,heat:1});silent("Ran covert intel.");mainMenu();}}],
+    ["Leave Cell",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left your revolutionary cell.");mainMenu();}]
+  ]);
+  if(p.path==="Bounty Hunter")return submenu("🎯 Bounty Hunter Role","Contracts and pursuit.",[
+    ["Take Contract",()=>huntBounty()],
+    ["Track Target",()=>{if(spendAction()){apply({intelligence:1,observationXP:1});silent("Tracked a target.");mainMenu();}}],
+    ["Leave Guild",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left the bounty guild.");mainMenu();}]
+  ]);
+  if(p.path==="Doctor")return submenu("🩺 Doctor Role","Treat patients and improve survival.",[
+    ["Treat Patients",()=>{if(spendAction()){p.health=clamp(p.health+25,0,100);apply({medicine:1,honor:1});silent("Treated patients.");mainMenu();}}],
+    ["Medical Research",()=>{if(spendAction()){apply({medicine:2,intelligence:1});silent("Researched rare disease.");mainMenu();}}],
+    ["Close Clinic",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left the clinic life.");mainMenu();}]
+  ]);
+  if(p.path==="Shipwright")return submenu("🛠️ Shipwright Role","Build, repair, and modify ships.",[
+    ["Repair Ship",()=>repairShip()],
+    ["Build Parts",()=>{if(spendAction()){apply({craft:2,berries:4000});silent("Built ship parts for profit.");mainMenu();}}],
+    ["Leave Dockyard",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left dockyard work.");mainMenu();}]
+  ]);
+}
+
+/* Override main menu into sandbox-first layout */
+function mainMenu(){
+  ensure();render();
+  if(p.dead)return deathScreen();
+  if(p.age>=80)return ending();
+  $("screen").innerHTML=`<h2>Age ${p.age}: ${p.name}'s Life</h2>
+    <div class="dangerMeter survivalBox"><b>Danger:</b> ${dangerText()} · Reckless ${p.reckless}</div>
+    <p><b>${p.actionsLeft}</b> energy left. This is the open sea — commit to a path, drift, scheme, train, explore, or switch allegiances.</p>
+    <div class="menuGrid">
+      <button class="primary" onclick="ageUp()">Age Up</button>
+      <button class="gold" onclick="freedomHub()">🌊 Open Sea</button>
+      <button onclick="careerRoleMenu()">⭐ Career Role</button>
+      <button onclick="combatMenu()">⚔️ Combat</button>
+      <button onclick="dailyLifeMenu()">Daily Life</button>
+      <button onclick="adventureMenu()">Adventure</button>
+      <button onclick="powerMenu()">Power Hunt</button>
+      <button onclick="factionMenu()">Faction Choices</button>
+      <button onclick="underworldMenu()">Underworld</button>
+      <button onclick="drifterMenu()">Drifter Life</button>
+      <button onclick="powerCodexMenu()">📖 Pirate Codex</button>
+      <button onclick="ownedWeapons()">⚔️ Weapons</button>
+      <button onclick="travelMenu()">Travel</button>
+      <button onclick="crewMenu()">Crew / Unit</button>
+      <button onclick="assetsMenu()">Assets</button>
+      <button onclick="relationshipsMenu()">Social</button>
+      <button onclick="legacyMenu()">Legacy</button>
+      <button onclick="save()">Save</button>
+    </div>`;
+}

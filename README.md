@@ -33,3 +33,13 @@ This is a clean rebuild of the core game files to reduce freezing, duplicate sta
 - Devil Fruit encyclopedia.
 - Logia, Zoan, Paramecia descriptions.
 - Weapon rarity tiers, movesets, special skills, lore.
+
+
+## v7.1 Sandbox Freedom Update
+- Adds Open Sea sandbox hub.
+- Adds Daily Life, Adventure, Power Hunt, Faction Choices, Underworld, and Drifter Life menus.
+- Careers are specializations, not hard rails.
+- Age 16 no longer forces immediate career choice.
+- Players can stay uncommitted, switch paths, leave careers, or do faction jobs without joining.
+- Adds more non-aging and low-risk actions.
+- Restores the feeling of a free One Piece experience.
