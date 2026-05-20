@@ -53,3 +53,11 @@ v5.1 Added dynamic combat visuals, damage popups, boss intros.
 - Retreat now has consequences: reputation/bounty/mood loss.
 - Defeat fatality chance now scales with tier.
 - Loot inventory appears in Powers/Assets area.
+
+
+## v6.1 Hotfix
+- Fixed visible header version to v6.1.
+- Added v6.1 save slot with previous-save fallback.
+- Fixed gambling odds so winning is capped and losses can happen.
+- Added gambling debt/mood consequences.
+- Kept Power Expansion / Codex foundation.
