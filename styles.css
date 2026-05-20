@@ -280,3 +280,40 @@ animation:flashfx 1s infinite alternate;
   padding:12px;
   margin:10px 0;
 }
+
+
+/* v6.6 startup bugfix + stable power menus */
+.powerCard{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  background:rgba(255,255,255,.045);
+  margin:10px 0;
+}
+.rarityCommon{border-color:#aeb6ca!important}
+.rarityUncommon{border-color:#63d297!important;box-shadow:0 0 10px rgba(99,210,151,.14)}
+.rarityRare{border-color:#62a8ff!important;box-shadow:0 0 12px rgba(98,168,255,.2)}
+.rarityEpic{border-color:#b58cff!important;box-shadow:0 0 14px rgba(181,140,255,.25)}
+.rarityLegendary{border-color:#f0c15b!important;box-shadow:0 0 18px rgba(240,193,91,.35)}
+.rarityMythic{border-color:#ff5df7!important;box-shadow:0 0 22px rgba(255,93,247,.4)}
+.survivalBox,.dangerMeter{
+  border:1px solid var(--gold);
+  background:rgba(240,193,91,.08);
+  border-radius:16px;
+  padding:12px;
+  margin:10px 0;
+}
+.captureBox{
+  border:1px solid var(--purple);
+  background:rgba(181,140,255,.08);
+  border-radius:16px;
+  padding:12px;
+  margin:10px 0;
+}
+.weaponEquipped{
+  border:1px solid var(--green);
+  background:rgba(99,210,151,.08);
+  border-radius:16px;
+  padding:12px;
+  margin:10px 0;
+}
