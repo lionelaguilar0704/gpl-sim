@@ -1,152 +1,85 @@
-window.GPL_DATA = {
- names:["Kaid","Rook","Vera","Mako","Lian","Sora","Dax","Namiro","Vale","Rin","Cale","Juno","Arashi","Toma","Kira","Zeno","Mira","Dante","Koji","Namiya","Vex","Orin","Talia","Saiko","Crowe","Milo","Nero","Yuna","Cass","Bram","Ari","Kael","Nox","Luma","Torren","Basil","Ember","Iris","Vlad","Orion","Levi","Kaito"],
- dreams:["Become Pirate King","Become the strongest swordsman","Destroy corrupt justice","Free the oppressed","Build the greatest ship","Cure an incurable disease","Map the entire sea","Become the richest person alive","Uncover forbidden history","Become an Admiral","Create a country with no chains","Defeat an Emperor","Find a lost ancient weapon","Become a legend no one can erase"],
- appearance:{
-  faces:["Youthful","Sharp","Round","Calm","Intimidating","Tired","Scarred","Serious"],
-  hair:["Curly","Messy","Short","Long","Braided","Wild","Buzzcut","Topknot"],
-  colors:["Black","Brown","White","Red","Blue","Green","Blond","Silver"],
-  bodies:["Lean","Muscular","Massive","Agile","Heavy","Compact"],
-  outfits:["Street Clothes","Marine Uniform","Samurai Robe","Noble Coat","Pirate Coat","Fighter Wraps","Doctor Coat","Shipwright Apron"],
-  accessories:["None","Bandana","Goggles","Earring","Mask","Cape","Gloves","Necklace","Eyepatch"],
-  scars:["None","Eye Scar","Burn Mark","Bite Scar","Blade Scar","Bullet Scar","Lightning Scar"]
- },
- regions:[
- {name:"Home Sea",danger:1,req:{nav:0,ship:0},desc:"The four Blues: safer routes, rookie pirates, corrupt towns, and local Marines."},
- {name:"Reverse Mountain",danger:3,req:{nav:3,ship:40},desc:"The violent gateway into the Grand Line."},
- {name:"Paradise",danger:5,req:{nav:5,ship:80},desc:"First half of the Grand Line. Weird climates, bigger crews, rising bounties."},
- {name:"Sabaody Crossroads",danger:7,req:{nav:7,ship:120},desc:"A dangerous checkpoint where rookies become legends or disappear."},
- {name:"New World",danger:9,req:{nav:10,ship:160},desc:"Emperors, storms, Haki monsters, impossible islands, and world-changing choices."}
- ],
- islands:[
- {name:"Loguetown",region:"Home Sea",type:"Marine Town",tags:["marine","dock","fame"],desc:"execution platforms, rain, rumors, Marines"},
- {name:"Shells Town",region:"Home Sea",type:"Marine Base",tags:["marine","justice"],desc:"Marine corruption, rooftops, recruits"},
- {name:"Syrup Harbor",region:"Home Sea",type:"Quiet Port",tags:["street","secret"],desc:"quiet mansions, lies, hidden pirates"},
- {name:"Organ Market",region:"Home Sea",type:"Black Market",tags:["secret","money","fruit"],desc:"black markets, stolen maps, secret auctions"},
- {name:"Dustvale",region:"Home Sea",type:"Bounty Town",tags:["money","fighter"],desc:"desert saloons, bounty hunters, old gangs"},
- {name:"Brinehook Port",region:"Home Sea",type:"Shipyard",tags:["ship","dock"],desc:"shipyards, tavern brawls, smugglers"},
- {name:"Karakuri Scrap Island",region:"Paradise",type:"Tech Island",tags:["craft","secret"],desc:"inventors, machines, failed weapons"},
- {name:"Moonreef",region:"Paradise",type:"Fishman Port",tags:["fishman","sea"],desc:"fishman docks, coral canals, sea beasts"},
- {name:"Ironbell",region:"Paradise",type:"Factory Island",tags:["revolutionary","chains"],desc:"factories, chained workers, revolutionary whispers"},
- {name:"Skypierce Atoll",region:"Paradise",type:"Sky Island",tags:["sky","secret"],desc:"cloud bridges, strange dials, sky pirates"},
- {name:"Frostwake",region:"Paradise",type:"Survival Island",tags:["sea","fighter"],desc:"ice storms, survival tribes, lost ships"},
- {name:"Amberfall",region:"Paradise",type:"Noble Island",tags:["noble","secret"],desc:"noble estates, hidden vaults, masked balls"},
- {name:"Red Lantern Port",region:"Sabaody Crossroads",type:"Underworld Hub",tags:["money","rival","secret"],desc:"gamblers, assassins, sake houses, bounty rumors"},
- {name:"Mangrove Ring",region:"Sabaody Crossroads",type:"Crossroads",tags:["fame","government","noble"],desc:"bubbles, auctions, veterans, and impossible choices"},
- {name:"Cinder Key",region:"New World",type:"Volcanic Island",tags:["fighter","sea"],desc:"volcanic caves, smugglers, heat mirages"},
- {name:"Pearl Graveyard",region:"New World",type:"Ship Graveyard",tags:["sea","money"],desc:"shipwrecks, ghosts, treasure divers"},
- {name:"Clockwork Cay",region:"New World",type:"Machine Island",tags:["craft","government"],desc:"mechanical towers, genius engineers, malfunctioning guards"},
- {name:"Storm Crown",region:"New World",type:"Emperor Borderland",tags:["fighter","fame","sea"],desc:"permanent storms, emperor flags, and Haki pressure"}
- ],
- origins:[
-["Dock Rat","⚓",{navigation:1,sneak:1},["dock","street","pirate"]],
-["Marine Base Child","🛡️",{discipline:2,marineRep:1},["marine","justice","rank"]],
-["Fishman Street Fighter","🌊",{strength:2,durability:1},["fishman","street","fighter"]],
-["Wano Exile","🗡️",{strength:1,discipline:1,sword:1},["sword","honor","exile"]],
-["Noble Runaway","👑",{charisma:2,berries:3000},["noble","money","secret"]],
-["Slave Escapee","⛓️",{durability:2,sneak:1,honor:1,kingWill:1},["chains","escape","freedom"]],
-["Sky Island Tinkerer","☁️",{intelligence:2,craft:1},["sky","gadget","dial"]],
-["Doctor's Apprentice","🩺",{intelligence:1,honor:1,medicine:1},["doctor","healer","mercy"]],
-["Shipwright's Kid","🔨",{intelligence:1,durability:1,craft:1},["ship","craft","sea"]],
-["Street Performer","🎭",{charisma:2,sneak:1},["performance","deception","crowds"]],
-["Forgotten Noble Guard","🏰",{discipline:1,strength:1,sword:1},["guard","loyalty","fall"]],
-["Orphan Pickpocket","🪙",{sneak:2,berries:1000},["street","theft","survival"]],
-["Monastery Student","📿",{discipline:2,observationXP:1},["spirit","training","vows"]],
-["Sea Beast Survivor","🦈",{durability:2,navigation:1,courage:1},["sea","trauma","survival"]],
-["Underground Courier","📦",{speed:1,sneak:1,navigation:1},["smuggling","routes","secrets"]],
-["Failed Marine Cadet","🎖️",{discipline:1,strength:1,marineRep:-1,defiance:1},["failure","justice","resentment"]]
- ],
- careers:{
- Pirate:["Rookie","Crewmate","Captain","Notorious Captain","Supernova","Warlord Candidate","Emperor Candidate","Sea Legend"],
- Marine:["Recruit","Seaman","Ensign","Lieutenant","Captain","Commodore","Vice Admiral Candidate","Admiral Candidate"],
- "Bounty Hunter":["Local Hunter","Regional Hunter","Grand Line Hunter","Warlord Contractor","Legend Hunter","Marine Consultant"],
- Revolutionary:["Sympathizer","Courier","Cell Leader","Liberator","Commander Candidate","World Threat"],
- Merchant:["Peddler","Trader","Route Owner","Underworld Broker","Shipping Magnate","Black Market Kingpin"],
- Doctor:["Apprentice","Field Medic","Ship Doctor","Miracle Doctor","War Surgeon","Legendary Healer"],
- Shipwright:["Apprentice","Dockhand","Shipwright","Master Shipwright","Adam-Wood Specialist","Legendary Builder"],
- "Cipher Pol Recruit":["Informer","Agent Trainee","Field Agent","Assassin","Cipher Specialist","Ghost Agent"],
- "Wandering Swordsman":["Student","Duelist","Blade Hunter","Master Swordsman","Cursed Blade Wielder","Legendary Swordsman"],
- "Treasure Diver":["Diver","Salvager","Map Hunter","Sunken Vault Raider","Sea Floor Legend"],
- Gambler:["Small Table","House Regular","Card Shark","Den Boss","Casino King"],
- "News Courier":["Runner","Reporter","Truth Hunter","War Correspondent","World Journalist"]
- },
- paths:[
-["Pirate","☠️",{bounty:10000,infamy:2,ambition:1}],["Marine","⚔️",{marineRep:3,discipline:2}],["Bounty Hunter","🎯",{berries:5000,strength:1}],["Revolutionary","🔥",{revolutionaryRep:3,honor:1,defiance:1}],
-["Merchant","💰",{berries:10000,charisma:1}],["Doctor","🩺",{medicine:2,honor:1}],["Shipwright","🛠️",{craft:2,durability:1}],["Cipher Pol Recruit","🕶️",{sneak:3,discipline:1,honor:-1}],
-["Wandering Swordsman","🗡️",{sword:3,bounty:3000,ambition:1}],["Treasure Diver","🫧",{navigation:2,berries:3000}],["Gambler","🎲",{charisma:1,berries:2500,sneak:1}],["News Courier","📰",{navigation:1,intelligence:1,charisma:1}]
- ],
- fruits:[
-{name:"Carve-Carve Fruit",type:"Paramecia",power:"engrave symbols that create seals, traps, and summons",tree:["Mark","Trap","Seal","Summon","Awakening: Living Sigils"],effect:"🔣"},
-{name:"Smoke Body Fruit",type:"Logia-like",power:"turn into drifting smoke and obscure battlefields",tree:["Smoke Dodge","Fog Cloud","Smoke Bind","Choke Field","Awakening: City of Smoke"],effect:"💨"},
-{name:"Iron Body Fruit",type:"Paramecia",power:"harden flesh into living metal",tree:["Iron Skin","Metal Fist","Magnet Grip","Iron Fortress","Awakening: Living Armory"],effect:"⚙️"},
-{name:"Mist-Mist Fruit",type:"Logia-like",power:"create mist clones and fog ambushes",tree:["Mist Veil","Clone","Drown Sight","Ghost Step","Awakening: Endless Fog"],effect:"🌫️"},
-{name:"Panther Zoan",type:"Zoan",power:"become a black panther hybrid",tree:["Claws","Pounce","Predator Eye","Full Beast","Awakening: Apex Predator"],effect:"🐾"},
-{name:"Hawk Zoan",type:"Zoan",power:"gain flight, talons, and predator vision",tree:["Talons","Glide","Divebomb","Sky Sight","Awakening: Storm Hawk"],effect:"🪶"},
-{name:"Wall-Wall Fruit",type:"Paramecia",power:"raise defensive walls from surfaces",tree:["Wall","Rampart","Crush Wall","Maze","Awakening: Fortress Island"],effect:"🧱"},
-{name:"Pulse-Pulse Fruit",type:"Paramecia",power:"send shockwaves through touch",tree:["Pulse Jab","Shock Step","Rupture","Quake Palm","Awakening: Heartbeat Field"],effect:"💥"},
-{name:"Thread-Thread Fruit",type:"Paramecia",power:"control razor-thin threads",tree:["Thread Grip","Wire Cut","Puppet Line","Sky String","Awakening: Thread World"],effect:"🧵"},
-{name:"Glide-Glide Fruit",type:"Paramecia",power:"slide through air and redirect momentum",tree:["Slide","Air Skim","Redirect","Friction Break","Awakening: Momentum Domain"],effect:"🪽"},
-{name:"Mend-Mend Fruit",type:"Paramecia",power:"rapidly stitch wounds and repair objects",tree:["Patch","Stitch","Field Surgery","Repair Burst","Awakening: Restoration Field"],effect:"🩹"},
-{name:"Grav-Grav Fruit",type:"Paramecia",power:"briefly increase or reduce gravity around targets",tree:["Heavy Palm","Light Step","Crush Zone","Orbit Pull","Awakening: Gravity Well"],effect:"🪐"}
- ],
- hakiTrees:{
- observation:["Presence Sense","Danger Pulse","Emotion Read","Lie Read","Future Flicker","Future Sight"],
- armament:["Hardening","Weapon Coating","Armor Skin","Flowing Force","Internal Destruction","Black Blade Progress"],
- conqueror:["Pressure Aura","Commanding Presence","Knockout Wave","King's Presence","Conqueror Clash","Conqueror Infusion"]
- },
- companions:[
-{name:"Ashfang",role:"Beast Companion",bonus:{sneak:1},loyalty:8,salary:0,traits:["Protective","Scarred"]},
-{name:"Mira",role:"Mink Fighter",bonus:{speed:1},loyalty:6,salary:500,traits:["Ambitious","Direct"]},
-{name:"Captain Squawk",role:"Scout",bonus:{navigation:1},loyalty:5,salary:0,traits:["Loud","Observant"]},
-{name:"Pip",role:"Deckhand",bonus:{charisma:1},loyalty:4,salary:200,traits:["Cowardly","Kind"]},
-{name:"Old Salt",role:"Mascot",bonus:{sneak:1},loyalty:7,salary:0,traits:["Lucky","Lazy"]},
-{name:"Nelli",role:"Gadgeteer",bonus:{craft:2},loyalty:6,salary:900,traits:["Inventive","Curious"]},
-{name:"Rook",role:"Comms",bonus:{intelligence:1},loyalty:5,salary:600,traits:["Gossip","Sharp"]},
-{name:"Doc Harlan",role:"Doctor",bonus:{medicine:2},loyalty:6,salary:1000,traits:["Calm","Haunted"]},
-{name:"Yume",role:"Swordsman",bonus:{sword:2},loyalty:5,salary:1200,traits:["Proud","Restless"]},
-{name:"Boro",role:"Navigator",bonus:{navigation:2},loyalty:6,salary:1000,traits:["Patient","Superstitious"]},
-{name:"Grit",role:"Cook",bonus:{charisma:1},loyalty:5,salary:700,traits:["Explosive","Funny"]},
-{name:"Lace",role:"Informant",bonus:{sneak:1,intelligence:1},loyalty:4,salary:800,traits:["Secretive","Greedy"]}
- ],
- rivals:["hotheaded Marine prodigy","laughing pirate captain","masked government agent","bounty hunter with twin pistols","noble swordsman","fishman bruiser","revolutionary extremist","black market queen","giant-blooded brawler","silent assassin child","fallen dojo champion","smiling CP trainee","steel-jawed pirate butcher","sky island sniper","false priest with a cannon staff","ghost captain with no flag","emperor scout","rogue warlord candidate"],
- ships:[
-{name:"Leaky Dinghy",hp:30,cannons:0,cargo:1,cost:0,tier:0},
-{name:"Sloop",hp:60,cannons:1,cargo:3,cost:12000,tier:1},
-{name:"Caravel",hp:100,cannons:3,cargo:6,cost:35000,tier:2},
-{name:"Brigantine",hp:160,cannons:6,cargo:10,cost:85000,tier:3},
-{name:"Custom Adam-Wood Cutter",hp:240,cannons:8,cargo:14,cost:180000,tier:4},
-{name:"Ironclad Smuggler",hp:300,cannons:5,cargo:20,cost:240000,tier:4},
-{name:"Legendary Frigate",hp:420,cannons:12,cargo:25,cost:500000,tier:5}
- ],
- items:[
-{name:"Smoke Bomb",cost:800,effect:{sneak:1}}, {name:"Training Weights",cost:2000,effect:{strength:1}},
-{name:"Basic Katana",cost:3000,effect:{sword:1}}, {name:"Medical Kit",cost:2500,effect:{medicine:1}},
-{name:"Log Pose Fragment",cost:7000,effect:{navigation:2}}, {name:"Dial Gadget",cost:8000,effect:{craft:1,speed:1}},
-{name:"Fake Papers",cost:4000,effect:{heat:-2}}, {name:"Armor Vest",cost:6000,effect:{durability:1}},
-{name:"Black Market Intel",cost:9000,effect:{mystery:1}}, {name:"Quality Rifle",cost:6500,effect:{marksmanship:2}},
-{name:"Weighted Cloak",cost:5000,effect:{discipline:1,durability:1}}, {name:"Rare Medical Text",cost:12000,effect:{medicine:2,intelligence:1}},
-{name:"Cursed Blade Rumor",cost:25000,effect:{mystery:2,sword:1}}, {name:"Crew Feast",cost:3000,effect:{mood:15,crewLoyalty:1}},
-{name:"Captain Coat",cost:18000,effect:{charisma:1,leadership:1,appearanceItem:"Captain Coat"}}, {name:"Masked Identity",cost:14000,effect:{sneak:2,appearanceItem:"Mask"}}
- ],
- businesses:[
-{name:"Dockside Tavern",cost:45000,income:3500,risk:"street"},
-{name:"Smuggling Route",cost:65000,income:8000,risk:"heat"},
-{name:"Free Clinic",cost:55000,income:2500,risk:"honor"},
-{name:"Ship Repair Stall",cost:80000,income:6000,risk:"craft"},
-{name:"Bounty Agency",cost:100000,income:9000,risk:"fighter"},
-{name:"Black Market Booth",cost:90000,income:11000,risk:"infamy"}
- ],
- mysteries:["black coin with a chain mark","red vivre card","forbidden sea chart","sealed letter from a dead captain","rusted key with a sun symbol","broken Marine badge","strange fruit stem","map written in ancient cipher","wanted poster with your face crossed out","bloodstained newspaper clipping","half-burned auction invitation","strange poneglyph rubbing","ciphered bounty ledger"],
- quests:[
-{name:"The Chain Mark",theme:"freedom fighters, slavers, old rebellions"},
-{name:"The False Marine",theme:"corrupt justice and stolen uniforms"},
-{name:"The Sunken Vault",theme:"treasure maps and sea monsters"},
-{name:"The Laughing Captain",theme:"rival pirate crew escalation"},
-{name:"The Cipher Letter",theme:"government secrets and assassins"},
-{name:"The Black Auction",theme:"nobles, rare fruits, stolen people"},
-{name:"The Broken Log Pose",theme:"lost islands, strange weather, impossible routes"},
-{name:"The Red Debt",theme:"old family debts, bounty hunters, revenge"},
-{name:"The Forgotten Century Scrap",theme:"forbidden history and government attention"},
-{name:"The Emperor's Scout",theme:"New World politics and impossible offers"}
- ],
- worldEvents:["A rookie crew wipes out a Marine base","A noble kingdom raises taxes and sparks unrest","A sea plague spreads through Paradise","A warlord candidate vanishes at sea","An Emperor scout is seen near the Sabaody Crossroads","A black market auction lists a rare fruit","A revolutionary cell liberates a factory island","A government cover-up leaks through newspapers","A sea beast migration closes a trade route","A famous swordsman challenges all rookies"]
+
+const DATA = {
+  names:["Kaid","Lian","Nero","Ember","Mako","Orion","Cale","Riven","Sora","Vale","Juno","Axel"],
+  dreams:["Become Pirate King","Destroy corrupt justice","Find the lost history","Become the strongest fighter","Build the greatest ship","Become the richest person alive","Free oppressed islands","Become an Admiral","Find a mythical Devil Fruit","Create a legendary crew"],
+  origins:[
+    ["Dock Rat","⚓",{speed:1,sneak:1}],
+    ["Marine Base Child","🛡️",{discipline:2,marineRep:1}],
+    ["Fishman Street Fighter","🌊",{strength:2,durability:1}],
+    ["Wano Exile","🗡️",{sword:2,discipline:1}],
+    ["Noble Runaway","👑",{charisma:2,berries:1500}],
+    ["Slave Escapee","⛓️",{freedom:2,courage:2,heat:1}],
+    ["Sky Island Tinkerer","☁️",{craft:2,intelligence:1}],
+    ["Doctor's Apprentice","🩺",{medicine:2,intelligence:1}],
+    ["Shipwright's Kid","🔨",{craft:2,shipXP:1}],
+    ["Street Performer","🎭",{charisma:2,mood:8}]
+  ],
+  paths:[
+    ["Pirate","☠️",{bounty:5000,freedom:1}],
+    ["Marine","🛡️",{marineRep:2,discipline:1}],
+    ["Revolutionary","🔥",{revolutionaryRep:2,heat:1,honor:1}],
+    ["Bounty Hunter","🎯",{berries:3000,marksmanship:1}],
+    ["Doctor","🩺",{medicine:2,honor:1}],
+    ["Shipwright","🔨",{craft:2,shipXP:1}]
+  ],
+  ranks:{
+    Pirate:["Rookie","Supernova","Captain","Warlord Candidate","Yonko Commander","Yonko","Pirate King Contender"],
+    Marine:["Recruit","Seaman","Petty Officer","Lieutenant","Captain","Commodore","Vice Admiral Candidate","Admiral Candidate"],
+    Revolutionary:["Recruit","Cell Agent","Liberator","Commander","Chief of Staff Candidate"],
+    "Bounty Hunter":["Rookie Hunter","Licensed Hunter","Black Card Hunter","Warlord-Class Hunter"],
+    Doctor:["Medic","Field Doctor","Miracle Doctor","Legendary Surgeon"],
+    Shipwright:["Apprentice","Dockhand","Master Builder","Legendary Shipwright"],
+    Undecided:["None"]
+  },
+  islands:[
+    {name:"Syrup Harbor",region:"Home Sea",danger:1},
+    {name:"Shell Town",region:"Home Sea",danger:2},
+    {name:"Dustvale",region:"Home Sea",danger:3},
+    {name:"Moonveil Island",region:"Paradise",danger:5},
+    {name:"Ironjaw Port",region:"Paradise",danger:6},
+    {name:"Thunder Reef",region:"New World",danger:8},
+    {name:"Oni Crown",region:"New World",danger:9}
+  ],
+  events:[
+    {title:"Market Trouble",text:"A thief is being chased through the market.",choices:[
+      ["Help the victim",{honor:1,marineRep:1,mood:2},"You helped recover stolen goods."],
+      ["Help the thief",{sneak:1,freedom:1,heat:1},"You helped the thief vanish into an alley."],
+      ["Rob both sides",{berries:1500,infamy:1,heat:2},"You turned chaos into profit."]
+    ]},
+    {title:"Burning Dock",text:"A fire spreads across the docks.",choices:[
+      ["Save workers",{honor:2,courage:1,health:-5},"You saved trapped dockworkers."],
+      ["Loot warehouses",{berries:3000,infamy:1,heat:2},"You stole goods during the panic."],
+      ["Organize rescue",{leadership:1,charisma:1},"People followed your orders."]
+    ]},
+    {title:"Strange Fruit Rumor",text:"A black market contact whispers about a Devil Fruit.",choices:[
+      ["Investigate",{mystery:1},"You found clues to a fruit dealer."],
+      ["Ignore it",{discipline:1},"You avoid a dangerous rabbit hole."],
+      ["Set a trap",{sneak:1,heat:1},"You baited the dealer into revealing more."]
+    ]}
+  ],
+  fruitCatalog:[
+    {name:"Flame-Flame Fruit",type:"Logia",rarity:"Legendary",desc:"Create, control, and become fire.",passives:["Logia intangibility vs non-Haki attacks","Fire resistance"],moves:["Fire Spear","Flame Dragon","Inferno Burst"],weakness:"Water, sea-prism, Armament Haki"},
+    {name:"Storm-Storm Fruit",type:"Logia",rarity:"Mythic",desc:"Become living storm clouds, wind, and lightning.",passives:["Logia intangibility","Lightning movement"],moves:["Thunder Spear","Storm Prison","Heavenly Judgment"],weakness:"Rubber-like counters, sea-prism, Armament Haki"},
+    {name:"Smoke Body Fruit",type:"Logia",rarity:"Epic",desc:"Become smoke to evade, bind, and blind enemies.",passives:["Logia intangibility","Fog concealment"],moves:["Smoke Bind","Whiteout","Choke Field"],weakness:"Strong wind, sea-prism, Armament Haki"},
+    {name:"Barrier-Barrier Fruit",type:"Paramecia",rarity:"Rare",desc:"Create nearly indestructible barriers.",passives:["Defense bonus","Protect allies"],moves:["Barrier Wall","Barrier Cage","Barrier Crash"],weakness:"Limited early offense"},
+    {name:"Wolf-Wolf Fruit",type:"Zoan",rarity:"Uncommon",desc:"Transform into a wolf or wolf hybrid.",passives:["Hybrid Form: speed and claws","Beast Form: tracking"],moves:["Savage Fang","Pack Rush","Moon Howl"],weakness:"Lower utility"},
+    {name:"Phoenix Fruit",type:"Mythical Zoan",rarity:"Mythic",desc:"Mythical bird fruit with blue healing flames.",passives:["Flight","Healing flames","Regeneration chance"],moves:["Phoenix Talon","Healing Flame","Rebirth Burst"],weakness:"High mastery requirement"},
+    {name:"Spinosaurus Fruit",type:"Ancient Zoan",rarity:"Epic",desc:"Ancient Zoan with monstrous durability.",passives:["Hybrid armor","Beast HP"],moves:["Tail Cleaver","Ancient Charge","Bone Breaker"],weakness:"Slow speed"}
+  ],
+  weaponCatalog:[
+    {name:"Rusty Cutlass",type:"Sword",rarity:"Common",desc:"A chipped blade used by rookies.",effects:["Small sword damage"],moves:["Basic Slash"],special:"None",power:4,history:"No known history."},
+    {name:"Marine Saber",type:"Sword",rarity:"Uncommon",desc:"A reliable military saber.",effects:["Sword damage","Parry bonus"],moves:["Officer Slash","Guard Break"],special:"Discipline scaling",power:9,history:"Standard Marine issue."},
+    {name:"Iron Knuckle Gauntlets",type:"Gauntlets",rarity:"Uncommon",desc:"Heavy iron gauntlets for brawlers.",effects:["Punch damage","Stun chance"],moves:["Iron Jab","Rib Breaker"],special:"Pairs well with Armament",power:10,history:"Underground fight pits."},
+    {name:"Sea King's Tooth Club",type:"Heavy Weapon",rarity:"Epic",desc:"A brutal club carved from Sea King tooth.",effects:["Stun","Armor break"],moves:["Skull Tide","Bone Quake"],special:"Bonus vs beasts",power:26,history:"Taken from a monster that sank seven ships."},
+    {name:"Storm Fang",type:"Spear",rarity:"Legendary",desc:"A spear forged from storm iron.",effects:["High crit chance","Lightning damage"],moves:["Thunder Pierce","Sky Splitter","Storm Fang Lance"],special:"Can evolve with Observation Haki",power:32,history:"Wielded by the Thunder King."},
+    {name:"Enketsu",type:"Cursed Blade",rarity:"Mythic",desc:"A cursed blade burning with hatred.",effects:["Massive slash damage","Blood Flame"],moves:["Blood Flame Cut","Soul Ignition","Crimson Execution"],special:"Hidden curse may drain stamina",power:42,history:"Wielded by the Crimson Executioner."}
+  ],
+  loot:[
+    {name:"Marine Rations",rarity:"Common",value:600,effect:{health:6}},
+    {name:"Smoke Pellets",rarity:"Uncommon",value:1800,effect:{sneak:1}},
+    {name:"Log Pose Shard",rarity:"Rare",value:6500,effect:{navigation:2}},
+    {name:"Ancient Rubbing",rarity:"Epic",value:35000,effect:{mystery:2,heat:2}},
+    {name:"Sea King's Tooth Charm",rarity:"Legendary",value:120000,effect:{charisma:2,courage:2}},
+    {name:"Void Century Cipher",rarity:"Mythic",value:300000,effect:{mystery:5,heat:5}}
+  ]
 };

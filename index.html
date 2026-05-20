@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>Great Pirate Life Sim v6.8</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="styles.css?v=68">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Great Pirate Life Sim v7.0</title>
+  <link rel="manifest" href="manifest.json?v=70" />
+  <link rel="stylesheet" href="styles.css?v=70" />
 </head>
 <body>
-  <div id="fxLayer" class="fxLayer"></div>
-  <div id="toastStack" class="toastStack"></div>
-
-  <div class="app">
+  <div id="app">
     <header class="topbar">
       <div>
-        <h1>Great Pirate Life Sim <span>v6.8</span></h1>
-        <p>Core Stability + Career Optimization</p>
+        <h1>Great Pirate Life Sim <span>v7.0</span></h1>
+        <p>Remaster + Quality of Life Rebuild</p>
       </div>
       <div class="topActions">
         <button id="saveBtn">Save</button>
@@ -25,77 +22,30 @@
     </header>
 
     <main class="layout">
-      <aside class="sidebar">
-        <section class="wanted livingPoster">
-          <h2>WANTED</h2>
-          <div id="characterStage" class="characterStage">
-            <div id="auraRing" class="auraRing"></div>
-            <div id="portrait">☠️</div>
-            <div id="avatarDetails" class="avatarDetails"></div>
-          </div>
-          <h3 id="posterName">UNKNOWN</h3>
-          <p>DEAD OR ALIVE</p>
-          <h4 id="posterBounty">฿0</h4>
-          <small id="epithet">No Epithet</small>
-        </section>
-
-        <section class="card dashboardCard">
-          <h3>Captain Dashboard</h3>
-          <div class="vitals">
-            <div><span>Health</span><b id="health">100%</b><div class="meter"><i id="healthMeter"></i></div></div>
-            <div><span>Mood</span><b id="mood">50%</b><div class="meter"><i id="moodMeter"></i></div></div>
-            <div><span>Energy</span><b id="energy">—</b><div class="meter"><i id="energyMeter"></i></div></div>
-          </div>
-          <div class="line"><span>Age</span><b id="age">—</b></div>
-          <div class="line"><span>Origin</span><b id="origin">—</b></div>
-          <div class="line"><span>Dream</span><b id="dream">—</b></div>
-          <div class="line"><span>Career</span><b id="path">Undecided</b></div>
-          <div class="line"><span>Rank</span><b id="rank">None</b></div>
-          <div class="line"><span>Region</span><b id="region">—</b></div>
-          <div class="line"><span>Island</span><b id="island">—</b></div>
-          <div class="line"><span>Ship</span><b id="ship">None</b></div>
-          <div class="line"><span>Berries</span><b id="berries">0</b></div>
-          <div class="line"><span>Fruit</span><b id="fruit">None</b></div>
-          <div class="line"><span>Haki</span><b id="haki">Dormant</b></div>
-        </section>
-
-        <section class="card">
-          <h3>Stats</h3>
-          <div id="stats"></div>
-        </section>
+      <aside class="leftPanel">
+        <section class="wanted" id="wantedPoster"></section>
+        <section class="dashboard" id="dashboard"></section>
       </aside>
 
-      <section class="main">
-        <section id="screen" class="screen"></section>
-
-        <nav class="tabs">
-          <button onclick="showMenu()">Menu</button>
-          <button onclick="showTab('feed')">Feed</button>
-          <button onclick="showTab('appearance')">Look</button>
-          <button onclick="showTab('life')">Life</button>
-          <button onclick="showTab('crew')">Crew</button>
-          <button onclick="showTab('haki')">Haki</button>
-          <button onclick="showTab('powers')">Powers</button>
-          <button onclick="showTab('map')">Map</button>
-          <button onclick="showTab('news')">News</button>
-          <button onclick="showTab('legacy')">Legacy</button>
-          <button onclick="showTab('log')">Log</button>
-        </nav>
-
-        <section id="tab" class="card"></section>
+      <section class="mainPanel">
+        <div id="screen" class="screen"></div>
+        <nav class="tabs" id="tabs"></nav>
+        <section id="tab" class="tabPanel"></section>
       </section>
     </main>
-  </div>
 
     <nav class="bottomNav">
-      <button onclick="careerMenu()">Career</button>
+      <button onclick="careerRoleMenu()">Role</button>
       <button onclick="assetsMenu()">Assets</button>
       <button class="ageBubble" onclick="ageUp()">+<br><span>Age</span></button>
       <button onclick="relationshipsMenu()">Social</button>
-      <button onclick="activitiesMenu()">More</button>
+      <button onclick="mainMenu()">More</button>
     </nav>
+  </div>
 
-  <script src="game-data.js?v=68"></script>
-  <script src="script.js?v=68"></script>
+  <div id="toastWrap"></div>
+
+  <script src="game-data.js?v=70"></script>
+  <script src="script.js?v=70"></script>
 </body>
 </html>
