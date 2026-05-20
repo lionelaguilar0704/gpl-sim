@@ -1,18 +1,18 @@
-# Great Pirate Life Sim v6.6 — Startup Bugfix + Stable Power Menus
+# Great Pirate Life Sim v6.7 — Career Roles + Crew/Platoon Stable Build
 
-## Fixed
-- Origin selection now uses safe index-based startup buttons.
-- Character creation no longer hangs on Choose Origin.
-- New systems are visible from the main menu after character creation.
+## Fixes
+- Rebuilt from stable v6.1 to avoid the broken origin-selection line.
+- Origin selection uses a stable safeOrigin flow.
+- Main menu exposes Codex, Fruit Search, Weapons, and Career Role.
 
-## Visible Main Menu Buttons
-- 📖 Pirate Codex
-- 🍎 Search Fruit
-- ⚔️ Weapons
+## New Gameplay
+- Pirate path can form your own crew or join an existing crew.
+- Joined pirate crews have captains, influence, and challenge mechanics.
+- Marine path assigns you to a unit/platoon.
+- Higher Marine rank can command a platoon.
+- Role-specific gameplay menu for Pirate, Marine, Revolutionary, Bounty Hunter, Doctor, and Shipwright.
 
-## Included
-- Weapon rarity tiers
-- Weapon descriptions, lore, effects, movesets, special skills
-- Devil Fruit encyclopedia
-- Fruit inspection screen
-- No-random-death survival outcomes
+## Also included
+- Devil Fruit descriptions and types.
+- Weapon tiers, movesets, special skills, and equip system.
+- Survival outcomes instead of random instant death.
