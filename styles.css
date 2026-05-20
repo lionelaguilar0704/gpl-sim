@@ -325,3 +325,81 @@ body{
   .v84BottomActions{grid-template-columns:repeat(2,1fr)}
   .v84SceneHeader{padding:18px 16px 4px}
 }
+
+
+/* v8.5 Age Energy */
+.lifeStageTag{
+  display:inline-block;
+  border:1px solid rgba(240,196,91,.35);
+  color:#f7e0a5;
+  background:rgba(240,196,91,.08);
+  border-radius:999px;
+  padding:6px 10px;
+  margin:4px 4px 8px 0;
+  font-size:.85rem;
+}
+.energyNote{
+  border:1px solid var(--blue);
+  background:rgba(98,168,255,.08);
+  border-radius:14px;
+  padding:10px;
+  margin:10px 0;
+  color:var(--muted);
+}
+
+
+/* v8.8 Visible Progression */
+.v88Section{
+  border:1px solid rgba(240,196,91,.25);
+  border-radius:16px;
+  padding:12px;
+  margin:12px 0;
+  background:rgba(255,255,255,.035);
+}
+.v88Section h3{
+  margin:0 0 10px;
+  color:#f7e0a5;
+  font-family:Georgia,serif;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+.v88OptionGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.v88Locked{
+  opacity:.62;
+  filter:saturate(.65);
+  border-style:dashed!important;
+  position:relative;
+}
+.v88Locked:before{
+  content:"🔒";
+  position:absolute;
+  right:10px;
+  top:8px;
+}
+.v88Req{
+  display:block;
+  color:#f0c15b;
+  font-size:.78rem;
+  line-height:1.25;
+  margin-top:5px;
+}
+.v88Unlocked small,.v88Locked small{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+}
+.v88Preview{
+  border:1px solid var(--blue);
+  background:rgba(98,168,255,.08);
+  border-radius:14px;
+  padding:10px;
+  margin:10px 0;
+  color:var(--muted);
+}
+@media(max-width:720px){
+  .v88OptionGrid{grid-template-columns:1fr}
+}

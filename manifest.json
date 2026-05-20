@@ -1,7 +1,7 @@
 {
-  "name": "Great Pirate Life Sim v8.4",
+  "name": "Great Pirate Life Sim v8.8",
   "short_name": "GPL Sim",
-  "start_url": "./?v=84",
+  "start_url": "./?v=88",
   "display": "standalone",
   "background_color": "#081121",
   "theme_color": "#081121",

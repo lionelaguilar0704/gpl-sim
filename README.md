@@ -52,3 +52,42 @@ This is a clean rebuild of the core game files to reduce freezing, duplicate sta
 - Keeps mockup-style UI direction.
 - Removes risky render override initialization issue.
 - Adds stable left character/stat panel, center parchment scene, and right dream/reputation hints panel.
+
+
+## v8.5 Age-Based Energy + Life Stage Limits
+- Energy now scales with age:
+  - 0–2: 1 action
+  - 3–4: 2 actions
+  - 5–8: 3 actions
+  - 9–12: 4 actions
+  - 13–17: 5 actions
+  - 18–49: 6 actions
+  - 50–64: 5 actions
+  - 65+: 4 actions
+- Childhood actions are safer and smaller.
+- Combat, travel, careers, black market, weapon hunting, and fruit hunting unlock gradually.
+- Main screen now shows life stage and energy.
+
+
+## v8.6 Fixed Action Limit
+- Restores original-feeling fixed yearly action limit.
+- All ages use 5 yearly actions.
+- Age still controls what actions are unlocked.
+- Childhood stays safer, but no longer has fewer total actions.
+
+
+## v8.7 Life Stage Action Growth
+- Childhood: 5 actions per year.
+- Teenage years: 8 actions per year.
+- Adulthood: 12 actions per year.
+- Veteran years: 10 actions.
+- Elder legend years: 8 actions.
+- Age still controls what actions are unlocked.
+
+
+## v8.8 Visible Progression
+- Activities menu now shows all major options.
+- Locked options remain visible with requirements.
+- Categories: General, Social, Combat, Crew/Career, Exploration/Power, Underworld.
+- More BitLife-like progression visibility.
+- Age and stats unlock options instead of hiding them.

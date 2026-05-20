@@ -1,7 +1,7 @@
 
 "use strict";
 
-const SAVE_KEY = "gpls_save_v84";
+const SAVE_KEY = "gpls_save_v88";
 const OLD_KEYS = ["gpls_save_v70","gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
 let p = null;
 let currentTab = "feed";
@@ -31,7 +31,7 @@ function silent(msg){ log(msg); toast(msg,false); render(); }
 
 function newPlayer(){
   return {
-    build:"v8.4", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
+    build:"v8.8", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
     portrait:"🙂", epithet:"No Epithet", region:"Home Sea", island:"Syrup Harbor",
     health:100, mood:55, energy:5, actionsLeft:5, berries:0, debt:0, bounty:0, heat:0, infamy:0, honor:0,
     strength:1, speed:1, durability:1, intelligence:1, charisma:1, sneak:1, discipline:1, leadership:0,
@@ -103,7 +103,7 @@ function checkUnlocks(){
 
 function save(){
   ensure();
-  p.build="v8.4";
+  p.build="v8.8";
   localStorage.setItem(SAVE_KEY,JSON.stringify(p));
   toast("Game saved.");
 }
@@ -115,7 +115,7 @@ function load(){
   if(!data){ setup(); return; }
   p=JSON.parse(data);
   ensure();
-  p.build="v8.4";
+  p.build="v8.8";
   save();
   mainMenu();
 }
@@ -191,7 +191,7 @@ function baseShowTab_v81(tab,silent=false){
     <h3>Inventory</h3><div class="cardGrid">${p.loot.slice(-8).map(l=>`<div class="miniCard rarity${l.rarity}"><h4>${l.rarity} ${l.name}</h4><p>Value ฿${fmt(l.value)}</p></div>`).join("")||"<p>No loot yet.</p>"}</div>`;
   if(tab==="codex")$("tab").innerHTML=`<h3>Codex</h3><div class="choices"><button onclick="fruitCodex()">Devil Fruits</button><button onclick="weaponCodex()">Weapons</button><button onclick="ownedWeapons()">Owned Weapons</button></div>`;
   if(tab==="map")$("tab").innerHTML=`<h3>Map</h3>${DATA.islands.map(i=>`<div class="line"><span>${i.name}</span><b>${i.region} · Danger ${i.danger}</b></div>`).join("")}`;
-  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.4<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
+  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.8<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
 }
 
 function roleSummary(){
@@ -211,7 +211,7 @@ function baseSetup_v81(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Start a New Life</h2>
-    <p><b>v8.4 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
+    <p><b>v8.8 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
     <div class="safeNotice notice">This version uses a clean save slot. Old saves can still be loaded, but a new life is recommended for testing.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -626,7 +626,7 @@ boot();
 
 
 /* =========================
-   v8.4 Narrative Foundation — Birth to Legend
+   v8.8 Narrative Foundation — Birth to Legend
    ========================= */
 
 const LIFE_FAMILIES=[
@@ -749,7 +749,7 @@ function v81Ensure(){
   if(!p.lifeFlags)p.lifeFlags={dreamChosen:false,traitMilestones:{},birthGenerated:false};
   if(!p.chapterLog)p.chapterLog=[];
   if(p.potential===undefined)p.potential=1;
-  p.build="v8.4";
+  p.build="v8.8";
 }
 function trait(k,v=1){
   v81Ensure();
@@ -795,7 +795,7 @@ function setup(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Begin a New Life</h2>
-    <p><b>v8.4 Narrative Foundation</b> starts at birth and builds your legend through age-up life events.</p>
+    <p><b>v8.8 Narrative Foundation</b> starts at birth and builds your legend through age-up life events.</p>
     <div class="chapterCard"><b>Concept:</b> BitLife-style aging at the core, with One Piece dreams, powers, combat, crew, rivals, and fate layered on top.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -1007,7 +1007,7 @@ function showTab(tab,silent=false){
     return;
   }
   if(tab==="log"){
-    $("tab").innerHTML=`<h3>Life Chapters</h3>${(p.chapterLog||[]).slice(0,12).map(c=>`<div class="line"><span>Age ${c.age}: ${c.title}</span><b>${c.choice}</b></div>`).join("")||"<p>No chapters yet.</p>"}<h3>Game Info</h3><div class="notice">Version: v8.4<br>Save Build: ${p.build}<br>Core: BitLife-style aging, One Piece narrative systems.</div>`;
+    $("tab").innerHTML=`<h3>Life Chapters</h3>${(p.chapterLog||[]).slice(0,12).map(c=>`<div class="line"><span>Age ${c.age}: ${c.title}</span><b>${c.choice}</b></div>`).join("")||"<p>No chapters yet.</p>"}<h3>Game Info</h3><div class="notice">Version: v8.8<br>Save Build: ${p.build}<br>Core: BitLife-style aging, One Piece narrative systems.</div>`;
     return;
   }
   return baseShowTab_v81(tab,silent);
@@ -1015,7 +1015,7 @@ function showTab(tab,silent=false){
 
 
 /* =========================
-   v8.4 UI Stability Fix
+   v8.8 UI Stability Fix
    Safe mockup-style layout without render override
    ========================= */
 function v84Bar(label,val,max=100,icon=""){
@@ -1157,4 +1157,383 @@ function setup(){
       </div>
     </div>
   </div>`;
+}
+
+
+/* =========================
+   v8.8 Age-Based Energy + Life Stage Limits
+   ========================= */
+function ageEnergyLimit(age){
+  if(age<=2)return 1;      // baby/toddler: tiny influence
+  if(age<=4)return 2;      // early childhood
+  if(age<=8)return 3;      // child
+  if(age<=12)return 4;     // older child
+  if(age<=17)return 5;     // teen
+  if(age<=49)return 6;     // adult prime
+  if(age<=64)return 5;     // older adult
+  return 4;                // elder
+}
+function ageStageLabel(age){
+  if(age<=2)return "Infant / Toddler";
+  if(age<=4)return "Early Childhood";
+  if(age<=8)return "Childhood";
+  if(age<=12)return "Foundation Years";
+  if(age<=17)return "Teen Identity Years";
+  if(age<=49)return "Open Sea Prime";
+  if(age<=64)return "Veteran Years";
+  return "Elder Legend";
+}
+function v85SyncEnergy(){
+  if(!p)return;
+  const limit=ageEnergyLimit(p.age||0);
+  p.energy=limit;
+  if(p.actionsLeft===undefined || p.actionsLeft>limit)p.actionsLeft=limit;
+}
+function v85ActionAllowed(kind){
+  const a=p.age||0;
+  const locked=[];
+  if(a<5)locked.push("combat","travel","career","blackmarket","weaponhunt","fruithunt");
+  else if(a<10)locked.push("career","blackmarket","deadlycombat","fruithunt");
+  else if(a<13)locked.push("blackmarket","deadlycombat");
+  else if(a<16)locked.push("deadlycombat");
+  return !locked.includes(kind);
+}
+function ageLockedMessage(label){
+  toast(`${label} is not available at this age yet.`);
+}
+const oldCreateBirth_v85 = typeof createBirth==="function" ? createBirth : null;
+function createBirth(){
+  if(oldCreateBirth_v85)oldCreateBirth_v85();
+  v85SyncEnergy();
+  save();
+}
+const oldAgeUp_v85 = typeof ageUp==="function" ? ageUp : null;
+function ageUp(){
+  if(!p||p.dead)return;
+  if(oldAgeUp_v85)oldAgeUp_v85();
+  v85SyncEnergy();
+  save();
+}
+const oldSpendAction_v85 = typeof spendAction==="function" ? spendAction : null;
+function spendAction(){
+  v85SyncEnergy();
+  if(p.dead)return false;
+  if(p.actionsLeft<=0){toast("No energy left. Age up or rest.");return false;}
+  p.actionsLeft--;
+  return true;
+}
+const oldLifeActionsMenu_v85 = typeof lifeActionsMenu==="function" ? lifeActionsMenu : null;
+function lifeActionsMenu(){
+  v81Ensure();v85SyncEnergy();
+  const a=p.age;
+  let actions=[];
+  if(a<=2){
+    actions=[
+      ["Observe the World",()=>{if(spendAction()){trait("curiosity",1);p.mood=clamp(p.mood+2,0,100);silent("You watched the world with wide eyes.");mainMenu();}}],
+      ["Stay Close to Caregiver",()=>{if(spendAction()){trait("caution",1);p.health=clamp(p.health+4,0,100);silent("You stayed close and safe.");mainMenu();}}],
+      ["Cry for Attention",()=>{if(spendAction()){trait("willpower",1);p.mood=clamp(p.mood+1,0,100);silent("You made sure someone noticed you.");mainMenu();}}]
+    ];
+  }else if(a<=4){
+    actions=[
+      ["Play",()=>{if(spendAction()){trait("curiosity",1);p.mood=clamp(p.mood+4,0,100);silent("You played and explored.");mainMenu();}}],
+      ["Follow Family Around",()=>{if(spendAction()){trait("caution",1);p.mood=clamp(p.mood+2,0,100);silent("You followed family through town.");mainMenu();}}],
+      ["Wander a Little",()=>{if(spendAction()){trait("curiosity",1);trait("courage",1);silent("You wandered just far enough to scare everyone.");mainMenu();}}]
+    ];
+  }else if(a<=8){
+    actions=[
+      ["Play With Kids",()=>{if(spendAction()){trait("confidence",1);p.mood=clamp(p.mood+4,0,100);silent("You played with local kids.");mainMenu();}}],
+      ["Help Family",()=>{if(spendAction()){trait("compassion",1);apply({discipline:1});silent("You helped your family with small chores.");mainMenu();}}],
+      ["Explore Neighborhood",()=>{if(spendAction()){trait("curiosity",1);apply({sneak:1});silent("You explored nearby streets.");mainMenu();}}],
+      ["Make a Friend",()=>{if(spendAction()){narrativeRelationship("You made a childhood connection.");}}]
+    ];
+  }else if(a<=12){
+    actions=[
+      ["Help Family Work",()=>{if(spendAction()){apply({berries:200,discipline:1});trait("compassion",1);silent("You helped your family work.");mainMenu();}}],
+      ["Sneak Around",()=>{if(spendAction()){apply({sneak:1});trait("curiosity",1);silent("You snuck around town.");mainMenu();}}],
+      ["Basic Training",()=>{if(spendAction()){apply({strength:1,health:-1});trait("courage",1);silent("You trained like a kid pretending to be a hero.");mainMenu();}}],
+      ["Make Friends",()=>{if(spendAction()){narrativeRelationship("You opened yourself to others.");}}]
+    ];
+  }else if(a<=17){
+    actions=[
+      ["Train Seriously",()=>{if(spendAction()){apply({strength:1,speed:1,health:-2});silent("You trained seriously.");mainMenu();}}],
+      ["Study the Sea",()=>{if(spendAction()){apply({navigation:1,intelligence:1});trait("curiosity",1);silent("You studied maps and sea routes.");mainMenu();}}],
+      ["Socialize",()=>{if(spendAction()){narrativeRelationship("You spent time with people your age.");}}],
+      ["Seek Trouble",()=>{if(spendAction()){showLifeEvent(pick(getLifePool()));}}],
+      ["Part-Time Work",()=>{if(spendAction()){apply({berries:700+Math.floor(Math.random()*900),discipline:1});silent("You worked for a little money.");mainMenu();}}]
+    ];
+  }else{
+    actions=[
+      ["Work",()=>{if(spendAction()){apply({berries:1200+Math.floor(Math.random()*2000)});silent("You worked for money.");mainMenu();}}],
+      ["Explore Island",()=>{if(spendAction()){showLifeEvent(pick(getLifePool()));}}],
+      ["Socialize",()=>{if(spendAction()){narrativeRelationship("You spent time with people nearby.");}}],
+      ["Seek Opportunity",()=>{if(spendAction()){const event=Math.random()<fateChance()?pick(FATE_EVENTS_V81):pick(getLifePool());showLifeEvent(event);}}],
+      ["Lay Low",()=>{if(spendAction()){p.heat=clamp((p.heat||0)-2,0,99);p.reckless=clamp((p.reckless||0)-1,0,99);silent("You kept a low profile.");mainMenu();}}]
+    ];
+  }
+  actions.push(["Rest",()=>{if(spendAction()){p.health=clamp(p.health+20,0,100);p.mood=clamp(p.mood+5,0,100);silent("You rested.");mainMenu();}}]);
+  submenu("Life Actions",`Stage: ${ageStageLabel(p.age)} · Energy: ${p.actionsLeft}/${p.energy}`,actions);
+}
+const oldCombatMenu_v85 = typeof combatMenu==="function" ? combatMenu : null;
+function combatMenu(){
+  if(!v85ActionAllowed("combat"))return ageLockedMessage("Combat");
+  if(oldCombatMenu_v85)return oldCombatMenu_v85();
+}
+const oldTravelMenu_v85 = typeof travelMenu==="function" ? travelMenu : null;
+function travelMenu(){
+  if(!v85ActionAllowed("travel"))return ageLockedMessage("Travel");
+  if(oldTravelMenu_v85)return oldTravelMenu_v85();
+}
+const oldCareerRoleMenu_v85 = typeof careerRoleMenu==="function" ? careerRoleMenu : null;
+function careerRoleMenu(){
+  if(!v85ActionAllowed("career"))return ageLockedMessage("Career paths");
+  if(oldCareerRoleMenu_v85)return oldCareerRoleMenu_v85();
+}
+const oldBlackMarketMenu_v85 = typeof blackMarketMenu==="function" ? blackMarketMenu : null;
+function blackMarketMenu(){
+  if(!v85ActionAllowed("blackmarket"))return ageLockedMessage("Black market");
+  if(oldBlackMarketMenu_v85)return oldBlackMarketMenu_v85();
+}
+const oldFindWeapon_v85 = typeof findWeapon==="function" ? findWeapon : null;
+function findWeapon(){
+  if(!v85ActionAllowed("weaponhunt"))return ageLockedMessage("Weapon hunting");
+  if(oldFindWeapon_v85)return oldFindWeapon_v85();
+}
+const oldInspectFruit_v85 = typeof inspectFruitEncounter==="function" ? inspectFruitEncounter : null;
+function inspectFruitEncounter(){
+  if(!v85ActionAllowed("fruithunt"))return ageLockedMessage("Devil Fruit hunting");
+  if(oldInspectFruit_v85)return oldInspectFruit_v85();
+}
+const oldMainMenu_v85 = typeof mainMenu==="function" ? mainMenu : null;
+function mainMenu(){
+  v85SyncEnergy();
+  if(oldMainMenu_v85)oldMainMenu_v85();
+  const scene=$("screen");
+  if(scene && p){
+    const tag=`<span class="lifeStageTag">${ageStageLabel(p.age)}</span><span class="lifeStageTag">Energy ${p.actionsLeft}/${p.energy}</span>`;
+    const parchment=scene.querySelector(".v84Parchment")||scene.querySelector(".chapterCard");
+    if(parchment && !parchment.querySelector(".energyNote")){
+      parchment.insertAdjacentHTML("afterbegin",`<div class="energyNote">${tag}<br>Energy grows as you age. Childhood has smaller, safer actions; adulthood opens larger risks.</div>`);
+    }
+  }
+}
+
+
+/* =========================
+   v8.8 Fixed Action Limit
+   Keeps original-feeling set actions while age gates options.
+   ========================= */
+const FIXED_YEARLY_ACTIONS_V86 = 5;
+
+function ageEnergyLimit(age){
+  return FIXED_YEARLY_ACTIONS_V86;
+}
+function v85SyncEnergy(){
+  if(!p)return;
+  p.energy=FIXED_YEARLY_ACTIONS_V86;
+  if(p.actionsLeft===undefined || p.actionsLeft>FIXED_YEARLY_ACTIONS_V86){
+    p.actionsLeft=FIXED_YEARLY_ACTIONS_V86;
+  }
+}
+function v86ResetYearActions(){
+  if(!p)return;
+  p.energy=FIXED_YEARLY_ACTIONS_V86;
+  p.actionsLeft=FIXED_YEARLY_ACTIONS_V86;
+}
+const oldAgeUp_v86 = typeof ageUp==="function" ? ageUp : null;
+function ageUp(){
+  if(!p||p.dead)return;
+  if(oldAgeUp_v86)oldAgeUp_v86();
+  v86ResetYearActions();
+  save();
+}
+const oldCreateBirth_v86 = typeof createBirth==="function" ? createBirth : null;
+function createBirth(){
+  if(oldCreateBirth_v86)oldCreateBirth_v86();
+  v86ResetYearActions();
+  save();
+}
+const oldMainMenu_v86 = typeof mainMenu==="function" ? mainMenu : null;
+function mainMenu(){
+  v85SyncEnergy();
+  if(oldMainMenu_v86)oldMainMenu_v86();
+  const note=document.querySelector(".energyNote");
+  if(note){
+    note.innerHTML=`<span class="lifeStageTag">${ageStageLabel(p.age)}</span><span class="lifeStageTag">Actions ${p.actionsLeft}/${p.energy}</span><br>You have a fixed yearly action limit. Age changes what actions are available, not how many actions you get.`;
+  }
+}
+
+
+/* =========================
+   v8.8 Life Stage Action Growth
+   Childhood 5, Teen 8, Adult 12
+   ========================= */
+function ageEnergyLimit(age){
+  if(age < 13) return 5;       // childhood
+  if(age < 18) return 8;       // teenage years
+  if(age < 55) return 12;      // adulthood / prime life
+  if(age < 70) return 10;      // veteran years
+  return 8;                    // elder legend
+}
+function v85SyncEnergy(){
+  if(!p)return;
+  const limit=ageEnergyLimit(p.age||0);
+  p.energy=limit;
+  if(p.actionsLeft===undefined || p.actionsLeft>limit){
+    p.actionsLeft=limit;
+  }
+}
+function v86ResetYearActions(){
+  if(!p)return;
+  const limit=ageEnergyLimit(p.age||0);
+  p.energy=limit;
+  p.actionsLeft=limit;
+}
+const oldAgeUp_v87 = typeof ageUp==="function" ? ageUp : null;
+function ageUp(){
+  if(!p||p.dead)return;
+  if(oldAgeUp_v87)oldAgeUp_v87();
+  v86ResetYearActions();
+  save();
+}
+const oldCreateBirth_v87 = typeof createBirth==="function" ? createBirth : null;
+function createBirth(){
+  if(oldCreateBirth_v87)oldCreateBirth_v87();
+  v86ResetYearActions();
+  save();
+}
+const oldMainMenu_v87 = typeof mainMenu==="function" ? mainMenu : null;
+function mainMenu(){
+  v85SyncEnergy();
+  if(oldMainMenu_v87)oldMainMenu_v87();
+  const note=document.querySelector(".energyNote");
+  if(note && p){
+    note.innerHTML=`<span class="lifeStageTag">${ageStageLabel(p.age)}</span><span class="lifeStageTag">Actions ${p.actionsLeft}/${p.energy}</span><br>Actions grow as you mature: Childhood 5 · Teen 8 · Adult 12. Age also controls what actions are available.`;
+  }
+}
+
+
+/* =========================
+   v8.8 Visible Progression + Locked Options
+   ========================= */
+function v88StatPhysical(){
+  return Math.floor(((p.strength||0)+(p.speed||0)+(p.durability||0))/3);
+}
+function v88OptionUnlocked(opt){
+  if(!p)return false;
+  if(opt.minAge!==undefined && p.age<opt.minAge)return false;
+  if(opt.maxAge!==undefined && p.age>opt.maxAge)return false;
+  if(opt.req){
+    for(const [k,v] of Object.entries(opt.req)){
+      if(k==="physical" && v88StatPhysical()<v)return false;
+      else if(k==="crew" && (!p.crew || p.crew.length<v))return false;
+      else if(k==="hasCrew" && (!p.crew || p.crew.length<1))return false;
+      else if((p[k]||0)<v)return false;
+    }
+  }
+  if(opt.custom && !opt.custom())return false;
+  return true;
+}
+function v88ReqText(opt){
+  const req=[];
+  if(opt.minAge!==undefined)req.push(`Age ${opt.minAge}+`);
+  if(opt.maxAge!==undefined)req.push(`Age ${opt.maxAge} or younger`);
+  if(opt.req){
+    for(const [k,v] of Object.entries(opt.req)){
+      if(k==="physical")req.push(`Physical ${v}+`);
+      else if(k==="crew")req.push(`Crew members ${v}+`);
+      else if(k==="hasCrew")req.push(`Requires crew`);
+      else req.push(`${k} ${v}+`);
+    }
+  }
+  if(opt.reqText)req.push(opt.reqText);
+  return req.length?`Requires: ${req.join(" · ")}`:"Locked";
+}
+function v88RunOption(opt){
+  if(v88OptionUnlocked(opt)){
+    opt.action();
+  }else{
+    $("screen").innerHTML=`<h2>🔒 ${opt.label}</h2>
+    <div class="v88Preview">
+      <b>This option is visible, but not unlocked yet.</b><br>
+      ${v88ReqText(opt)}
+      ${opt.preview?`<br><br><b>Unlocks:</b> ${opt.preview}`:""}
+    </div>
+    <div class="choices">
+      <button class="primary" onclick="visibleProgressionMenu()">Back to Activities</button>
+      <button onclick="mainMenu()">Return Home</button>
+    </div>`;
+    render();
+  }
+}
+function v88Button(opt){
+  const unlocked=v88OptionUnlocked(opt);
+  const cls=unlocked?"v88Unlocked":"v88Locked";
+  return `<button class="${cls}" onclick="v88RunOption(v88AllOptions.find(o=>o.id==='${opt.id}'))">
+    ${unlocked?"":"🔒 "}${opt.icon||""} ${opt.label}
+    <small>${opt.desc||""}</small>
+    ${unlocked?"":`<span class="v88Req">${v88ReqText(opt)}</span>`}
+  </button>`;
+}
+function v88Section(title,items){
+  return `<div class="v88Section"><h3>${title}</h3><div class="v88OptionGrid">${items.map(v88Button).join("")}</div></div>`;
+}
+function v88SafeAction(fn){
+  return ()=>{ fn(); };
+}
+const v88AllOptions=[
+  // General
+  {id:"play",cat:"General",icon:"🧸",label:"Play",desc:"Childhood morale and curiosity.",maxAge:12,action:()=>{if(spendAction()){trait("curiosity",1);p.mood=clamp(p.mood+4,0,100);silent("You played and explored.");mainMenu();}}},
+  {id:"study",cat:"General",icon:"📚",label:"Study",desc:"Improve intelligence and discipline.",minAge:5,action:()=>{if(spendAction()){apply({intelligence:1,discipline:1});silent("You studied and learned.");mainMenu();}}},
+  {id:"work",cat:"General",icon:"💼",label:"Work",desc:"Earn money.",minAge:13,action:()=>{if(spendAction()){apply({berries:900+Math.floor(Math.random()*1600),discipline:1});silent("You worked for money.");mainMenu();}}},
+  {id:"rest",cat:"General",icon:"🛏️",label:"Rest",desc:"Recover health and morale.",action:()=>{if(spendAction()){p.health=clamp(p.health+20,0,100);p.mood=clamp(p.mood+5,0,100);silent("You rested.");mainMenu();}}},
+  {id:"train",cat:"General",icon:"🏋️",label:"Train",desc:"Improve physical ability.",minAge:7,action:()=>{if(spendAction()){apply({strength:1,speed:1,health:-2});silent("You trained your body.");mainMenu();}}},
+  {id:"helpfamily",cat:"General",icon:"🏠",label:"Help Family",desc:"Build discipline and compassion.",maxAge:17,action:()=>{if(spendAction()){apply({discipline:1,berries:p.age<13?150:500});trait("compassion",1);silent("You helped your family.");mainMenu();}}},
+
+  // Social
+  {id:"friends",cat:"Social",icon:"👥",label:"Make Friends",desc:"Meet people and build relationships.",minAge:5,action:()=>{if(spendAction()){narrativeRelationship("You opened yourself to others.");}}},
+  {id:"rival",cat:"Social",icon:"⚡",label:"Find Rival",desc:"Create a long-term rival.",minAge:10,action:()=>{if(spendAction()){p.relationships.push({name:pick(DATA.names),status:"Rival",ageMet:p.age});trait("ambition",1);major("You found someone who pushes you to improve.");mainMenu();}}},
+  {id:"network",cat:"Social",icon:"🤝",label:"Network",desc:"Meet useful contacts.",minAge:16,req:{charisma:2},action:()=>{if(spendAction()){p.relationships.push({name:pick(DATA.names),status:"Useful Contact",ageMet:p.age});apply({charisma:1});silent("You built your network.");mainMenu();}}},
+
+  // Combat
+  {id:"spar",cat:"Combat",icon:"🥊",label:"Spar",desc:"Safe combat practice.",minAge:8,action:()=>{if(spendAction()){apply({strength:1,armamentXP:1});silent("You sparred safely.");mainMenu();}}},
+  {id:"barfight",cat:"Combat",icon:"🍺",label:"Street Fight",desc:"Risky local fight.",minAge:13,action:()=>{if(spendAction())startBattle("street fight","easy");}},
+  {id:"arena",cat:"Combat",icon:"🏟️",label:"Arena Fight",desc:"Public combat for rewards.",minAge:16,req:{physical:3},preview:"Money, battle experience, reputation.",action:()=>{if(spendAction())startBattle("arena","normal");}},
+  {id:"bountyhunt",cat:"Combat",icon:"🎯",label:"Bounty Hunting",desc:"Hunt wanted targets.",minAge:15,req:{physical:3},preview:"Berries, combat growth, reputation.",action:()=>huntBounty()},
+  {id:"deadlybattle",cat:"Combat",icon:"☠️",label:"Deadly Battle",desc:"High risk, high reward.",minAge:18,req:{physical:5,reckless:2},preview:"Rare loot, scars, possible capture/death.",action:()=>{if(spendAction())startBattle("deadly","deadly");}},
+
+  // Crew / Career
+  {id:"joinpirates",cat:"Crew / Career",icon:"☠️",label:"Join Pirate Crew",desc:"Serve under a captain.",minAge:14,req:{charisma:2},action:()=>{if(spendAction()){p.path="Pirate";p.rank="Rookie";joinGeneratedCrew();}}},
+  {id:"startcrew",cat:"Crew / Career",icon:"🏴",label:"Start Your Own Crew",desc:"Become captain.",minAge:16,req:{charisma:3,infamy:2},preview:"Captain role, crew recruitment, raids.",action:()=>{if(spendAction()){p.path="Pirate";p.rank="Captain";formOwnCrew();}}},
+  {id:"recruit",cat:"Crew / Career",icon:"🧑‍✈️",label:"Recruit Member",desc:"Add someone to your crew.",minAge:16,req:{hasCrew:1},action:()=>recruitCrew?recruitCrew():narrativeCrewJoin("You found someone willing to follow you.")},
+  {id:"enlist",cat:"Crew / Career",icon:"🛡️",label:"Enlist Marines",desc:"Join the Marines.",minAge:15,req:{discipline:2},action:()=>{if(spendAction()){p.path="Marine";p.rank="Recruit";setupMarineUnit();}}},
+  {id:"officerexam",cat:"Crew / Career",icon:"🎖️",label:"Officer Exam",desc:"Attempt promotion.",minAge:18,req:{marineRep:2,discipline:3},preview:"Marine rank progression and platoon command.",action:()=>{if(spendAction()){apply({marineRep:1,discipline:1});silent("You prepared for Marine promotion.");mainMenu();}}},
+  {id:"revolution",cat:"Crew / Career",icon:"🔥",label:"Join Revolutionaries",desc:"Fight the World Government.",minAge:16,req:{freedom:1},action:()=>{if(spendAction()){p.path="Revolutionary";p.rank="Recruit";p.roleData={cell:"Local Cell",role:"New Liberator"};apply({revolutionaryRep:1,heat:1});major("You joined a revolutionary cell.");mainMenu();}}},
+
+  // Exploration / Power
+  {id:"neartravel",cat:"Exploration / Power",icon:"⛵",label:"Travel Nearby",desc:"Move between safer islands.",minAge:13,action:()=>travelMenu()},
+  {id:"grandline",cat:"Exploration / Power",icon:"🌊",label:"Grand Line Voyage",desc:"Dangerous sea adventure.",minAge:18,req:{navigation:2,physical:4},preview:"High danger islands, stronger events, better loot.",action:()=>{if(spendAction()){p.region="Paradise";p.island=pick(DATA.islands.filter(i=>i.region==="Paradise")).name;major("You entered Paradise, the first half of the Grand Line.");mainMenu();}}},
+  {id:"fruitsearch",cat:"Exploration / Power",icon:"🍎",label:"Search Devil Fruit",desc:"Look for rumors of strange fruits.",minAge:14,req:{curiosity:2},preview:"Paramecia, Zoan, Logia, Mythical fruit events.",action:()=>inspectFruitEncounter()},
+  {id:"weaponhunt",cat:"Exploration / Power",icon:"⚔️",label:"Search Weapon",desc:"Find weapons or cursed blades.",minAge:13,req:{sword:1},action:()=>findWeapon()},
+  {id:"haki",cat:"Exploration / Power",icon:"👁️",label:"Haki Training",desc:"Train your will.",minAge:13,req:{willpower:1},action:()=>hakiMenu()},
+
+  // Underworld
+  {id:"blackmarket",cat:"Underworld",icon:"🕶️",label:"Black Market",desc:"Buy dangerous goods.",minAge:18,req:{heat:1},preview:"Rare weapons, fruit rumors, illegal jobs.",action:()=>blackMarketMenu()},
+  {id:"smuggle",cat:"Underworld",icon:"📦",label:"Smuggling Run",desc:"Illegal money job.",minAge:16,req:{sneak:2},action:()=>{if(spendAction()){if(Math.random()<.25)return startBattle("smuggling","hard");apply({berries:6000,heat:2,infamy:1});silent("You completed a smuggling run.");mainMenu();}}},
+  {id:"steal",cat:"Underworld",icon:"💰",label:"Steal Supplies",desc:"Quick profit, bad reputation.",minAge:10,req:{sneak:1},action:()=>{if(spendAction()){apply({berries:1500,heat:1,infamy:1});trait("ruthless",1);silent("You stole supplies.");mainMenu();}}},
+];
+
+function visibleProgressionMenu(){
+  v81Ensure();v85SyncEnergy();
+  const cats=["General","Social","Combat","Crew / Career","Exploration / Power","Underworld"];
+  $("screen").innerHTML=`<h2>Activities</h2>
+  <div class="v88Preview">
+    All options are visible. Locked options show what you need, like BitLife-style progression.
+    <br><b>Age:</b> ${p.age} · <b>Actions:</b> ${p.actionsLeft}/${p.energy}
+  </div>
+  ${cats.map(cat=>v88Section(cat,v88AllOptions.filter(o=>o.cat===cat))).join("")}
+  <div class="choices"><button class="primary" onclick="mainMenu()">Back Home</button></div>`;
+  render();
+}
+function lifeActionsMenu(){
+  visibleProgressionMenu();
 }
