@@ -47,10 +47,8 @@ This is a clean rebuild of the core game files to reduce freezing, duplicate sta
 - Adds chapter log and stronger legacy direction.
 
 
-## v8.3 UI Target Build
-- Mockup-inspired layout.
-- Left character/stat panel.
-- Center life event parchment scene.
-- Right dream/reputation/world hints panel.
-- Bottom action bar with Age Up centerpiece.
-- Keeps v8.1 narrative foundation underneath.
+## v8.4 UI Stability Fix
+- Fixes v8.3 startup freeze.
+- Keeps mockup-style UI direction.
+- Removes risky render override initialization issue.
+- Adds stable left character/stat panel, center parchment scene, and right dream/reputation hints panel.
