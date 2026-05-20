@@ -245,15 +245,14 @@ animation:flashfx 1s infinite alternate;
 @media(max-width:700px){.battleTierGrid{grid-template-columns:1fr}}
 
 
-/* v6.7 career roles + stable startup */
-.roleCard,.powerCard{
+/* v6.8 Core Stability + Optimization */
+.powerCard,.roleCard{
   border:1px solid var(--line);
   border-radius:16px;
   padding:12px;
   background:rgba(255,255,255,.045);
   margin:10px 0;
 }
-.roleCard h4,.powerCard h4{margin:0 0 6px}
 .rarityCommon{border-color:#aeb6ca!important}
 .rarityUncommon{border-color:#63d297!important;box-shadow:0 0 10px rgba(99,210,151,.14)}
 .rarityRare{border-color:#62a8ff!important;box-shadow:0 0 12px rgba(98,168,255,.2)}
@@ -272,5 +271,24 @@ animation:flashfx 1s infinite alternate;
   background:rgba(181,140,255,.08);
   border-radius:16px;
   padding:12px;
+  margin:10px 0;
+}
+.weaponEquipped{
+  border:1px solid var(--green);
+  background:rgba(99,210,151,.08);
+  border-radius:16px;
+  padding:12px;
+  margin:10px 0;
+}
+.buildStamp{
+  font-size:.8rem;
+  color:var(--muted);
+  margin-top:6px;
+}
+.safeNotice{
+  border:1px solid var(--blue);
+  background:rgba(98,168,255,.08);
+  border-radius:14px;
+  padding:10px;
   margin:10px 0;
 }

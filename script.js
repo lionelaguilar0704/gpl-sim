@@ -62,7 +62,7 @@ function newPlayer(){return{
  hiddenTraits:[],personality:{mercy:0,greed:0,freedom:0,ruthless:0,loyalty:0,ego:0},
  destiny:0,health:100,mood:50,
  strength:1,speed:1,durability:1,intelligence:1,charisma:1,navigation:0,sneak:0,discipline:0,sword:0,medicine:0,craft:0,marksmanship:0,
- honor:0,infamy:0,marineRep:0,revolutionaryRep:0,heat:0,crew:[],rivals:[],relationships:[],items:[],loot:[],weapons:[],equippedWeapon:null,codex:{fruits:[],weapons:[]},roleData:{},crewMode:"solo",injuries:[],reckless:0,mystery:0,quest:null,
+ honor:0,infamy:0,marineRep:0,revolutionaryRep:0,heat:0,crew:[],rivals:[],relationships:[],items:[],mystery:0,quest:null,
  ship:{name:"None",hp:0,maxHp:0,cannons:0,cargo:0,xp:0,tier:0},businesses:[],territories:[],debt:0,legacy:0,
  memories:{islands:{},npcs:{},world:[]},timeline:[],feed:[],log:[],newspapers:[],dead:false
 }}
@@ -271,7 +271,7 @@ function chooseEvent(ei,ci){let c=EVENTS[ei].choices[ci];apply(c[1]);major(c[2])
 function postEventConsequences(){if(Math.random()<.12&&p.health<70)injuryRoll();if(p.bounty>0&&Math.random()<.18)addNews("BOUNTY UPDATED",`${p.name}, ${p.epithet}, now carries a bounty of ฿${fmt(p.bounty)}.`);if(p.infamy>=10&&["No Epithet","the Unwritten"].includes(p.epithet)){p.epithet=pick(["the Menace","Red-Hand","the Problem","Stormbringer","Black Wake"]);major(`Earned epithet: ${p.epithet}.`)}if(p.honor>=10&&["No Epithet","the Unwritten"].includes(p.epithet)){p.epithet=pick(["the Kind Blade","Harbor Saint","the Shield","the Gentle Storm","Dawn Hand"]);major(`Earned epithet: ${p.epithet}.`)}}
 
 
-/* v6.7 Battle Engine */
+/* v6.8 Battle Engine */
 function maxBattleHP(){return 80+p.durability*8+p.health}
 function maxBattleStamina(){return 40+p.discipline*5+p.speed*2}
 function maxBattleHaki(){return 20+(p.observation+p.armament+p.conqueror)*12+p.kingTraits.presence*2}
@@ -363,7 +363,7 @@ function bossIntro(name){
 
 function setup(){
  p=newPlayer();
- $("screen").innerHTML=`<h2>Start a New Life</h2><p><b>v6.7 Battle Engine</b> adds appearance evolution, animated dashboard, live notifications, interactive maps, newspapers, timeline, Haki effects, visual character stages, and smoother menus.</p><input id="nameInput" placeholder="Character name, or leave blank for random"><div class="choices"><button class="primary" onclick="randomStart()">Random Life</button><button onclick="chooseOriginScreen()">Choose Origin</button>${(localStorage.getItem("gpls_save_v42")||localStorage.getItem("gpls_save_v41")||localStorage.getItem("gpls_save_v40"))?'<button onclick="loadGame()">Load Saved Life</button>':''}<button class="danger" onclick="clearSave()">Clear Save</button></div>`;
+ $("screen").innerHTML=`<h2>Start a New Life</h2><p><b>v6.8 Battle Engine</b> adds appearance evolution, animated dashboard, live notifications, interactive maps, newspapers, timeline, Haki effects, visual character stages, and smoother menus.</p><input id="nameInput" placeholder="Character name, or leave blank for random"><div class="choices"><button class="primary" onclick="randomStart()">Random Life</button><button onclick="chooseOriginScreen()">Choose Origin</button>${(localStorage.getItem("gpls_save_v42")||localStorage.getItem("gpls_save_v41")||localStorage.getItem("gpls_save_v40"))?'<button onclick="loadGame()">Load Saved Life</button>':''}<button class="danger" onclick="clearSave()">Clear Save</button></div>`;
  render();
 }
 function randomStart(){p=newPlayer();p.name=$("nameInput").value.trim()||pick(DATA.names);p.dream=pick(DATA.dreams);let o=pick(DATA.origins);startWithOrigin(o)}
@@ -497,15 +497,20 @@ function showTab(tab,silentRender=false){
  $("tab").innerHTML=html;
 }
 function ending(forcedTitle=null){let title=forcedTitle||"Unknown Drifter";if(!forcedTitle){if(p.conqueror>=5&&p.bounty>500000000)title="Emperor Candidate";else if(p.bounty>300000000)title="Legendary Pirate";else if(p.bounty>100000000)title="Supernova";else if(p.marineRep>35)title="Admiral Candidate";else if(p.revolutionaryRep>25)title="World Government Threat";else if(p.berries>600000)title="Underworld Tycoon";else if(p.infamy>25)title="Sea Menace";else if(p.honor>25)title="Local Legend";else if(p.crew.length>=10)title="Beloved Captain"}$("screen").innerHTML=`<h2>Ending: ${title}</h2><p>Your life reaches its final chapter. Legacy: ${p.legacy}. Future versions can let old lives become world legends.</p><div class="choices"><button class="primary" onclick="setup()">Start New Life</button></div>`;major(`Final title: ${title}.`);addNews("LIFE OF A LEGEND",`${p.name}'s story ends with the title: ${title}.`);render()}
-function help(){ $("screen").innerHTML=`<h2>How to Play v6.7</h2><div class="notice"><b>Living UI:</b> Watch the poster, appearance, background, feed, map, and newspapers evolve.<br><br><b>Appearance:</b> Your look changes from age, wounds, outfit, career, Devil Fruit, and Haki.<br><br><b>Notifications:</b> Small updates appear as toasts; major events still interrupt.<br><br><b>Haki:</b> Observation, Armament, and Conqueror unlock usable actions.</div><div class="choices"><button class="primary" onclick="showMenu()">Back</button></div>`}
+function help(){ $("screen").innerHTML=`<h2>How to Play v6.8</h2><div class="notice"><b>Living UI:</b> Watch the poster, appearance, background, feed, map, and newspapers evolve.<br><br><b>Appearance:</b> Your look changes from age, wounds, outfit, career, Devil Fruit, and Haki.<br><br><b>Notifications:</b> Small updates appear as toasts; major events still interrupt.<br><br><b>Haki:</b> Observation, Armament, and Conqueror unlock usable actions.</div><div class="choices"><button class="primary" onclick="showMenu()">Back</button></div>`}
 function manualSave(){localStorage.setItem("gpls_save_v42",JSON.stringify(p));silent("Game saved.");showMenu()}
 function loadGame(){p=JSON.parse(localStorage.getItem("gpls_save_v42"))||JSON.parse(localStorage.getItem("gpls_save_v41"))||JSON.parse(localStorage.getItem("gpls_save_v40"));ensureAppearance();if(!p.movesMastery)p.movesMastery={};showMenu()}
 function clearSave(){localStorage.removeItem("gpls_save_v42");localStorage.removeItem("gpls_save_v41");localStorage.removeItem("gpls_save_v40");setup()}
 
 /* =========================
-   v6.7 Stable Startup, Career Roles, Crews, Platoons
+   v6.8 Core Stability Layer
    ========================= */
-const SAFE_FRUITS=[
+const GPL_BUILD="v6.8.0-core-stability";
+let GPL_BOOTED=false;
+let GPL_CREATING=false;
+let GPL_CHARACTER_READY=false;
+
+const V68_FRUITS=[
  {name:"Flame-Flame Fruit",type:"Logia",rarity:"Legendary",desc:"Create, control, and become fire itself.",passives:["Logia intangibility vs non-Haki attacks","Fire resistance"],moves:["Fire Spear","Flame Dragon","Inferno Burst"],weakness:"Water, sea-prism, Armament Haki"},
  {name:"Storm-Storm Fruit",type:"Logia",rarity:"Mythic",desc:"Become living storm clouds, wind, and lightning.",passives:["Logia intangibility","Lightning movement"],moves:["Thunder Spear","Storm Prison","Heavenly Judgment"],weakness:"Rubber-like counters, sea-prism, Armament Haki"},
  {name:"Smoke Body Fruit",type:"Logia",rarity:"Epic",desc:"Turn into smoke to evade, bind, and blind enemies.",passives:["Logia intangibility","Fog concealment"],moves:["Smoke Bind","Whiteout","Choke Field"],weakness:"Strong wind, sea-prism, Armament Haki"},
@@ -513,7 +518,7 @@ const SAFE_FRUITS=[
  {name:"Wolf-Wolf Fruit",type:"Zoan",rarity:"Uncommon",desc:"Transform into a wolf or wolf hybrid.",passives:["Hybrid Form: speed and claws","Beast Form: tracking"],moves:["Savage Fang","Pack Rush","Moon Howl"],weakness:"Lower utility"},
  {name:"Phoenix Fruit",type:"Mythical Zoan",rarity:"Mythic",desc:"A mythical bird fruit with blue healing flames.",passives:["Flight","Healing flames","Regeneration chance"],moves:["Phoenix Talon","Healing Flame","Rebirth Burst"],weakness:"High mastery requirement"}
 ];
-const SAFE_WEAPONS=[
+const V68_WEAPONS=[
  {name:"Rusty Cutlass",type:"Sword",rarity:"Common",desc:"A chipped blade used by rookies.",effects:["Small sword damage"],moves:["Basic Slash"],special:"None",power:4,history:"No known history."},
  {name:"Marine Saber",type:"Sword",rarity:"Uncommon",desc:"A reliable military saber.",effects:["Sword damage","Parry bonus"],moves:["Officer Slash","Guard Break"],special:"Discipline scaling",power:9,history:"Standard Marine issue."},
  {name:"Iron Knuckle Gauntlets",type:"Gauntlets",rarity:"Uncommon",desc:"Heavy iron gauntlets for brawlers.",effects:["Punch damage","Stun chance"],moves:["Iron Jab","Rib Breaker"],special:"Pairs well with Armament",power:10,history:"Underground fight pits."},
@@ -521,10 +526,12 @@ const SAFE_WEAPONS=[
  {name:"Storm Fang",type:"Spear",rarity:"Legendary",desc:"A spear forged from storm iron.",effects:["High crit chance","Lightning damage"],moves:["Thunder Pierce","Sky Splitter","Storm Fang Lance"],special:"Can evolve with Observation Haki",power:32,history:"Wielded by the Thunder King."},
  {name:"Enketsu",type:"Cursed Blade",rarity:"Mythic",desc:"A cursed blade burning with hatred.",effects:["Massive slash damage","Blood Flame"],moves:["Blood Flame Cut","Soul Ignition","Crimson Execution"],special:"Hidden curse may drain stamina",power:42,history:"Wielded by the Crimson Executioner."}
 ];
-function stableFields(){
+
+function v68Fields(){
  if(!p)return;
  if(!p.loot)p.loot=[];
  if(!p.weapons)p.weapons=[];
+ if(!p.equippedWeapon)p.equippedWeapon=null;
  if(!p.codex)p.codex={fruits:[],weapons:[]};
  if(!p.codex.fruits)p.codex.fruits=[];
  if(!p.codex.weapons)p.codex.weapons=[];
@@ -534,47 +541,67 @@ function stableFields(){
  if(!p.crewMode)p.crewMode="solo";
  if(!p.movesMastery)p.movesMastery={};
 }
-function rarityClass(r){return "rarity"+String(r||"Common").replace(/\s/g,"")}
+function v68RarityClass(r){return "rarity"+String(r||"Common").replace(/\s/g,"")}
+function v68Save(){localStorage.setItem("gpls_save_v68",JSON.stringify(p))}
+function v68LoadRaw(){
+ return JSON.parse(localStorage.getItem("gpls_save_v68")||"null")
+     || JSON.parse(localStorage.getItem("gpls_save_v67")||"null")
+     || JSON.parse(localStorage.getItem("gpls_save_v61")||"null")
+     || JSON.parse(localStorage.getItem("gpls_save_v52")||"null")
+     || JSON.parse(localStorage.getItem("gpls_save_v42")||"null")
+     || null;
+}
 function stableSetup(){
- p=newPlayer();stableFields();
+ GPL_CREATING=false;
+ GPL_CHARACTER_READY=false;
+ p=newPlayer();
+ v68Fields();
  $("screen").innerHTML=`<h2>Start a New Life</h2>
- <p><b>v6.7 Career Roles Stable Build</b> fixes startup and adds role-specific gameplay, joining crews, and Marine platoons.</p>
+ <p><b>v6.8 Core Stability</b> fixes duplicate startup/origin execution, adds cache-busting, and stabilizes career role systems.</p>
+ <div class="safeNotice">Build: ${GPL_BUILD}<br>Tip: open the site with <b>?v=68</b> after uploading to bypass old Safari cache.</div>
  <input id="nameInput" placeholder="Character name, or leave blank for random">
  <div class="choices">
  <button class="primary" onclick="randomStart()">Random Life</button>
  <button onclick="chooseOriginScreen()">Choose Origin</button>
- ${(localStorage.getItem("gpls_save_v67")||localStorage.getItem("gpls_save_v61")||localStorage.getItem("gpls_save_v52")||localStorage.getItem("gpls_save_v42"))?'<button onclick="loadGame()">Load Saved Life</button>':''}
+ ${v68LoadRaw()?'<button onclick="loadGame()">Load Saved Life</button>':''}
  <button class="danger" onclick="clearSave()">Clear Save</button>
  </div>`;
  render();
 }
-function safeOrigin(i){
+function chooseOriginScreen(){
+ if(GPL_CREATING)return;
+ GPL_CREATING=true;
+ p=newPlayer();
+ v68Fields();
+ p.name=($("nameInput")&&$("nameInput").value.trim())||pick(DATA.names);
+ p.dream=pick(DATA.dreams);
+ $("screen").innerHTML=`<h2>Choose Origin</h2>
+ <p>Your origin gives bonuses and shapes your event pool.</p>
+ <div class="choices">${DATA.origins.map((o,i)=>`<button onclick="selectOrigin(${i})">${o[1]} ${o[0]}</button>`).join("")}</div>`;
+ render();
+ setTimeout(()=>{GPL_CREATING=false},250);
+}
+function selectOrigin(i){
+ if(GPL_CHARACTER_READY)return;
+ GPL_CHARACTER_READY=true;
  const o=DATA.origins[i]||DATA.origins[0];
  p.origin=o[0];p.portrait=o[1];
  const starts=DATA.islands.filter(x=>x.region==="Home Sea");
  const isl=pick(starts);
  p.region=isl.region;p.island=isl.name;
  apply(o[2]||{});
- stableFields();
+ v68Fields();
  p.epithet=pick(["the Unwritten","the Small Storm","Iron Will","Chainbreaker","Sea Rat","the Runaway","the Quiet Spark","No-Name","the Dawn Rookie"]);
  major(`Born as a ${p.origin}, starting on ${p.island}. Dream: ${p.dream}.`);
+ v68Save();
  showMenu();
 }
-function chooseOriginScreen(){
- p=newPlayer();
- stableFields();
- p.name=($("nameInput")&&$("nameInput").value.trim())||pick(DATA.names);
- p.dream=pick(DATA.dreams);
- $("screen").innerHTML=`<h2>Choose Origin</h2>
- <p>Your origin gives bonuses and shapes your event pool. Dream is randomized to keep lives different.</p>
- <div class="choices">${DATA.origins.map((o,i)=>`<button onclick="safeOrigin(${i})">${o[1]} ${o[0]}</button>`).join("")}</div>`;
- render();
-}
 function randomStart(){
- p=newPlayer();stableFields();
+ if(GPL_CHARACTER_READY)return;
+ p=newPlayer();v68Fields();
  p.name=($("nameInput")&&$("nameInput").value.trim())||pick(DATA.names);
  p.dream=pick(DATA.dreams);
- safeOrigin(Math.floor(Math.random()*DATA.origins.length));
+ selectOrigin(Math.floor(Math.random()*DATA.origins.length));
 }
 function choosePath(){
  $("screen").innerHTML=`<h2>Age 16: Choose Your Path</h2>
@@ -583,7 +610,7 @@ function choosePath(){
  render();
 }
 function setPathStable(i){
- let x=DATA.paths[i];p.path=x[0];p.portrait=x[1];p.rank=DATA.careers[p.path][0];apply(x[2]);stableFields();
+ let x=DATA.paths[i];p.path=x[0];p.portrait=x[1];p.rank=DATA.careers[p.path][0];apply(x[2]);v68Fields();
  if(p.path==="Pirate")return pirateCrewChoice();
  if(p.path==="Marine")setupMarineUnit();
  if(p.path==="Revolutionary")p.roleData={cell:"Unassigned Cell",role:"New Liberator",missions:0};
@@ -591,6 +618,7 @@ function setPathStable(i){
  if(p.path==="Doctor")p.roleData={clinic:"Field Clinic",patients:0};
  if(p.path==="Shipwright")p.roleData={yard:"Dockyard Apprentice",builds:0};
  major(`Chose the path of ${p.path}.`);
+ v68Save();
  showMenu();
 }
 function pirateCrewChoice(){
@@ -606,7 +634,7 @@ function formOwnCrew(){
  p.crewMode="captain";
  p.roleData={crewName:`${p.name} Pirates`,position:"Captain",captain:p.name,influence:1};
  major(`Founded the ${p.roleData.crewName}.`);
- showMenu();
+ v68Save();showMenu();
 }
 function joinGeneratedCrew(){
  const captains=["Red Jack","Mira Blackfin","Captain Crowe","Darius Bloodwolf","Velvet Vane","Iron Mako"];
@@ -616,19 +644,17 @@ function joinGeneratedCrew(){
  p.roleData={crewName:crews[idx],position:pick(["Deckhand","Fighter","Scout","Gunner","Navigator Trainee"]),captain:captains[idx],influence:0};
  p.crew.push({name:p.roleData.captain,role:"Captain",loyalty:5,salary:0,traits:["Commanding","Ambitious"]});
  major(`Joined the ${p.roleData.crewName} under ${p.roleData.captain}.`);
- showMenu();
+ v68Save();showMenu();
 }
 function setupMarineUnit(){
- const rank=p.rank||"Recruit";
  const unitName=pick(["Shells Platoon","Blue Shield Unit","G-12 Patrol","Iron Gull Platoon","East Watch Division"]);
- const inCharge=["Captain","Commodore","Vice Admiral Candidate","Admiral Candidate"].includes(rank);
- p.crewMode=inCharge?"commander":"assigned";
- p.roleData={unitName,position:inCharge?"Commanding Officer":"Assigned Marine",platoonSize:inCharge?24:8,discipline:1};
+ p.crewMode="assigned";
+ p.roleData={unitName,position:"Assigned Marine",platoonSize:8,discipline:1};
  major(`Assigned to ${unitName} as ${p.roleData.position}.`);
- showMenu();
+ v68Save();showMenu();
 }
 function roleMenu(){
- stableFields();
+ v68Fields();
  if(p.path==="Pirate")return pirateRoleMenu();
  if(p.path==="Marine")return marineRoleMenu();
  if(p.path==="Revolutionary")return revolutionaryRoleMenu();
@@ -652,6 +678,8 @@ function earnCrewInfluence(){if(!spendAction())return;p.roleData.influence=(p.ro
 function captainRaid(){if(!spendAction())return;startBattle("raid",{berries:16000,bounty:18000,infamy:1},"hard")}
 function giveCrewOrders(){if(!spendAction())return;p.crew.forEach(c=>c.loyalty=clamp((c.loyalty||5)+1,0,10));apply({leadership:1});silent("You organized the crew and improved loyalty.");showMenu()}
 function marineRoleMenu(){
+ const canCommand=["Captain","Commodore","Vice Admiral Candidate","Admiral Candidate"].includes(p.rank);
+ if(canCommand&&p.crewMode!=="commander"){p.crewMode="commander";p.roleData.position="Commanding Officer";p.roleData.platoonSize=24}
  $("screen").innerHTML=`<h2>🛡️ Marine Role</h2>${roleHeader()}<div class="choices">
  <button onclick="marinePatrol()">Patrol Waters</button>
  <button onclick="marineArrest()">Arrest Pirate</button>
@@ -668,34 +696,36 @@ function bountyRoleMenu(){submenu("🎯 Bounty Hunter Role","Contracts and pursu
 function doctorRoleMenu(){submenu("🩺 Doctor Role","Treat patients and improve survival.",[`<button onclick="if(spendAction()){p.health=clamp(p.health+25,0,100);apply({medicine:1,honor:1});silent('Treated patients and improved medicine.');showMenu()}">Treat Patients</button>`,`<button onclick="if(spendAction()){apply({medicine:2,intelligence:1});silent('Researched rare disease.');showMenu()}">Medical Research</button>`])}
 function shipwrightRoleMenu(){submenu("🛠️ Shipwright Role","Build, repair, and modify ships.",[`<button onclick="repairShip()">Repair Ship</button>`,`<button onclick="if(spendAction()){apply({craft:2,berries:4000});silent('Built ship parts for profit.');showMenu()}">Build Parts</button>`])}
 function genericRoleMenu(){submenu("Career Role","General career work.",[`<button onclick="careerWork()">Career Mission</button>`,`<button onclick="seekPromotion()">Seek Promotion</button>`])}
+
 function powerCodexMenu(){
- stableFields();
+ v68Fields();
  $("screen").innerHTML=`<h2>📖 Pirate Codex</h2>
  <div class="choices"><button onclick="fruitCodex()">🍎 Devil Fruit Encyclopedia</button><button onclick="weaponCodex()">⚔️ Weapon Tier Encyclopedia</button><button onclick="ownedWeapons()">🎒 Owned Weapons</button><button class="primary" onclick="showMenu()">Back</button></div>`;
  render();
 }
 function fruitCodex(){
  $("screen").innerHTML=`<h2>🍎 Devil Fruit Encyclopedia</h2><p><b>Logia Rule:</b> non-Haki physical attacks should miss Logia users unless countered by Armament, sea-prism, or natural weakness.</p>`+
- SAFE_FRUITS.map(f=>`<div class="powerCard ${rarityClass(f.rarity)}"><h3>${f.name}</h3><p><b>${f.type}</b> • ${f.rarity}</p><p>${f.desc}</p><p><b>Passives:</b> ${f.passives.join(", ")}</p><p><b>Moves:</b> ${f.moves.join(", ")}</p><p><b>Weakness:</b> ${f.weakness}</p></div>`).join("")+
+ V68_FRUITS.map(f=>`<div class="powerCard ${v68RarityClass(f.rarity)}"><h3>${f.name}</h3><p><b>${f.type}</b> • ${f.rarity}</p><p>${f.desc}</p><p><b>Passives:</b> ${f.passives.join(", ")}</p><p><b>Moves:</b> ${f.moves.join(", ")}</p><p><b>Weakness:</b> ${f.weakness}</p></div>`).join("")+
  `<button class="primary" onclick="powerCodexMenu()">Back</button>`;
 }
 function weaponCodex(){
  $("screen").innerHTML=`<h2>⚔️ Weapon Tier Encyclopedia</h2>`+
- SAFE_WEAPONS.map(w=>`<div class="powerCard ${rarityClass(w.rarity)}"><h3>${w.name}</h3><p><b>${w.rarity}</b> ${w.type} • Power ${w.power}</p><p>${w.desc}</p><p><b>Effects:</b> ${w.effects.join(", ")}</p><p><b>Moves:</b> ${w.moves.join(", ")}</p><p><b>Special:</b> ${w.special}</p><p><b>History:</b> ${w.history}</p></div>`).join("")+
+ V68_WEAPONS.map(w=>`<div class="powerCard ${v68RarityClass(w.rarity)}"><h3>${w.name}</h3><p><b>${w.rarity}</b> ${w.type} • Power ${w.power}</p><p>${w.desc}</p><p><b>Effects:</b> ${w.effects.join(", ")}</p><p><b>Moves:</b> ${w.moves.join(", ")}</p><p><b>Special:</b> ${w.special}</p><p><b>History:</b> ${w.history}</p></div>`).join("")+
  `<button class="primary" onclick="powerCodexMenu()">Back</button>`;
 }
 function ownedWeapons(){
- stableFields();
- $("screen").innerHTML=`<h2>🎒 Owned Weapons</h2>${p.equippedWeapon?`<div class="roleCard"><b>Equipped:</b> ${p.equippedWeapon.rarity} ${p.equippedWeapon.name}</div>`:"<p>No weapon equipped.</p>"}<div class="choices">${p.weapons.map((w,i)=>`<button onclick="equipWeapon(${i})">${w.rarity} ${w.name}<small>${w.type} • Power ${w.power}</small></button>`).join("")||"<p>No weapons owned yet.</p>"}<button onclick="findWeapon()">Search for Weapon</button><button class="primary" onclick="showMenu()">Back</button></div>`;
+ v68Fields();
+ $("screen").innerHTML=`<h2>🎒 Owned Weapons</h2>${p.equippedWeapon?`<div class="weaponEquipped"><b>Equipped:</b> ${p.equippedWeapon.rarity} ${p.equippedWeapon.name}</div>`:"<p>No weapon equipped.</p>"}<div class="choices">${p.weapons.map((w,i)=>`<button onclick="equipWeapon(${i})">${w.rarity} ${w.name}<small>${w.type} • Power ${w.power}</small></button>`).join("")||"<p>No weapons owned yet.</p>"}<button onclick="findWeapon()">Search for Weapon</button><button class="primary" onclick="showMenu()">Back</button></div>`;
  render();
 }
-function equipWeapon(i){stableFields();if(!p.weapons[i])return;p.equippedWeapon=p.weapons[i];major(`Equipped ${p.equippedWeapon.name}.`);showMenu()}
-function findWeapon(){if(!spendAction())return;stableFields();let danger=(currentRegion().danger||1);let pool=SAFE_WEAPONS.filter(w=>w.power<=10+danger*6);if(!pool.length)pool=SAFE_WEAPONS.slice(0,3);if(Math.random()<.08)pool=SAFE_WEAPONS;let w=deep(pick(pool));p.weapons.push(w);p.codex.weapons.push(w);major(`Found weapon: ${w.rarity} ${w.name}.`);ownedWeapons()}
-function inspectFruitEncounter(){if(!spendAction())return;stableFields();let danger=(currentRegion().danger||1);let order=["Common","Uncommon","Rare","Epic","Legendary","Mythic"];let pool=SAFE_FRUITS.filter(f=>order.indexOf(f.rarity)<=Math.min(5,Math.floor(danger/2)+2));if(!pool.length)pool=SAFE_FRUITS;if(Math.random()<.05)pool=SAFE_FRUITS;let f=deep(pick(pool));window.__foundFruit=f;p.codex.fruits.push(f);$("screen").innerHTML=`<h2>🍎 Devil Fruit Found</h2><div class="powerCard ${rarityClass(f.rarity)}"><h3>${f.name}</h3><p><b>${f.type}</b> • ${f.rarity}</p><p>${f.desc}</p><p><b>Passives:</b> ${f.passives.join(", ")}</p><p><b>Moves:</b> ${f.moves.join(", ")}</p><p><b>Weakness:</b> ${f.weakness}</p></div><div class="choices"><button onclick="eatFoundFruit()">Eat Fruit</button><button onclick="sellFoundFruit()">Sell Fruit</button><button onclick="showMenu()">Leave It</button></div>`;render()}
+function equipWeapon(i){v68Fields();if(!p.weapons[i])return;p.equippedWeapon=p.weapons[i];major(`Equipped ${p.equippedWeapon.name}.`);showMenu()}
+function findWeapon(){if(!spendAction())return;v68Fields();let danger=(currentRegion().danger||1);let pool=V68_WEAPONS.filter(w=>w.power<=10+danger*6);if(!pool.length)pool=V68_WEAPONS.slice(0,3);if(Math.random()<.08)pool=V68_WEAPONS;let w=deep(pick(pool));p.weapons.push(w);p.codex.weapons.push(w);major(`Found weapon: ${w.rarity} ${w.name}.`);ownedWeapons()}
+function inspectFruitEncounter(){if(!spendAction())return;v68Fields();let danger=(currentRegion().danger||1);let order=["Common","Uncommon","Rare","Epic","Legendary","Mythic"];let pool=V68_FRUITS.filter(f=>order.indexOf(f.rarity)<=Math.min(5,Math.floor(danger/2)+2));if(!pool.length)pool=V68_FRUITS;if(Math.random()<.05)pool=V68_FRUITS;let f=deep(pick(pool));window.__foundFruit=f;p.codex.fruits.push(f);$("screen").innerHTML=`<h2>🍎 Devil Fruit Found</h2><div class="powerCard ${v68RarityClass(f.rarity)}"><h3>${f.name}</h3><p><b>${f.type}</b> • ${f.rarity}</p><p>${f.desc}</p><p><b>Passives:</b> ${f.passives.join(", ")}</p><p><b>Moves:</b> ${f.moves.join(", ")}</p><p><b>Weakness:</b> ${f.weakness}</p></div><div class="choices"><button onclick="eatFoundFruit()">Eat Fruit</button><button onclick="sellFoundFruit()">Sell Fruit</button><button onclick="showMenu()">Leave It</button></div>`;render()}
 function eatFoundFruit(){let f=window.__foundFruit;if(!f)return showMenu();if(p.fruit&&p.fruit!=="None"){notice("Already Powered","You already have a Devil Fruit.");return}p.fruit=f.name;p.fruitType=f.type;p.fruitMastery=1;p.fruitSkills=[f.moves[0]];major(`Ate the ${f.name}.`);showMenu()}
 function sellFoundFruit(){let f=window.__foundFruit;if(!f)return showMenu();let values={Common:1000,Uncommon:5000,Rare:20000,Epic:60000,Legendary:150000,Mythic:400000};p.berries+=values[f.rarity]||5000;major(`Sold ${f.name}.`);showMenu()}
+
 function survivalDefeat(reason="You were defeated."){
- stableFields();p.health=0;let roll=Math.random();
+ v68Fields();p.health=0;let roll=Math.random();
  if(p.crew&&p.crew.length&&roll<.25){p.health=20;major("Your allies rescued you from defeat.");return showMenu()}
  if(roll<.5){p.health=18;p.mood=clamp(p.mood-15,0,100);major(reason+" You were captured instead of killed.");$("screen").innerHTML=`<h2>⛓️ Captured</h2><div class="captureBox">You survived, but were thrown into captivity.</div><div class="choices"><button onclick="p.health=25;major('Escaped captivity.');showMenu()">Escape</button></div>`;return render()}
  if(roll<.75){p.health=10;p.injuries.push("Permanent scar");major(reason+" You survived with a scar.");return showMenu()}
@@ -709,12 +739,13 @@ function dangerCheck(label,fatalChance=0,injuryChance=0){
  return false;
 }
 function loseBattle(){let b=p.battle;p.battle=null;p.reckless=(p.reckless||0)+1;survivalDefeat(`You were defeated by ${b?.enemy?.name||"the enemy"}.`)}
-function weaponPowerBonus(){stableFields();return p.equippedWeapon?Math.floor((p.equippedWeapon.power||0)/4):0}
-function weaponMoveButtons(){stableFields();if(!p.equippedWeapon)return [];return (p.equippedWeapon.moves||[]).map((m,i)=>({id:"weapon_"+i,name:m,type:"weapon",cost:8+i*3,power:(p.equippedWeapon.power||5)+p.sword*2,desc:p.equippedWeapon.name}))}
-const oldBuildMoves=typeof buildMoves==="function"?buildMoves:null;
-function buildMoves(){let moves=oldBuildMoves?oldBuildMoves():[{id:"punch",name:"Heavy Punch",type:"basic",cost:4,power:10+p.strength*2,desc:"Reliable strike."}];weaponMoveButtons().forEach(m=>{if(!moves.some(x=>x.name===m.name))moves.push(m)});return moves}
-const oldCombatScore=typeof combatScore==="function"?combatScore:null;
-function combatScore(mode="duel"){return (oldCombatScore?oldCombatScore(mode):(p.strength*2+p.speed+p.durability))+weaponPowerBonus()}
+function weaponPowerBonus(){v68Fields();return p.equippedWeapon?Math.floor((p.equippedWeapon.power||0)/4):0}
+function weaponMoveButtons(){v68Fields();if(!p.equippedWeapon)return [];return (p.equippedWeapon.moves||[]).map((m,i)=>({id:"weapon_"+i,name:m,type:"weapon",cost:8+i*3,power:(p.equippedWeapon.power||5)+p.sword*2,desc:p.equippedWeapon.name}))}
+const v68OldBuildMoves=typeof buildMoves==="function"?buildMoves:null;
+function buildMoves(){let moves=v68OldBuildMoves?v68OldBuildMoves():[{id:"punch",name:"Heavy Punch",type:"basic",cost:4,power:10+p.strength*2,desc:"Reliable strike."}];weaponMoveButtons().forEach(m=>{if(!moves.some(x=>x.name===m.name))moves.push(m)});return moves}
+const v68OldCombatScore=typeof combatScore==="function"?combatScore:null;
+function combatScore(mode="duel"){return (v68OldCombatScore?v68OldCombatScore(mode):(p.strength*2+p.speed+p.durability))+weaponPowerBonus()}
+
 function showMenu(){
  render();if(p.dead)return;if(p.age>=80)return ending();if(p.age===16&&p.path==="Undecided")return choosePath();
  $("screen").innerHTML=`<h2>Age ${p.age}: ${p.name}'s Life</h2><div class="dangerMeter"><b>Danger:</b> ${p.health<30?'🔴 Critical':p.health<60?'🟠 Wounded':'🟢 Stable'} · Reckless ${p.reckless||0}</div><p><b>${p.actionsLeft}</b> energy left.</p><div class="menuGrid">
@@ -739,8 +770,16 @@ function showMenu(){
  <button onclick="manualSave()">Save</button>
  </div>`;
 }
-function manualSave(){localStorage.setItem("gpls_save_v67",JSON.stringify(p));silent("Game saved.");showMenu()}
-function loadGame(){p=JSON.parse(localStorage.getItem("gpls_save_v67"))||JSON.parse(localStorage.getItem("gpls_save_v61"))||JSON.parse(localStorage.getItem("gpls_save_v52"))||JSON.parse(localStorage.getItem("gpls_save_v42"));ensureAppearance();stableFields();showMenu()}
-function clearSave(){["gpls_save_v67","gpls_save_v61","gpls_save_v52","gpls_save_v42","gpls_save_v41","gpls_save_v40"].forEach(k=>localStorage.removeItem(k));stableSetup()}
+function manualSave(){v68Save();silent("Game saved.");showMenu()}
+function loadGame(){p=v68LoadRaw();if(!p){stableSetup();return}ensureAppearance();v68Fields();GPL_CHARACTER_READY=true;showMenu()}
+function clearSave(){["gpls_save_v68","gpls_save_v67","gpls_save_v61","gpls_save_v52","gpls_save_v42","gpls_save_v41","gpls_save_v40"].forEach(k=>localStorage.removeItem(k));stableSetup()}
+function v68Boot(){
+ if(GPL_BOOTED)return;
+ GPL_BOOTED=true;
+ $("saveBtn").onclick=manualSave;
+ $("newBtn").onclick=stableSetup;
+ $("helpBtn").onclick=help;
+ stableSetup();
+}
 
-$("saveBtn").onclick=manualSave;$("newBtn").onclick=setup;$("helpBtn").onclick=help;stableSetup();
+v68Boot();
