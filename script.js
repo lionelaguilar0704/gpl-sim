@@ -1,8 +1,8 @@
 
 "use strict";
 
-const SAVE_KEY = "gpls_save_v80";
-const OLD_KEYS = ["gpls_save_v71","gpls_save_v70","gpls_save_v70","gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
+const SAVE_KEY = "gpls_save_v81";
+const OLD_KEYS = ["gpls_save_v70","gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
 let p = null;
 let currentTab = "feed";
 let booted = false;
@@ -31,7 +31,7 @@ function silent(msg){ log(msg); toast(msg,false); render(); }
 
 function newPlayer(){
   return {
-    build:"v8.0", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
+    build:"v8.1", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
     portrait:"🙂", epithet:"No Epithet", region:"Home Sea", island:"Syrup Harbor",
     health:100, mood:55, energy:5, actionsLeft:5, berries:0, debt:0, bounty:0, heat:0, infamy:0, honor:0,
     strength:1, speed:1, durability:1, intelligence:1, charisma:1, sneak:1, discipline:1, leadership:0,
@@ -103,7 +103,7 @@ function checkUnlocks(){
 
 function save(){
   ensure();
-  p.build="v8.0";
+  p.build="v8.1";
   localStorage.setItem(SAVE_KEY,JSON.stringify(p));
   toast("Game saved.");
 }
@@ -115,7 +115,7 @@ function load(){
   if(!data){ setup(); return; }
   p=JSON.parse(data);
   ensure();
-  p.build="v8.0";
+  p.build="v8.1";
   save();
   mainMenu();
 }
@@ -167,7 +167,7 @@ function renderTabs(){
   $("tabs").innerHTML=tabs.map(([id,label])=>`<button onclick="showTab('${id}')">${label}</button>`).join("");
   showTab(currentTab,true);
 }
-function showTab(tab,silent=false){
+function baseShowTab_v81(tab,silent=false){
   currentTab=tab;
   if(!p){$("tab").innerHTML="";return;}
   if(tab==="feed")$("tab").innerHTML=`<h3>Recent Feed</h3>${p.feed.slice(0,12).map(x=>`<div class="line"><span>${x}</span></div>`).join("")||"<p>No events yet.</p>"}`;
@@ -191,7 +191,7 @@ function showTab(tab,silent=false){
     <h3>Inventory</h3><div class="cardGrid">${p.loot.slice(-8).map(l=>`<div class="miniCard rarity${l.rarity}"><h4>${l.rarity} ${l.name}</h4><p>Value ฿${fmt(l.value)}</p></div>`).join("")||"<p>No loot yet.</p>"}</div>`;
   if(tab==="codex")$("tab").innerHTML=`<h3>Codex</h3><div class="choices"><button onclick="fruitCodex()">Devil Fruits</button><button onclick="weaponCodex()">Weapons</button><button onclick="ownedWeapons()">Owned Weapons</button></div>`;
   if(tab==="map")$("tab").innerHTML=`<h3>Map</h3>${DATA.islands.map(i=>`<div class="line"><span>${i.name}</span><b>${i.region} · Danger ${i.danger}</b></div>`).join("")}`;
-  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.0<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
+  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.1<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
 }
 
 function roleSummary(){
@@ -207,11 +207,11 @@ function dangerText(){
 }
 function currentIsland(){return DATA.islands.find(i=>i.name===p.island)||DATA.islands[0];}
 
-function setup(){
+function baseSetup_v81(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Start a New Life</h2>
-    <p><b>v8.0 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
+    <p><b>v8.1 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
     <div class="safeNotice notice">This version uses a clean save slot. Old saves can still be loaded, but a new life is recommended for testing.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -295,7 +295,7 @@ function setupMarineUnit(){
   save();mainMenu();
 }
 
-function mainMenu(){
+function baseMainMenu_v81(){
   ensure();render();
   if(p.dead)return deathScreen();
   if(p.age>=80)return ending();
@@ -327,7 +327,7 @@ function spendAction(){
   if(p.actionsLeft<=0){toast("No energy left. Age up or rest.");return false;}
   p.actionsLeft--;return true;
 }
-function ageUp(){
+function baseAgeUp_v81(){
   if(!p||p.dead)return;
   p.age++;p.actionsLeft=p.energy;p.mood=clamp(p.mood+pick([-4,-2,0,1,3]),0,100);
   if(p.injuries.length && Math.random()<0.35){const healed=p.injuries.shift();log(`Recovered from ${healed}.`)}
@@ -626,492 +626,389 @@ boot();
 
 
 /* =========================
-   v8.0 Sandbox Freedom Update
+   v8.1 Narrative Foundation — Birth to Legend
    ========================= */
-function freedomHub(){
-  $("screen").innerHTML=`<h2>🌊 Open Sea</h2>
-  <p>This is the free-play hub. Your career gives special options, but it does not control your entire life.</p>
-  <div class="freedomPanel">
-    <b>Identity:</b> ${p.path}<br>
-    <b>Role:</b> ${p.crewMode}<br>
-    <b>Location:</b> ${p.island}<br>
-    <span class="sandboxTag">Explore</span><span class="sandboxTag">Train</span><span class="sandboxTag">Scheme</span><span class="sandboxTag">Drift</span><span class="sandboxTag">Join factions</span>
+
+const LIFE_FAMILIES=[
+  {name:"Poor Dock Workers",wealth:"Poor",bonus:{berries:50,strength:1},text:"Your family survives on dock labor and favors."},
+  {name:"Working Fisher Family",wealth:"Working",bonus:{health:4,navigation:1},text:"Your family knows the sea better than most."},
+  {name:"Merchant Family",wealth:"Comfortable",bonus:{berries:1200,charisma:1},text:"Your family trades goods between islands."},
+  {name:"Marine Family",wealth:"Stable",bonus:{discipline:2,marineRep:1},text:"Justice is discussed at your dinner table."},
+  {name:"Criminal Family",wealth:"Unstable",bonus:{sneak:2,heat:1},text:"You learn early that law and survival are not the same."},
+  {name:"Noble Household",wealth:"Rich",bonus:{berries:3000,charisma:2,mood:-4},text:"You are born with status, but expectations follow you."},
+  {name:"Unknown Parents",wealth:"Unknown",bonus:{freedom:1},text:"No one knows where you came from. Maybe that matters."}
+];
+const SEAS_V81=["East Blue","West Blue","North Blue","South Blue"];
+const DREAMS_V81=[
+  {name:"Freedom",trait:"independence",text:"You want to live without chains."},
+  {name:"Pirate King",trait:"ambition",text:"You want the whole sea to know your name."},
+  {name:"Justice",trait:"discipline",text:"You want to decide what justice means."},
+  {name:"Knowledge",trait:"curiosity",text:"You want to uncover hidden truths."},
+  {name:"Riches",trait:"greed",text:"You want wealth beyond imagination."},
+  {name:"Strongest Swordsman",trait:"courage",text:"You want your blade to reach the top."},
+  {name:"Protect My People",trait:"compassion",text:"You want strength to protect what matters."},
+  {name:"Unknown",trait:"willpower",text:"You do not know yet. The sea will show you."}
+];
+
+const LIFE_EVENTS_V81=[
+  {phase:"Early Childhood",min:1,max:4,title:"The Market Crowd",text:"You wander away from your family in a crowded market.",choices:[
+    ["Keep exploring",{curiosity:2,courage:1,mood:1},"You follow your curiosity through the crowd."],
+    ["Return home",{caution:2,discipline:1},"You return before anyone notices."],
+    ["Follow a strange sound",{curiosity:1,luck:1},"You find a musician playing a song about the sea."]
+  ]},
+  {phase:"Early Childhood",min:2,max:5,title:"Shiny Coin",text:"You find a shiny coin on the street.",choices:[
+    ["Keep it",{greed:1,berries:100},"You keep the coin and feel clever."],
+    ["Return it",{compassion:1,honor:1},"You return it to an old shopkeeper."],
+    ["Spend it",{mood:4,greed:1},"You spend it on something sweet."]
+  ]},
+  {phase:"Foundation Years",min:5,max:12,title:"Bullied Child",text:"Older kids are picking on a smaller child near the docks.",choices:[
+    ["Help them",{compassion:2,leadership:1,courage:1},"You step in even though you are scared."],
+    ["Talk them down",{charisma:1,leadership:1,honor:1},"You talk the bullies away."],
+    ["Join the bullies",{ruthless:2,infamy:1},"You learn that power can be cruel."],
+    ["Ignore it",{caution:1,fear:1},"You walk away and remember their crying."]
+  ]},
+  {phase:"Foundation Years",min:6,max:12,title:"Dock Work",text:"Your family asks you to help at the docks.",choices:[
+    ["Work hard",{strength:1,discipline:1,berries:200},"You work until your hands ache."],
+    ["Slack off",{mood:2,discipline:-1},"You avoid the work and enjoy the day."],
+    ["Listen to sailors",{curiosity:1,navigation:1},"You hear stories of dangerous seas."]
+  ]},
+  {phase:"Foundation Years",min:7,max:13,title:"First Fight",text:"A local kid shoves you and dares you to fight.",choices:[
+    ["Fight back",{strength:1,courage:1,reckless:1},"You throw your first real punch."],
+    ["Walk away",{discipline:1,caution:1},"You refuse to be baited."],
+    ["Embarrass them",{charisma:1,confidence:1},"You make the crowd laugh at them instead."],
+    ["Fight dirty",{sneak:1,ruthless:1},"You win with a cheap shot."]
+  ]},
+  {phase:"Identity Years",min:13,max:18,title:"Traveling Swordsman",text:"A traveling swordsman notices your stance and offers a brief lesson.",choices:[
+    ["Train seriously",{sword:2,discipline:1,strength:1},"You learn the weight of a blade."],
+    ["Ask about the world",{intelligence:1,curiosity:1},"You learn that every sea has monsters."],
+    ["Challenge them",{courage:2,reckless:1,sword:1},"You lose quickly, but they respect your nerve."],
+    ["Ignore them",{caution:1},"You let the chance pass."]
+  ]},
+  {phase:"Identity Years",min:13,max:18,title:"Pirate Ship Arrives",text:"A pirate ship docks nearby. The town becomes tense.",choices:[
+    ["Sneak aboard",{sneak:2,curiosity:1,heat:1},"You glimpse maps, weapons, and treasure."],
+    ["Tell the Marines",{marineRep:1,discipline:1},"You report the ship."],
+    ["Approach the crew",{charisma:1,courage:1,infamy:1},"You speak to pirates and survive the conversation."],
+    ["Stay away",{caution:2},"You avoid the danger."]
+  ]},
+  {phase:"Identity Years",min:14,max:19,title:"Mentor's Offer",text:"A local mentor offers to teach you if you commit your time.",choices:[
+    ["Learn combat",{strength:1,sword:1,armamentXP:1},"You learn how to stand your ground."],
+    ["Learn navigation",{navigation:2,intelligence:1},"You learn how islands connect."],
+    ["Learn medicine",{medicine:2,intelligence:1},"You learn how fragile life is."],
+    ["Refuse",{freedom:1,independence:1},"You choose your own road."]
+  ]},
+  {phase:"Identity Years",min:15,max:20,title:"Friend Insulted",text:"A drunk pirate insults someone close to you.",choices:[
+    ["Ignore it",{discipline:1,caution:1},"You swallow your anger."],
+    ["Threaten them",{courage:1,charisma:1},"You make it clear they should leave."],
+    ["Fight them",{triggerCombat:"bar fight",courage:1,reckless:1},"You choose violence."],
+    ["Get help",{leadership:1,compassion:1},"You bring others together before things explode."]
+  ]},
+  {phase:"Open Sea",min:18,max:99,title:"Crew Opportunity",text:"You meet a capable wanderer looking for purpose.",choices:[
+    ["Recruit them",{leadership:1,crewAdd:true},"They join your journey."],
+    ["Befriend them",{charisma:1,relationshipAdd:true},"You gain a valuable contact."],
+    ["Rob them",{ruthless:1,berries:1500,infamy:1},"You take what they have."],
+    ["Walk away",{caution:1},"You leave them behind."]
+  ]},
+  {phase:"Open Sea",min:18,max:99,title:"Bounty Poster",text:"A bounty poster with your face appears in town.",choices:[
+    ["Celebrate",{confidence:1,infamy:1,mood:4},"You feel your legend growing."],
+    ["Hide",{sneak:1,heat:-1},"You keep a low profile."],
+    ["Confront the source",{triggerCombat:"bounty hunter",courage:1},"You hunt whoever spread it."],
+    ["Use it for fame",{charisma:1,leadership:1},"You turn reputation into opportunity."]
+  ]},
+  {phase:"Open Sea",min:18,max:99,title:"Island Crisis",text:"The island faces a crisis. People are looking for someone to act.",choices:[
+    ["Help civilians",{compassion:2,honor:1},"You protect people who cannot protect themselves."],
+    ["Exploit the chaos",{greed:2,berries:5000,infamy:1},"You profit while others panic."],
+    ["Side with Marines",{marineRep:2,discipline:1},"You help restore order."],
+    ["Side with rebels",{revolutionaryRep:2,freedom:1,heat:1},"You help the oppressed fight back."]
+  ]}
+];
+
+const FATE_EVENTS_V81=[
+  {phase:"Fate Event",fate:true,title:"Strange Fruit",text:"A strange patterned fruit washes ashore after a storm.",choices:[
+    ["Eat it",{fateFruit:true,courage:1,curiosity:1},"You take a bite and your life changes."],
+    ["Hide it",{mystery:2,caution:1},"You hide the fruit for later."],
+    ["Sell the rumor",{berries:8000,greed:1},"You sell the information to dangerous people."],
+    ["Tell the Marines",{marineRep:2,discipline:1},"You report the discovery."]
+  ]},
+  {phase:"Fate Event",fate:true,title:"Village Raid",text:"Raiders attack your home. Smoke rises over the rooftops.",choices:[
+    ["Protect people",{triggerCombat:"raiders",compassion:2,courage:2},"You stand between danger and your people."],
+    ["Save family",{compassion:1,fear:1},"You focus only on those closest to you."],
+    ["Loot during chaos",{ruthless:2,berries:4000,infamy:2},"You take advantage of disaster."],
+    ["Run",{fear:2,caution:1},"You survive by fleeing."]
+  ]},
+  {phase:"Fate Event",fate:true,title:"Legendary Mentor",text:"A legendary fighter passes through your island and notices your potential.",choices:[
+    ["Beg for training",{strength:2,discipline:2,potential:1},"They teach you one brutal lesson."],
+    ["Ask about dreams",{ambition:2,willpower:1},"They ask what you truly want."],
+    ["Challenge them",{triggerCombat:"mentor test",courage:2,reckless:1},"They accept with a smile."],
+    ["Watch silently",{observationXP:3,caution:1},"You study their movement from afar."]
+  ]}
+];
+
+function v81Ensure(){
+  ensure();
+  if(!p.hiddenTraits)p.hiddenTraits={compassion:0,ruthless:0,greed:0,courage:0,caution:0,curiosity:0,leadership:0,ambition:0,willpower:0,fear:0,confidence:0,independence:0,luck:0,reckless:0};
+  if(!p.lifeFlags)p.lifeFlags={dreamChosen:false,traitMilestones:{},birthGenerated:false};
+  if(!p.chapterLog)p.chapterLog=[];
+  if(p.potential===undefined)p.potential=1;
+  p.build="v8.1";
+}
+function trait(k,v=1){
+  v81Ensure();
+  if(p.hiddenTraits[k]===undefined)p.hiddenTraits[k]=0;
+  p.hiddenTraits[k]+=v;
+  if(k==="leadership")p.kingTraits.leadership=(p.kingTraits.leadership||0)+Math.max(0,v);
+  if(k==="courage")p.kingTraits.courage=(p.kingTraits.courage||0)+Math.max(0,v);
+  if(k==="ambition")p.kingTraits.ambition=(p.kingTraits.ambition||0)+Math.max(0,v);
+  if(k==="willpower")p.kingTraits.presence=(p.kingTraits.presence||0)+Math.max(0,v);
+}
+function narrativeApply(e={}){
+  v81Ensure();
+  for(const [k,v] of Object.entries(e)){
+    if(["triggerCombat","crewAdd","relationshipAdd","fateFruit"].includes(k))continue;
+    if(k in p.hiddenTraits)trait(k,v);
+    else apply({[k]:v});
+  }
+}
+function createBirth(){
+  p=newPlayer();
+  v81Ensure();
+  const sea=pick(SEAS_V81);
+  const family=pick(LIFE_FAMILIES);
+  p.name=($("nameInput")&&$("nameInput").value.trim())||pick(DATA.names);
+  p.age=0;
+  p.region=sea;
+  p.island=pick(DATA.islands.filter(x=>x.region==="Home Sea")).name;
+  p.origin=family.name;
+  p.family=family;
+  p.dream="Undiscovered";
+  p.portrait=pick(["👶","🍼","🌊","⭐"]);
+  p.potential=1+Math.floor(Math.random()*5);
+  trait("luck",Math.floor(Math.random()*3));
+  trait("willpower",Math.floor(Math.random()*3));
+  trait("ambition",Math.floor(Math.random()*2));
+  apply(family.bonus||{});
+  p.lifeFlags.birthGenerated=true;
+  p.feed.unshift(`Born in ${sea}. Family: ${family.name}. ${family.text}`);
+  save();
+  mainMenu();
+}
+function setup(){
+  p=newPlayer();
+  render();
+  $("screen").innerHTML=`<h2>Begin a New Life</h2>
+    <p><b>v8.1 Narrative Foundation</b> starts at birth and builds your legend through age-up life events.</p>
+    <div class="chapterCard"><b>Concept:</b> BitLife-style aging at the core, with One Piece dreams, powers, combat, crew, rivals, and fate layered on top.</div>
+    <input id="nameInput" placeholder="Character name, or leave blank for random">
+    <div class="choices">
+      <button class="primary" onclick="createBirth()">Be Born</button>
+      ${hasSave()?'<button onclick="load()">Load Saved Life</button>':''}
+      <button class="danger" onclick="clearSave()">Clear Save</button>
+    </div>`;
+}
+function getLifePool(){
+  v81Ensure();
+  let pool=LIFE_EVENTS_V81.filter(e=>p.age>=e.min&&p.age<=e.max);
+  if(!pool.length)pool=LIFE_EVENTS_V81.filter(e=>e.phase==="Open Sea");
+  if(p.age>=10 && !p.lifeFlags.dreamChosen && Math.random()<.35)return [{dreamEvent:true}];
+  if(p.age>=4 && Math.random()<fateChance())pool=pool.concat(FATE_EVENTS_V81);
+  return pool;
+}
+function fateChance(){
+  v81Ensure();
+  return clamp(0.06+(p.hiddenTraits.curiosity||0)*0.006+(p.hiddenTraits.luck||0)*0.018,0.04,0.22);
+}
+function ageUp(){
+  if(!p||p.dead)return;
+  v81Ensure();
+  p.age++;
+  p.actionsLeft=p.energy;
+  p.mood=clamp(p.mood+pick([-4,-2,0,1,3]),0,100);
+  if(p.injuries.length && Math.random()<0.35){const healed=p.injuries.shift();log(`Recovered from ${healed}.`)}
+  if(typeof worldTick==="function")worldTick();
+  const event=pick(getLifePool());
+  save();
+  if(event.dreamEvent)return dreamChoiceEvent();
+  showLifeEvent(event);
+}
+function showLifeEvent(e){
+  v81Ensure();
+  const fateClass=e.fate?" fateEvent":"";
+  $("screen").innerHTML=`<h2>Age ${p.age}: ${e.title}</h2>
+  <div class="chapterCard${fateClass}">
+    <b>${e.phase||"Life Event"}</b>
+    <p>${e.text}</p>
   </div>
-  <div class="pathGrid">
-    <button onclick="dailyLifeMenu()">Daily Life<small>Rest, work, socialize, gamble, lay low</small></button>
-    <button onclick="adventureMenu()">Adventure<small>Explore, rumors, travel, island events</small></button>
-    <button onclick="powerMenu()">Power Hunt<small>Fruits, weapons, Haki, mastery</small></button>
-    <button onclick="factionMenu()">Faction Choices<small>Pirates, Marines, Revolutionaries, hunters</small></button>
-    <button onclick="underworldMenu()">Underworld<small>Smuggling, crime, black market</small></button>
-    <button onclick="drifterMenu()">Drifter Life<small>Stay uncommitted and survive freely</small></button>
-    <button class="primary" onclick="mainMenu()">Back</button>
+  <div class="choices" id="lifeChoices"></div>`;
+  const c=$("lifeChoices");
+  e.choices.forEach(choice=>{
+    const b=document.createElement("button");
+    b.innerHTML=`${choice[0]}<div class="choiceImpact">${previewImpact(choice[1])}</div>`;
+    b.onclick=()=>resolveLifeChoice(e,choice);
+    c.appendChild(b);
+  });
+  addButton(c,"Do Nothing / Let Life Pass",()=>{log(`You let the moment pass: ${e.title}.`);save();mainMenu()},"primary");
+  render();
+}
+function previewImpact(e={}){
+  const keys=Object.keys(e).filter(k=>!["triggerCombat","crewAdd","relationshipAdd","fateFruit"].includes(k));
+  const parts=keys.slice(0,4).map(k=>`${k} ${e[k]>0?"+":""}${e[k]}`);
+  if(e.triggerCombat)parts.push("combat");
+  if(e.crewAdd)parts.push("possible crew");
+  if(e.relationshipAdd)parts.push("new contact");
+  if(e.fateFruit)parts.push("Devil Fruit fate");
+  return parts.join(" · ")||"story choice";
+}
+function resolveLifeChoice(event,choice){
+  const [label,effect,result]=choice;
+  narrativeApply(effect);
+  p.chapterLog.unshift({age:p.age,title:event.title,choice:label,result});
+  p.chapterLog=p.chapterLog.slice(0,100);
+  log(result);
+  if(effect.fateFruit)return grantNarrativeFruit();
+  if(effect.crewAdd)return narrativeCrewJoin(result);
+  if(effect.relationshipAdd)return narrativeRelationship(result);
+  if(effect.triggerCombat)return startNarrativeCombat(effect.triggerCombat,result);
+  checkTraitMilestones();
+  save();
+  mainMenu();
+}
+function dreamChoiceEvent(){
+  $("screen").innerHTML=`<h2>Age ${p.age}: What Do You Seek?</h2>
+  <div class="dreamCard"><p>Something inside you begins to take shape. It is not a career yet. It is the thing your life keeps turning toward.</p></div>
+  <div class="choices" id="dreamChoices"></div>`;
+  const c=$("dreamChoices");
+  DREAMS_V81.forEach(d=>{
+    const b=document.createElement("button");
+    b.innerHTML=`${d.name}<small>${d.text}</small>`;
+    b.onclick=()=>{p.dream=d.name;p.lifeFlags.dreamChosen=true;trait(d.trait,2);major(`Dream awakened: ${d.name}.`);save();mainMenu();};
+    c.appendChild(b);
+  });
+  render();
+}
+function grantNarrativeFruit(){
+  const order=["Common","Uncommon","Rare","Epic","Legendary","Mythic"];
+  const max=2+Math.floor((p.hiddenTraits.luck||0)/3)+(p.hiddenTraits.curiosity>4?1:0);
+  let pool=DATA.fruitCatalog.filter(f=>order.indexOf(f.rarity)<=Math.min(5,max));
+  if(Math.random()<.08)pool=DATA.fruitCatalog;
+  const f=deep(pick(pool.length?pool:DATA.fruitCatalog));
+  window.__fruit=f;
+  $("screen").innerHTML=`<h2>🍎 Fate Fruit: ${f.name}</h2>
+  <div class="powerCard rarity${f.rarity}">
+    <p><b>${f.type}</b> · ${f.rarity}</p>
+    <p>${f.desc}</p>
+    <p><b>Passives:</b> ${f.passives.join(", ")}</p>
+    <p><b>Moves:</b> ${f.moves.join(", ")}</p>
+    <p><b>Weakness:</b> ${f.weakness}</p>
+  </div>
+  <div class="choices">
+    <button onclick="eatFoundFruit()">Eat It</button>
+    <button onclick="sellFoundFruit()">Sell It</button>
+    <button onclick="p.codex.fruits.push(window.__fruit);major('You hid the fruit and recorded its details.');mainMenu()">Hide It</button>
   </div>`;
   render();
 }
-function dailyLifeMenu(){
-  submenu("Daily Life","Low-risk actions that make the world feel alive between major events.",[
-    ["Work Odd Jobs",()=>{if(spendAction()){apply({berries:1200+Math.floor(Math.random()*1800),mood:-1});silent("Worked odd jobs.");mainMenu();}}],
-    ["Rest Properly",()=>{if(spendAction()){p.health=clamp(p.health+25,0,100);p.mood=clamp(p.mood+8,0,100);silent("You rested properly.");mainMenu();}}],
-    ["Study Maps",()=>{if(spendAction()){apply({navigation:1,intelligence:1});silent("Studied maps and sea routes.");mainMenu();}}],
-    ["Socialize",()=>{if(spendAction()){p.relationships.push({name:pick(DATA.names),status:pick(["Friend","Contact","Rival Contact","Informant"])});apply({charisma:1,mood:3});silent("Met someone new.");mainMenu();}}],
-    ["Lay Low",()=>{if(spendAction()){p.heat=clamp(p.heat-2,0,99);p.reckless=clamp(p.reckless-1,0,99);silent("You kept a low profile.");mainMenu();}}],
-    ["Gamble",()=>gambleMenu()]
-  ]);
-}
-function adventureMenu(){
-  submenu("Adventure","Open-ended ways to find trouble, stories, and secrets.",[
-    ["Explore Island",()=>{if(spendAction()){if(Math.random()<.35){const e=pick(DATA.events);showEventFree(e)}else{apply({mystery:1,mood:2});silent("Explored the island and found rumors.");mainMenu();}}}],
-    ["Follow Rumor",()=>{if(spendAction()){apply({mystery:2,heat:Math.random()<.4?1:0});silent("Followed a rumor deeper into the island.");mainMenu();}}],
-    ["Look for Trouble",()=>{if(spendAction())startBattle("random","normal")}],
-    ["Help Civilians",()=>{if(spendAction()){apply({honor:1,charisma:1,mood:2});silent("Helped civilians and earned local trust.");mainMenu();}}],
-    ["Travel",()=>travelMenu()]
-  ]);
-}
-function powerMenu(){
-  submenu("Power Hunt","Choose how you pursue strength without being locked to a faction.",[
-    ["Train Body",()=>{if(spendAction()){apply({strength:1,speed:1,health:-3});silent("Trained your body.");mainMenu();}}],
-    ["Train Haki",()=>hakiMenu()],
-    ["Search Fruit",()=>inspectFruitEncounter()],
-    ["Search Weapon",()=>findWeapon()],
-    ["Practice Weapon",()=>{if(spendAction()){apply({sword:1,armamentXP:1});silent(p.equippedWeapon?`Practiced with ${p.equippedWeapon.name}.`:"Practiced basic weapon forms.");mainMenu();}}],
-    ["Create Signature Move",()=>{if(spendAction()){const move=signatureMoveName();p.movesMastery[move]=1;major(`Created signature move: ${move}.`);mainMenu();}}]
-  ]);
-}
-function signatureMoveName(){
-  const a=pick(["Storm","Iron","Crimson","Black","Thunder","Dragon","Wolf","Phoenix","Sea"]);
-  const b=pick(["Fang","Lance","Burst","Breaker","Crash","Fist","Slash","Cannon","Judgment"]);
-  return `${a} ${b}`;
-}
-function factionMenu(){
-  submenu("Faction Choices","Interact with factions without fully changing your life path.",[
-    ["Take Pirate Job",()=>{if(spendAction()){apply({bounty:3500,infamy:1,berries:2500});silent("Took a pirate-side job.");mainMenu();}}],
-    ["Help Marines",()=>{if(spendAction()){apply({marineRep:1,honor:1,berries:2000});silent("Helped a Marine patrol.");mainMenu();}}],
-    ["Aid Revolutionaries",()=>{if(spendAction()){apply({revolutionaryRep:1,heat:1,honor:1});silent("Aided a revolutionary contact.");mainMenu();}}],
-    ["Take Bounty Contract",()=>huntBounty()],
-    ["Join / Change Career Path",()=>choosePath()],
-    ["Abandon Formal Path",()=>{p.path="Undecided";p.rank="None";p.crewMode="solo";p.roleData={};major("You abandoned your formal path and returned to the open sea.");mainMenu();}]
-  ]);
-}
-function underworldMenu(){
-  submenu("Underworld","Higher reward, higher consequence sandbox options.",[
-    ["Smuggling Run",()=>{if(spendAction()){if(Math.random()<.25)return startBattle("raid","hard");apply({berries:8500,heat:2,infamy:1});silent("Completed a smuggling run.");mainMenu();}}],
-    ["Black Market",()=>blackMarketMenu()],
-    ["Steal Supplies",()=>{if(spendAction()){apply({berries:4000,heat:2,infamy:1,sneak:1});silent("Stole valuable supplies.");mainMenu();}}],
-    ["Bribe Officials",()=>{if(spendAction()){const cost=3000+p.heat*1000;if(p.berries<cost){toast(`Need ฿${fmt(cost)}.`);return;}p.berries-=cost;p.heat=clamp(p.heat-3,0,99);silent("Bribed officials to lower heat.");mainMenu();}}],
-    ["Start Rumor Network",()=>{if(spendAction()){apply({charisma:1,sneak:1,mystery:1});p.relationships.push({name:"Underworld Contact",status:"Information broker"});silent("Started building a rumor network.");mainMenu();}}]
-  ]);
-}
-function drifterMenu(){
-  submenu("Drifter Life","Stay uncommitted. Drift, survive, and build your legend without joining anyone.",[
-    ["Sleep Under the Stars",()=>{if(spendAction()){p.health=clamp(p.health+12,0,100);p.mood=clamp(p.mood+4,0,100);silent("Slept under the stars.");mainMenu();}}],
-    ["Take Any Job",()=>{if(spendAction()){apply({berries:2000,experience:1});silent("Took whatever job the island offered.");mainMenu();}}],
-    ["Make a Local Friend",()=>{if(spendAction()){p.relationships.push({name:pick(DATA.names),status:"Local friend"});apply({charisma:1,mood:4});silent("Made a local friend.");mainMenu();}}],
-    ["Start a New Reputation",()=>{if(spendAction()){p.epithet=pick(["the Wanderer","the Free Blade","the Nameless Storm","the Sea Ghost","the Laughing Rookie"]);major(`People started calling you ${p.epithet}.`);mainMenu();}}],
-    ["Choose a Real Path",()=>choosePath()]
-  ]);
-}
-function showEventFree(e){
-  $("screen").innerHTML=`<h2>${e.title}</h2><p>${e.text}</p><div class="choices" id="eventChoices"></div>`;
-  const c=$("eventChoices");
-  e.choices.forEach(choice=>{
-    const b=document.createElement("button");
-    b.textContent=choice[0];
-    b.onclick=()=>{apply(choice[1]);major(choice[2]);mainMenu();};
-    c.appendChild(b);
-  });
-  addButton(c,"Walk Away",()=>{silent("You walked away from the situation.");mainMenu()},"primary");
-  render();
-}
-
-/* Override: age 16 no longer forces the career screen */
-function ageUp(){
-  if(!p||p.dead)return;
-  p.age++;p.actionsLeft=p.energy;p.mood=clamp(p.mood+pick([-4,-2,0,1,3]),0,100);
-  if(p.injuries.length && Math.random()<0.35){const healed=p.injuries.shift();log(`Recovered from ${healed}.`)}
-  worldTick();
-  if(p.age===16 && p.path==="Undecided"){
-    log("You are old enough to choose a path, but the open sea does not force you.");
-  }
-  randomLifeBeat();
+function narrativeCrewJoin(result){
+  const c={name:pick(DATA.names),role:pick(["Navigator","Fighter","Doctor","Sniper","Cook","Shipwright","Scout"]),loyalty:5+Math.floor(Math.random()*3),dream:pick(DREAMS_V81).name};
+  p.crew.push(c);
+  major(`${result} ${c.name}, a ${c.role}, joined your life. Their dream: ${c.dream}.`);
   save();mainMenu();
 }
-
-/* Override: career role is optional */
-function careerRoleMenu(){
-  if(p.path==="Undecided"){
-    $("screen").innerHTML=`<h2>⭐ Career Role</h2>
-    <p>You have not committed to a formal path. You can choose one, keep drifting, or do faction jobs without joining anyone.</p>
-    <div class="choices">
-      <button onclick="choosePath()">Choose a Path</button>
-      <button onclick="drifterMenu()">Stay a Drifter</button>
-      <button onclick="factionMenu()">Do Faction Jobs</button>
-      <button class="primary" onclick="mainMenu()">Back</button>
-    </div>`;
-    render();
-    return;
-  }
-  if(p.path==="Pirate")return pirateRoleMenu();
-  if(p.path==="Marine")return marineRoleMenu();
-  if(p.path==="Revolutionary")return submenu("🔥 Revolutionary Role","Liberation missions and covert work.",[
-    ["Liberation Mission",()=>{if(spendAction()){apply({revolutionaryRep:2,honor:1,heat:1,freedom:1});silent("Helped liberate civilians.");mainMenu();}}],
-    ["Covert Intel",()=>{if(spendAction()){apply({sneak:2,mystery:1,heat:1});silent("Ran covert intel.");mainMenu();}}],
-    ["Leave Cell",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left your revolutionary cell.");mainMenu();}]
-  ]);
-  if(p.path==="Bounty Hunter")return submenu("🎯 Bounty Hunter Role","Contracts and pursuit.",[
-    ["Take Contract",()=>huntBounty()],
-    ["Track Target",()=>{if(spendAction()){apply({intelligence:1,observationXP:1});silent("Tracked a target.");mainMenu();}}],
-    ["Leave Guild",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left the bounty guild.");mainMenu();}]
-  ]);
-  if(p.path==="Doctor")return submenu("🩺 Doctor Role","Treat patients and improve survival.",[
-    ["Treat Patients",()=>{if(spendAction()){p.health=clamp(p.health+25,0,100);apply({medicine:1,honor:1});silent("Treated patients.");mainMenu();}}],
-    ["Medical Research",()=>{if(spendAction()){apply({medicine:2,intelligence:1});silent("Researched rare disease.");mainMenu();}}],
-    ["Close Clinic",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left the clinic life.");mainMenu();}]
-  ]);
-  if(p.path==="Shipwright")return submenu("🛠️ Shipwright Role","Build, repair, and modify ships.",[
-    ["Repair Ship",()=>repairShip()],
-    ["Build Parts",()=>{if(spendAction()){apply({craft:2,berries:4000});silent("Built ship parts for profit.");mainMenu();}}],
-    ["Leave Dockyard",()=>{p.path="Undecided";p.rank="None";p.roleData={};major("You left dockyard work.");mainMenu();}]
-  ]);
+function narrativeRelationship(result){
+  const r={name:pick(DATA.names),status:pick(["Friend","Rival","Mentor","Informant","Local Ally"]),ageMet:p.age};
+  p.relationships.push(r);
+  major(`${result} You met ${r.name}, now marked as ${r.status}.`);
+  save();mainMenu();
 }
-
-/* Override main menu into sandbox-first layout */
+function startNarrativeCombat(kind,result){
+  log(result);
+  startBattle(kind,"normal");
+}
+function checkTraitMilestones(){
+  v81Ensure();
+  const traits=p.hiddenTraits;
+  const checks=[
+    ["compassion","Compassionate"],["ruthless","Ruthless"],["courage","Fearless"],["greed","Opportunist"],
+    ["leadership","Inspiring"],["curiosity","Curious"],["caution","Careful"],["reckless","Reckless"]
+  ];
+  checks.forEach(([k,name])=>{
+    if((traits[k]||0)>=5 && !p.lifeFlags.traitMilestones[name]){
+      p.lifeFlags.traitMilestones[name]=true;
+      if(name==="Ruthless")p.epithet="the Cold";
+      if(name==="Fearless")p.epithet="the Brave";
+      log(`Trait emerged: ${name}.`);
+    }
+  });
+  const kingScore=(traits.leadership||0)+(traits.courage||0)+(traits.ambition||0)+(traits.willpower||0);
+  if(kingScore>=12 && p.conqueror===0 && Math.random()<0.25){
+    p.conqueror=1;
+    major("Your will erupted for the first time. Conqueror Haki awakened.");
+  }
+}
+function lifePhaseName(){
+  if(p.age<=4)return "Early Childhood";
+  if(p.age<=12)return "Foundation Years";
+  if(p.age<=18)return "Identity Years";
+  return "Open Sea";
+}
 function mainMenu(){
-  ensure();render();
+  v81Ensure();
+  render();
   if(p.dead)return deathScreen();
   if(p.age>=80)return ending();
   $("screen").innerHTML=`<h2>Age ${p.age}: ${p.name}'s Life</h2>
+    <div class="chapterCard"><b>Chapter:</b> ${lifePhaseName()}<br><b>Dream:</b> ${p.dream}<br><b>Family:</b> ${p.origin}<br><b>Sea:</b> ${p.region}</div>
     <div class="dangerMeter survivalBox"><b>Danger:</b> ${dangerText()} · Reckless ${p.reckless}</div>
-    <p><b>${p.actionsLeft}</b> energy left. This is the open sea — commit to a path, drift, scheme, train, explore, or switch allegiances.</p>
+    <p><b>${p.actionsLeft}</b> energy left. Age Up is the heartbeat; actions shape the person you become.</p>
     <div class="menuGrid">
       <button class="primary" onclick="ageUp()">Age Up</button>
-      <button class="gold" onclick="freedomHub()">🌊 Open Sea</button>
-      <button onclick="careerRoleMenu()">⭐ Career Role</button>
-      <button onclick="combatMenu()">⚔️ Combat</button>
-      <button onclick="dailyLifeMenu()">Daily Life</button>
-      <button onclick="adventureMenu()">Adventure</button>
-      <button onclick="powerMenu()">Power Hunt</button>
-      <button onclick="factionMenu()">Faction Choices</button>
-      <button onclick="underworldMenu()">Underworld</button>
-      <button onclick="drifterMenu()">Drifter Life</button>
-      <button onclick="powerCodexMenu()">📖 Pirate Codex</button>
+      <button onclick="lifeActionsMenu()">Life Actions</button>
+      <button onclick="careerRoleMenu()">⭐ Career / Identity</button>
+      <button onclick="combatMenu()">⚔️ Combat Practice</button>
+      <button onclick="trainingMenu()">Training</button>
+      <button onclick="hakiMenu()">Haki</button>
+      <button onclick="powerCodexMenu()">📖 Codex</button>
       <button onclick="ownedWeapons()">⚔️ Weapons</button>
+      <button onclick="relationshipsMenu()">Relationships</button>
       <button onclick="travelMenu()">Travel</button>
-      <button onclick="crewMenu()">Crew / Unit</button>
       <button onclick="assetsMenu()">Assets</button>
-      <button onclick="relationshipsMenu()">Social</button>
       <button onclick="legacyMenu()">Legacy</button>
       <button onclick="save()">Save</button>
     </div>`;
 }
-
-
-/* =========================
-   v8.0 Grand Line Evolution — Wave 1: World Engine
-   ========================= */
-function ensureWorld(){
-  ensure();
-  if(!p.world){
-    p.world={
-      month:1,
-      year:0,
-      chaos:{pirate:35,marine:35,revolutionary:20,economy:50,instability:30},
-      crews:[],
-      marines:[],
-      territories:[],
-      fruitsInCirculation:[],
-      newspaper:[],
-      timeline:[]
-    };
+function lifeActionsMenu(){
+  v81Ensure();
+  const actions=[];
+  if(p.age<=4){
+    actions.push(["Play",()=>{if(spendAction()){trait("curiosity",1);p.mood=clamp(p.mood+4,0,100);silent("You played and explored the world.");mainMenu();}}]);
+    actions.push(["Stay Near Family",()=>{if(spendAction()){trait("caution",1);p.mood=clamp(p.mood+2,0,100);silent("You stayed close to family.");mainMenu();}}]);
+  }else if(p.age<=12){
+    actions.push(["Help Family",()=>{if(spendAction()){apply({berries:200,discipline:1});trait("compassion",1);silent("You helped your family.");mainMenu();}}]);
+    actions.push(["Sneak Around",()=>{if(spendAction()){apply({sneak:1});trait("curiosity",1);silent("You snuck around town.");mainMenu();}}]);
+    actions.push(["Make Friends",()=>{if(spendAction()){narrativeRelationship("You opened yourself to others.");}}]);
+  }else{
+    actions.push(["Work",()=>{if(spendAction()){apply({berries:1200+Math.floor(Math.random()*2000)});silent("You worked for money.");mainMenu();}}]);
+    actions.push(["Explore Island",()=>{if(spendAction()){showLifeEvent(pick(getLifePool()));}}]);
+    actions.push(["Socialize",()=>{if(spendAction()){narrativeRelationship("You spent time with people nearby.");}}]);
+    actions.push(["Seek Opportunity",()=>{if(spendAction()){const event=Math.random()<fateChance()?pick(FATE_EVENTS_V81):pick(LIFE_EVENTS_V81.filter(e=>p.age>=e.min&&p.age<=e.max));showLifeEvent(event);}}]);
   }
-  if(!p.world.crews || !p.world.crews.length)p.world.crews=generateRivalCrews();
-  if(!p.world.marines || !p.world.marines.length)p.world.marines=generateMarineOfficers();
-  if(!p.world.territories || !p.world.territories.length)p.world.territories=generateTerritories();
-  if(!p.world.fruitsInCirculation || !p.world.fruitsInCirculation.length)p.world.fruitsInCirculation=DATA.fruitCatalog.map(f=>({...f,status:"circulating",holder:null}));
-  if(!p.world.newspaper)p.world.newspaper=[];
-  if(!p.world.timeline)p.world.timeline=[];
+  actions.push(["Rest",()=>{if(spendAction()){p.health=clamp(p.health+20,0,100);p.mood=clamp(p.mood+5,0,100);silent("You rested.");mainMenu();}}]);
+  submenu("Life Actions",`Current phase: ${lifePhaseName()}`,actions);
 }
-function worldName(){
-  return pick(["Bloodwolf","Crimson Gull","Iron Tide","Blackfin","Red Wake","Stormjaw","Velvet Fang","Moonbreaker","Ashen Mako","Silver Hook"]);
-}
-function generateRivalCrews(){
-  const out=[];
-  for(let i=0;i<6;i++){
-    const fruit=Math.random()<.45?pick(DATA.fruitCatalog):null;
-    out.push({
-      id:"crew_"+i,
-      name:worldName()+" Pirates",
-      captain:pick(DATA.names)+" "+pick(["D.","Vale","Crowe","Mako","Rook","Vane"]),
-      ambition:pick(["Become Yonko","Find a legendary fruit","Destroy Marines","Rule an island","Find ancient treasure","Become Pirate King"]),
-      style:pick(["Brawler","Swordsman","Sniper","Zoan Bruiser","Logia Menace","Underworld Schemer"]),
-      strength:20+Math.floor(Math.random()*45),
-      bounty:5000000+Math.floor(Math.random()*80000000),
-      territory:null,
-      relationship:"unknown",
-      fruit:fruit?fruit.name:"None",
-      alive:true,
-      heat:Math.floor(Math.random()*8)
-    });
-  }
-  return out;
-}
-function generateMarineOfficers(){
-  const ranks=["Captain","Commodore","Rear Admiral","Vice Admiral"];
-  const out=[];
-  for(let i=0;i<5;i++){
-    out.push({
-      id:"marine_"+i,
-      name:pick(DATA.names)+" "+pick(["Kain","Atlas","Rook","Vale","Grant","Sterling"]),
-      rank:pick(ranks),
-      justice:pick(["Absolute Justice","Moral Justice","Lazy Justice","Corrupt Justice","Pragmatic Justice"]),
-      strength:25+Math.floor(Math.random()*50),
-      hunts:pick(["pirates","revolutionaries","smugglers","warlord candidates"]),
-      relationship:"unknown",
-      alive:true
-    });
-  }
-  return out;
-}
-function generateTerritories(){
-  const owners=["Independent","Government","Marine","Pirate","Revolutionary"];
-  return DATA.islands.map(i=>{
-    const owner=pick(owners);
-    return {
-      island:i.name,
-      region:i.region,
-      owner,
-      wealth:30+Math.floor(Math.random()*60),
-      stability:30+Math.floor(Math.random()*60),
-      corruption:Math.floor(Math.random()*75),
-      danger:i.danger,
-      crisis:null
-    };
-  });
-}
-function ownerClass(owner){
-  return "owner"+String(owner||"Independent").replace(/\s/g,"");
-}
-function worldHeadline(txt,category="World"){
-  ensureWorld();
-  const item={age:p.age,month:p.world.month,category,text:txt};
-  p.world.newspaper.unshift(item);
-  p.world.timeline.unshift(item);
-  p.world.newspaper=p.world.newspaper.slice(0,80);
-  p.world.timeline=p.world.timeline.slice(0,160);
-  p.worldNews=p.worldNews||[];
-  p.worldNews.unshift(`Age ${p.age}, Month ${p.world.month}: ${txt}`);
-  p.worldNews=p.worldNews.slice(0,60);
-}
-function worldTickV8(reason="time passes"){
-  ensureWorld();
-  p.world.month++;
-  if(p.world.month>12){p.world.month=1;p.world.year++}
-  const c=p.world.chaos;
-  c.pirate=clamp(c.pirate+Math.floor(Math.random()*9)-3,0,100);
-  c.marine=clamp(c.marine+Math.floor(Math.random()*9)-3,0,100);
-  c.revolutionary=clamp(c.revolutionary+Math.floor(Math.random()*7)-2,0,100);
-  c.economy=clamp(c.economy+Math.floor(Math.random()*9)-4,0,100);
-  c.instability=clamp(c.instability+Math.floor(Math.random()*11)-4,0,100);
-  const rolls=1+(Math.random()<.35?1:0)+(c.instability>65?1:0);
-  for(let i=0;i<rolls;i++)resolveWorldEvent();
-}
-function resolveWorldEvent(){
-  ensureWorld();
-  const type=pick(["pirateRise","marinePromotion","territoryShift","revolution","fruitRumor","islandCrisis","rivalClash","economy"]);
-  if(type==="pirateRise"){
-    const crew=pick(p.world.crews.filter(x=>x.alive));
-    crew.strength+=5+Math.floor(Math.random()*10);
-    crew.bounty+=1000000+Math.floor(Math.random()*12000000);
-    worldHeadline(`${crew.name} led by ${crew.captain} grows stronger. New bounty estimate: ฿${fmt(crew.bounty)}.`,"Pirates");
-  }
-  if(type==="marinePromotion"){
-    const m=pick(p.world.marines.filter(x=>x.alive));
-    const ranks=["Captain","Commodore","Rear Admiral","Vice Admiral","Admiral Candidate"];
-    const idx=Math.min(ranks.length-1,ranks.indexOf(m.rank)+1);
-    m.rank=ranks[idx]||m.rank;
-    m.strength+=4+Math.floor(Math.random()*8);
-    worldHeadline(`${m.name} was promoted to ${m.rank}. Justice type: ${m.justice}.`,"Marines");
-  }
-  if(type==="territoryShift"){
-    const t=pick(p.world.territories);
-    const old=t.owner;
-    t.owner=pick(["Independent","Government","Marine","Pirate","Revolutionary"]);
-    t.stability=clamp(t.stability+Math.floor(Math.random()*31)-15,0,100);
-    t.danger=clamp(t.danger+Math.floor(Math.random()*3)-1,1,10);
-    worldHeadline(`${t.island} changed control from ${old} to ${t.owner}. Stability now ${t.stability}/100.`,"Territory");
-  }
-  if(type==="revolution"){
-    const t=pick(p.world.territories);
-    t.crisis="Revolutionary unrest";
-    t.stability=clamp(t.stability-15,0,100);
-    p.world.chaos.revolutionary=clamp(p.world.chaos.revolutionary+7,0,100);
-    worldHeadline(`Revolutionary unrest spreads through ${t.island}.`,"Revolutionaries");
-  }
-  if(type==="fruitRumor"){
-    const fruit=pick(p.world.fruitsInCirculation);
-    fruit.status=pick(["black market rumor","hidden on island","held by unknown fighter","auctioned"]);
-    fruit.location=pick(DATA.islands).name;
-    worldHeadline(`Rumors claim the ${fruit.name} is ${fruit.status} near ${fruit.location}.`,"Devil Fruit");
-  }
-  if(type==="islandCrisis"){
-    const t=pick(p.world.territories);
-    t.crisis=pick(["Sea King attack","food shortage","corrupt official scandal","pirate raid","Marine crackdown","strange storm","missing children"]);
-    t.danger=clamp(t.danger+1,1,10);
-    t.stability=clamp(t.stability-10,0,100);
-    worldHeadline(`${t.island} faces crisis: ${t.crisis}.`,"Island Crisis");
-  }
-  if(type==="rivalClash"){
-    const alive=p.world.crews.filter(x=>x.alive);
-    if(alive.length>1){
-      const a=pick(alive); let b=pick(alive.filter(x=>x!==a));
-      const winner=a.strength+Math.random()*40>b.strength+Math.random()*40?a:b;
-      const loser=winner===a?b:a;
-      winner.strength+=5;winner.bounty+=5000000;
-      loser.strength=clamp(loser.strength-8,1,999);
-      if(Math.random()<.12){loser.alive=false;releaseFruitFromNPC(loser.captain)}
-      worldHeadline(`${winner.name} defeated ${loser.name} in a violent clash.`,"Pirate Clash");
-    }
-  }
-  if(type==="economy"){
-    const t=pick(p.world.territories);
-    const boom=Math.random()<.5;
-    t.wealth=clamp(t.wealth+(boom?12:-12),0,100);
-    worldHeadline(`${t.island}'s economy ${boom?"booms":"declines"}. Wealth now ${t.wealth}/100.`,"Economy");
-  }
-}
-function releaseFruitFromNPC(holder){
-  const fruit=pick(p.world.fruitsInCirculation);
-  fruit.status="re-entered circulation";
-  fruit.holder=null;
-  fruit.location=pick(DATA.islands).name;
-  worldHeadline(`After ${holder}'s fall, the ${fruit.name} may have re-entered circulation near ${fruit.location}.`,"Devil Fruit");
-}
-function worldEngineMenu(){
-  ensureWorld();
-  $("screen").innerHTML=`<h2>🌎 World Engine</h2>
-  <p>The Grand Line now moves without you. Factions rise, islands change, fruits circulate, and newspapers report global events.</p>
-  <div class="worldGrid">
-    <div class="worldCard"><h4>World Clock</h4><p>Year ${p.world.year}, Month ${p.world.month}</p></div>
-    <div class="worldCard"><h4>Chaos</h4><p>Pirates ${p.world.chaos.pirate}<br>Marines ${p.world.chaos.marine}<br>Revolutionaries ${p.world.chaos.revolutionary}<br>Instability ${p.world.chaos.instability}</p></div>
-  </div>
-  <div class="choices">
-    <button onclick="newspaperMenu()">📰 Newspaper</button>
-    <button onclick="rivalCrewsMenu()">☠️ Rival Crews</button>
-    <button onclick="marineWorldMenu()">🛡️ Marine Officers</button>
-    <button onclick="territoryMenu()">🏝 Territories</button>
-    <button onclick="fruitCirculationMenu()">🍎 Fruit Circulation</button>
-    <button onclick="manualWorldTick()">Advance World Manually</button>
-    <button class="primary" onclick="mainMenu()">Back</button>
-  </div>`;
-  render();
-}
-function manualWorldTick(){if(!spendAction())return;worldTickV8("manual");major("The world moved forward.");worldEngineMenu()}
-function newspaperMenu(){
-  ensureWorld();
-  $("screen").innerHTML=`<h2>📰 World Economic Journal</h2>
-  <div class="newsFront"><h3>Front Page</h3>${p.world.newspaper.slice(0,8).map(n=>`<p><b>${n.category}</b> — ${n.text}</p>`).join("")||"<p>No world news yet. Advance time or age up.</p>"}</div>
-  <div class="choices"><button onclick="worldEngineMenu()">Back</button></div>`;
-  render();
-}
-function rivalCrewsMenu(){
-  ensureWorld();
-  $("screen").innerHTML=`<h2>☠️ Rival Pirate Crews</h2>
-  <div class="cardGrid">${p.world.crews.map((c,i)=>`<div class="worldCard"><h4>${c.name}</h4><p>Captain: ${c.captain}<br>Ambition: ${c.ambition}<br>Style: ${c.style}<br>Strength: ${c.strength}<br>Bounty: ฿${fmt(c.bounty)}<br>Fruit: ${c.fruit}<br>Status: ${c.alive?"Active":"Defeated"}</p><button onclick="interactRivalCrew(${i})">Interact</button></div>`).join("")}</div>
-  <button onclick="worldEngineMenu()">Back</button>`;
-  render();
-}
-function interactRivalCrew(i){
-  const c=p.world.crews[i];
-  $("screen").innerHTML=`<h2>${c.name}</h2><p>How do you want to deal with ${c.captain}?</p>
-  <div class="choices">
-    <button onclick="allyRival(${i})">Seek Alliance</button>
-    <button onclick="huntRival(${i})">Hunt Them</button>
-    <button onclick="spyRival(${i})">Spy on Them</button>
-    <button onclick="rivalCrewsMenu()">Back</button>
-  </div>`;
-}
-function allyRival(i){if(!spendAction())return;const c=p.world.crews[i];c.relationship="ally";apply({charisma:1,infamy:1});major(`You opened alliance talks with ${c.name}.`);rivalCrewsMenu()}
-function huntRival(i){if(!spendAction())return;const c=p.world.crews[i];p.battleTargetCrew=i;startBattle("rival","hard")}
-function spyRival(i){if(!spendAction())return;const c=p.world.crews[i];apply({sneak:1,intelligence:1});major(`You learned ${c.name}'s current strength: ${c.strength}.`);rivalCrewsMenu()}
-function marineWorldMenu(){
-  ensureWorld();
-  $("screen").innerHTML=`<h2>🛡️ Marine Officers</h2>
-  <div class="cardGrid">${p.world.marines.map((m,i)=>`<div class="worldCard"><h4>${m.rank} ${m.name}</h4><p>Justice: ${m.justice}<br>Strength: ${m.strength}<br>Hunts: ${m.hunts}<br>Status: ${m.alive?"Active":"Defeated"}</p><button onclick="interactMarine(${i})">Interact</button></div>`).join("")}</div>
-  <button onclick="worldEngineMenu()">Back</button>`;
-  render();
-}
-function interactMarine(i){
-  const m=p.world.marines[i];
-  $("screen").innerHTML=`<h2>${m.rank} ${m.name}</h2><div class="choices">
-  <button onclick="if(spendAction()){apply({marineRep:1,intelligence:1});major('You sent information to the Marines.');marineWorldMenu()}">Tip Them Off</button>
-  <button onclick="if(spendAction()){p.heat+=2;startBattle('marine','hard')}">Attack / Ambush</button>
-  <button onclick="if(spendAction()){apply({sneak:1,heat:-1});major('You avoided Marine attention.');marineWorldMenu()}">Avoid</button>
-  <button onclick="marineWorldMenu()">Back</button>
-  </div>`;
-}
-function territoryMenu(){
-  ensureWorld();
-  $("screen").innerHTML=`<h2>🏝 Territories</h2>
-  <div class="cardGrid">${p.world.territories.map((t,i)=>`<div class="worldCard"><h4>${t.island}</h4><span class="territoryOwner ${ownerClass(t.owner)}">${t.owner}</span><p>Region: ${t.region}<br>Wealth: ${t.wealth}<br>Stability: ${t.stability}<br>Corruption: ${t.corruption}<br>Danger: ${t.danger}<br>Crisis: ${t.crisis||"None"}</p><button onclick="territoryAction(${i})">Act Here</button></div>`).join("")}</div><button onclick="worldEngineMenu()">Back</button>`;
-  render();
-}
-function territoryAction(i){
-  const t=p.world.territories[i];
-  $("screen").innerHTML=`<h2>${t.island}</h2><p>Owner: ${t.owner}. What do you do?</p><div class="choices">
-  <button onclick="if(spendAction()){t.stability=clamp(t.stability+8,0,100);apply({honor:1,charisma:1});major('You helped stabilize '+p.world.territories[${i}].island+'.');territoryMenu()}">Help Civilians</button>
-  <button onclick="if(spendAction()){t.wealth=clamp(t.wealth-8,0,100);apply({berries:6000,infamy:1,heat:1});major('You exploited '+p.world.territories[${i}].island+'.');territoryMenu()}">Exploit Chaos</button>
-  <button onclick="if(spendAction()){t.owner=p.path==='Marine'?'Marine':p.path==='Revolutionary'?'Revolutionary':'Pirate';t.stability=clamp(t.stability-10,0,100);major('You shifted control of '+p.world.territories[${i}].island+'.');territoryMenu()}">Challenge Control</button>
-  <button onclick="territoryMenu()">Back</button>
-  </div>`;
-}
-function fruitCirculationMenu(){
-  ensureWorld();
-  $("screen").innerHTML=`<h2>🍎 Devil Fruit Circulation</h2>
-  <p>Fruits can be rumored, auctioned, hidden, held by NPCs, or re-enter circulation after deaths.</p>
-  <div class="cardGrid">${p.world.fruitsInCirculation.map(f=>`<div class="worldCard rarity${f.rarity}"><h4>${f.name}</h4><p>${f.type} · ${f.rarity}<br>Status: ${f.status}<br>Location: ${f.location||"Unknown"}<br>Holder: ${f.holder||"None known"}</p></div>`).join("")}</div><button onclick="worldEngineMenu()">Back</button>`;
-  render();
-}
-
-/* Override old world tick so v8 engine runs with aging */
-const oldWorldTick_v80 = typeof worldTick==="function" ? worldTick : null;
-function worldTick(){
-  if(oldWorldTick_v80)oldWorldTick_v80();
-  worldTickV8("age");
-}
-
-/* Add World Engine button to main menu without deleting sandbox freedom */
-const oldMainMenu_v80 = mainMenu;
-function mainMenu(){
-  oldMainMenu_v80();
-  const grid=$("screen")?.querySelector(".menuGrid");
-  if(grid && !grid.querySelector("[data-world-engine]")){
-    const b=document.createElement("button");
-    b.textContent="🌎 World Engine";
-    b.setAttribute("data-world-engine","1");
-    b.onclick=worldEngineMenu;
-    grid.insertBefore(b, grid.children[2]||null);
-  }
-}
-
-/* Add World tab */
-const oldShowTab_v80 = showTab;
 function showTab(tab,silent=false){
-  if(tab!=="world")return oldShowTab_v80(tab,silent);
-  ensureWorld();
-  $("tab").innerHTML=`<h3>World</h3>
-  <div class="worldGrid">
-    <div class="worldCard"><h4>Clock</h4><p>Year ${p.world.year}, Month ${p.world.month}</p></div>
-    <div class="worldCard"><h4>Global Chaos</h4><p>Pirate ${p.world.chaos.pirate}<br>Marine ${p.world.chaos.marine}<br>Revolutionary ${p.world.chaos.revolutionary}<br>Instability ${p.world.chaos.instability}</p></div>
-  </div>
-  <h4>Latest Headlines</h4>${p.world.newspaper.slice(0,5).map(n=>`<div class="line"><span>${n.category}</span><b>${n.text}</b></div>`).join("")||"<p>No headlines yet.</p>"}`;
-}
-const oldRenderTabs_v80 = renderTabs;
-function renderTabs(){
-  oldRenderTabs_v80();
-  if($("tabs") && !$("tabs").querySelector("[data-world-tab]")){
-    const b=document.createElement("button");
-    b.textContent="World";
-    b.setAttribute("data-world-tab","1");
-    b.onclick=()=>showTab("world");
-    $("tabs").appendChild(b);
+  currentTab=tab;
+  if(!p){$("tab").innerHTML="";return;}
+  if(tab==="life"){
+    v81Ensure();
+    $("tab").innerHTML=`<h3>Life</h3><div class="cardGrid">
+      <div class="miniCard"><h4>Visible Stats</h4><p>Health ${p.health}<br>Morale ${p.mood}<br>Physical ${Math.floor((p.strength+p.speed+p.durability)/3)}<br>Intelligence ${p.intelligence}<br>Charisma ${p.charisma}<br>Potential ${p.potential}</p></div>
+      <div class="miniCard"><h4>Hidden Traits</h4><p>${Object.entries(p.hiddenTraits).map(([k,v])=>`${k}: ${v}`).join("<br>")}</p></div>
+      <div class="miniCard"><h4>Identity</h4><p>Dream: ${p.dream}<br>Family: ${p.origin}<br>Phase: ${lifePhaseName()}</p></div>
+      <div class="miniCard"><h4>Injuries</h4><p>${p.injuries.join("<br>")||"None"}</p></div>
+    </div>`;
+    return;
   }
+  if(tab==="log"){
+    $("tab").innerHTML=`<h3>Life Chapters</h3>${(p.chapterLog||[]).slice(0,12).map(c=>`<div class="line"><span>Age ${c.age}: ${c.title}</span><b>${c.choice}</b></div>`).join("")||"<p>No chapters yet.</p>"}<h3>Game Info</h3><div class="notice">Version: v8.1<br>Save Build: ${p.build}<br>Core: BitLife-style aging, One Piece narrative systems.</div>`;
+    return;
+  }
+  return baseShowTab_v81(tab,silent);
 }

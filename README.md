@@ -35,23 +35,13 @@ This is a clean rebuild of the core game files to reduce freezing, duplicate sta
 - Weapon rarity tiers, movesets, special skills, lore.
 
 
-## v7.1 Sandbox Freedom Update
-- Adds Open Sea sandbox hub.
-- Adds Daily Life, Adventure, Power Hunt, Faction Choices, Underworld, and Drifter Life menus.
-- Careers are specializations, not hard rails.
-- Age 16 no longer forces immediate career choice.
-- Players can stay uncommitted, switch paths, leave careers, or do faction jobs without joining.
-- Adds more non-aging and low-risk actions.
-- Restores the feeling of a free One Piece experience.
-
-
-## v8.0 Grand Line Evolution — Wave 1: World Engine
-- Adds living world clock.
-- Adds dynamic newspaper system.
-- Adds rival pirate crews.
-- Adds Marine officer progression.
-- Adds territory ownership and island stability.
-- Adds Devil Fruit circulation system.
-- Adds world chaos values.
-- World now advances on Age Up and manual world ticks.
-- Adds World Engine menu and World tab.
+## v8.1 Narrative Foundation — Birth to Legend
+- Game now starts at birth.
+- Adds randomized birth sea, family, wealth, and hidden potential.
+- Adds Early Childhood, Foundation Years, Identity Years, and Open Sea phases.
+- Age Up now generates life events.
+- Adds hidden trait engine: compassion, ruthless, greed, courage, caution, curiosity, leadership, ambition, willpower, fear, confidence, independence, luck.
+- Adds dream choice event.
+- Adds fate events: strange fruit, village raid, legendary mentor.
+- Adds triggered combat from life events.
+- Adds chapter log and stronger legacy direction.

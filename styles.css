@@ -132,62 +132,37 @@ input{
 @media(min-width:1051px){.bottomNav{display:none}#app{padding-bottom:20px}}
 
 
-/* v7.1 Sandbox Freedom */
-.freedomPanel{
+/* v8.1 Narrative Foundation */
+.chapterCard{
+  border:1px solid var(--gold);
+  background:rgba(240,196,91,.08);
+  border-radius:18px;
+  padding:14px;
+  margin:12px 0;
+}
+.choiceImpact{
+  color:var(--muted);
+  font-size:.85rem;
+  margin-top:4px;
+}
+.fateEvent{
+  border:2px solid var(--purple);
+  box-shadow:0 0 20px rgba(181,140,255,.22);
+  background:rgba(181,140,255,.08);
+}
+.dreamCard{
   border:1px solid var(--blue);
   background:rgba(98,168,255,.08);
   border-radius:16px;
   padding:12px;
   margin:10px 0;
 }
-.pathGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-}
-.sandboxTag{
+.traitBadge{
   display:inline-block;
-  padding:5px 9px;
+  padding:6px 10px;
+  border:1px solid var(--line);
   border-radius:999px;
-  border:1px solid var(--line);
-  color:var(--muted);
-  margin:3px;
-  font-size:.82rem;
-}
-@media(max-width:720px){.pathGrid{grid-template-columns:1fr}}
-
-
-/* v8.0 World Engine */
-.worldCard{
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:12px;
-  background:rgba(255,255,255,.045);
-  margin:10px 0;
-}
-.newsFront{
-  border:2px double var(--gold);
-  background:rgba(240,196,91,.08);
-  border-radius:18px;
-  padding:14px;
-  margin:10px 0;
-}
-.worldGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-}
-.territoryOwner{
-  padding:5px 9px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  display:inline-block;
-  margin:3px 0;
+  margin:4px;
+  background:rgba(255,255,255,.06);
   color:var(--muted);
 }
-.ownerPirate{border-color:var(--red);color:#ffb8b8}
-.ownerMarine{border-color:var(--blue);color:#bad8ff}
-.ownerRevolutionary{border-color:var(--green);color:#c4ffd9}
-.ownerIndependent{border-color:var(--gold);color:#ffe5a2}
-.ownerGovernment{border-color:var(--purple);color:#dbc9ff}
-@media(max-width:720px){.worldGrid{grid-template-columns:1fr}}
