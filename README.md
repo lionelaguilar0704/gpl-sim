@@ -43,3 +43,15 @@ This is a clean rebuild of the core game files to reduce freezing, duplicate sta
 - Players can stay uncommitted, switch paths, leave careers, or do faction jobs without joining.
 - Adds more non-aging and low-risk actions.
 - Restores the feeling of a free One Piece experience.
+
+
+## v8.0 Grand Line Evolution — Wave 1: World Engine
+- Adds living world clock.
+- Adds dynamic newspaper system.
+- Adds rival pirate crews.
+- Adds Marine officer progression.
+- Adds territory ownership and island stability.
+- Adds Devil Fruit circulation system.
+- Adds world chaos values.
+- World now advances on Age Up and manual world ticks.
+- Adds World Engine menu and World tab.

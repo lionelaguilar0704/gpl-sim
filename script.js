@@ -1,8 +1,8 @@
 
 "use strict";
 
-const SAVE_KEY = "gpls_save_v71";
-const OLD_KEYS = ["gpls_save_v70","gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
+const SAVE_KEY = "gpls_save_v80";
+const OLD_KEYS = ["gpls_save_v71","gpls_save_v70","gpls_save_v70","gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
 let p = null;
 let currentTab = "feed";
 let booted = false;
@@ -31,7 +31,7 @@ function silent(msg){ log(msg); toast(msg,false); render(); }
 
 function newPlayer(){
   return {
-    build:"v7.1", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
+    build:"v8.0", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
     portrait:"🙂", epithet:"No Epithet", region:"Home Sea", island:"Syrup Harbor",
     health:100, mood:55, energy:5, actionsLeft:5, berries:0, debt:0, bounty:0, heat:0, infamy:0, honor:0,
     strength:1, speed:1, durability:1, intelligence:1, charisma:1, sneak:1, discipline:1, leadership:0,
@@ -103,7 +103,7 @@ function checkUnlocks(){
 
 function save(){
   ensure();
-  p.build="v7.1";
+  p.build="v8.0";
   localStorage.setItem(SAVE_KEY,JSON.stringify(p));
   toast("Game saved.");
 }
@@ -115,7 +115,7 @@ function load(){
   if(!data){ setup(); return; }
   p=JSON.parse(data);
   ensure();
-  p.build="v7.1";
+  p.build="v8.0";
   save();
   mainMenu();
 }
@@ -191,7 +191,7 @@ function showTab(tab,silent=false){
     <h3>Inventory</h3><div class="cardGrid">${p.loot.slice(-8).map(l=>`<div class="miniCard rarity${l.rarity}"><h4>${l.rarity} ${l.name}</h4><p>Value ฿${fmt(l.value)}</p></div>`).join("")||"<p>No loot yet.</p>"}</div>`;
   if(tab==="codex")$("tab").innerHTML=`<h3>Codex</h3><div class="choices"><button onclick="fruitCodex()">Devil Fruits</button><button onclick="weaponCodex()">Weapons</button><button onclick="ownedWeapons()">Owned Weapons</button></div>`;
   if(tab==="map")$("tab").innerHTML=`<h3>Map</h3>${DATA.islands.map(i=>`<div class="line"><span>${i.name}</span><b>${i.region} · Danger ${i.danger}</b></div>`).join("")}`;
-  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v7.1<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
+  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.0<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
 }
 
 function roleSummary(){
@@ -211,7 +211,7 @@ function setup(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Start a New Life</h2>
-    <p><b>v7.1 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
+    <p><b>v8.0 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
     <div class="safeNotice notice">This version uses a clean save slot. Old saves can still be loaded, but a new life is recommended for testing.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -626,7 +626,7 @@ boot();
 
 
 /* =========================
-   v7.1 Sandbox Freedom Update
+   v8.0 Sandbox Freedom Update
    ========================= */
 function freedomHub(){
   $("screen").innerHTML=`<h2>🌊 Open Sea</h2>
@@ -802,4 +802,316 @@ function mainMenu(){
       <button onclick="legacyMenu()">Legacy</button>
       <button onclick="save()">Save</button>
     </div>`;
+}
+
+
+/* =========================
+   v8.0 Grand Line Evolution — Wave 1: World Engine
+   ========================= */
+function ensureWorld(){
+  ensure();
+  if(!p.world){
+    p.world={
+      month:1,
+      year:0,
+      chaos:{pirate:35,marine:35,revolutionary:20,economy:50,instability:30},
+      crews:[],
+      marines:[],
+      territories:[],
+      fruitsInCirculation:[],
+      newspaper:[],
+      timeline:[]
+    };
+  }
+  if(!p.world.crews || !p.world.crews.length)p.world.crews=generateRivalCrews();
+  if(!p.world.marines || !p.world.marines.length)p.world.marines=generateMarineOfficers();
+  if(!p.world.territories || !p.world.territories.length)p.world.territories=generateTerritories();
+  if(!p.world.fruitsInCirculation || !p.world.fruitsInCirculation.length)p.world.fruitsInCirculation=DATA.fruitCatalog.map(f=>({...f,status:"circulating",holder:null}));
+  if(!p.world.newspaper)p.world.newspaper=[];
+  if(!p.world.timeline)p.world.timeline=[];
+}
+function worldName(){
+  return pick(["Bloodwolf","Crimson Gull","Iron Tide","Blackfin","Red Wake","Stormjaw","Velvet Fang","Moonbreaker","Ashen Mako","Silver Hook"]);
+}
+function generateRivalCrews(){
+  const out=[];
+  for(let i=0;i<6;i++){
+    const fruit=Math.random()<.45?pick(DATA.fruitCatalog):null;
+    out.push({
+      id:"crew_"+i,
+      name:worldName()+" Pirates",
+      captain:pick(DATA.names)+" "+pick(["D.","Vale","Crowe","Mako","Rook","Vane"]),
+      ambition:pick(["Become Yonko","Find a legendary fruit","Destroy Marines","Rule an island","Find ancient treasure","Become Pirate King"]),
+      style:pick(["Brawler","Swordsman","Sniper","Zoan Bruiser","Logia Menace","Underworld Schemer"]),
+      strength:20+Math.floor(Math.random()*45),
+      bounty:5000000+Math.floor(Math.random()*80000000),
+      territory:null,
+      relationship:"unknown",
+      fruit:fruit?fruit.name:"None",
+      alive:true,
+      heat:Math.floor(Math.random()*8)
+    });
+  }
+  return out;
+}
+function generateMarineOfficers(){
+  const ranks=["Captain","Commodore","Rear Admiral","Vice Admiral"];
+  const out=[];
+  for(let i=0;i<5;i++){
+    out.push({
+      id:"marine_"+i,
+      name:pick(DATA.names)+" "+pick(["Kain","Atlas","Rook","Vale","Grant","Sterling"]),
+      rank:pick(ranks),
+      justice:pick(["Absolute Justice","Moral Justice","Lazy Justice","Corrupt Justice","Pragmatic Justice"]),
+      strength:25+Math.floor(Math.random()*50),
+      hunts:pick(["pirates","revolutionaries","smugglers","warlord candidates"]),
+      relationship:"unknown",
+      alive:true
+    });
+  }
+  return out;
+}
+function generateTerritories(){
+  const owners=["Independent","Government","Marine","Pirate","Revolutionary"];
+  return DATA.islands.map(i=>{
+    const owner=pick(owners);
+    return {
+      island:i.name,
+      region:i.region,
+      owner,
+      wealth:30+Math.floor(Math.random()*60),
+      stability:30+Math.floor(Math.random()*60),
+      corruption:Math.floor(Math.random()*75),
+      danger:i.danger,
+      crisis:null
+    };
+  });
+}
+function ownerClass(owner){
+  return "owner"+String(owner||"Independent").replace(/\s/g,"");
+}
+function worldHeadline(txt,category="World"){
+  ensureWorld();
+  const item={age:p.age,month:p.world.month,category,text:txt};
+  p.world.newspaper.unshift(item);
+  p.world.timeline.unshift(item);
+  p.world.newspaper=p.world.newspaper.slice(0,80);
+  p.world.timeline=p.world.timeline.slice(0,160);
+  p.worldNews=p.worldNews||[];
+  p.worldNews.unshift(`Age ${p.age}, Month ${p.world.month}: ${txt}`);
+  p.worldNews=p.worldNews.slice(0,60);
+}
+function worldTickV8(reason="time passes"){
+  ensureWorld();
+  p.world.month++;
+  if(p.world.month>12){p.world.month=1;p.world.year++}
+  const c=p.world.chaos;
+  c.pirate=clamp(c.pirate+Math.floor(Math.random()*9)-3,0,100);
+  c.marine=clamp(c.marine+Math.floor(Math.random()*9)-3,0,100);
+  c.revolutionary=clamp(c.revolutionary+Math.floor(Math.random()*7)-2,0,100);
+  c.economy=clamp(c.economy+Math.floor(Math.random()*9)-4,0,100);
+  c.instability=clamp(c.instability+Math.floor(Math.random()*11)-4,0,100);
+  const rolls=1+(Math.random()<.35?1:0)+(c.instability>65?1:0);
+  for(let i=0;i<rolls;i++)resolveWorldEvent();
+}
+function resolveWorldEvent(){
+  ensureWorld();
+  const type=pick(["pirateRise","marinePromotion","territoryShift","revolution","fruitRumor","islandCrisis","rivalClash","economy"]);
+  if(type==="pirateRise"){
+    const crew=pick(p.world.crews.filter(x=>x.alive));
+    crew.strength+=5+Math.floor(Math.random()*10);
+    crew.bounty+=1000000+Math.floor(Math.random()*12000000);
+    worldHeadline(`${crew.name} led by ${crew.captain} grows stronger. New bounty estimate: ฿${fmt(crew.bounty)}.`,"Pirates");
+  }
+  if(type==="marinePromotion"){
+    const m=pick(p.world.marines.filter(x=>x.alive));
+    const ranks=["Captain","Commodore","Rear Admiral","Vice Admiral","Admiral Candidate"];
+    const idx=Math.min(ranks.length-1,ranks.indexOf(m.rank)+1);
+    m.rank=ranks[idx]||m.rank;
+    m.strength+=4+Math.floor(Math.random()*8);
+    worldHeadline(`${m.name} was promoted to ${m.rank}. Justice type: ${m.justice}.`,"Marines");
+  }
+  if(type==="territoryShift"){
+    const t=pick(p.world.territories);
+    const old=t.owner;
+    t.owner=pick(["Independent","Government","Marine","Pirate","Revolutionary"]);
+    t.stability=clamp(t.stability+Math.floor(Math.random()*31)-15,0,100);
+    t.danger=clamp(t.danger+Math.floor(Math.random()*3)-1,1,10);
+    worldHeadline(`${t.island} changed control from ${old} to ${t.owner}. Stability now ${t.stability}/100.`,"Territory");
+  }
+  if(type==="revolution"){
+    const t=pick(p.world.territories);
+    t.crisis="Revolutionary unrest";
+    t.stability=clamp(t.stability-15,0,100);
+    p.world.chaos.revolutionary=clamp(p.world.chaos.revolutionary+7,0,100);
+    worldHeadline(`Revolutionary unrest spreads through ${t.island}.`,"Revolutionaries");
+  }
+  if(type==="fruitRumor"){
+    const fruit=pick(p.world.fruitsInCirculation);
+    fruit.status=pick(["black market rumor","hidden on island","held by unknown fighter","auctioned"]);
+    fruit.location=pick(DATA.islands).name;
+    worldHeadline(`Rumors claim the ${fruit.name} is ${fruit.status} near ${fruit.location}.`,"Devil Fruit");
+  }
+  if(type==="islandCrisis"){
+    const t=pick(p.world.territories);
+    t.crisis=pick(["Sea King attack","food shortage","corrupt official scandal","pirate raid","Marine crackdown","strange storm","missing children"]);
+    t.danger=clamp(t.danger+1,1,10);
+    t.stability=clamp(t.stability-10,0,100);
+    worldHeadline(`${t.island} faces crisis: ${t.crisis}.`,"Island Crisis");
+  }
+  if(type==="rivalClash"){
+    const alive=p.world.crews.filter(x=>x.alive);
+    if(alive.length>1){
+      const a=pick(alive); let b=pick(alive.filter(x=>x!==a));
+      const winner=a.strength+Math.random()*40>b.strength+Math.random()*40?a:b;
+      const loser=winner===a?b:a;
+      winner.strength+=5;winner.bounty+=5000000;
+      loser.strength=clamp(loser.strength-8,1,999);
+      if(Math.random()<.12){loser.alive=false;releaseFruitFromNPC(loser.captain)}
+      worldHeadline(`${winner.name} defeated ${loser.name} in a violent clash.`,"Pirate Clash");
+    }
+  }
+  if(type==="economy"){
+    const t=pick(p.world.territories);
+    const boom=Math.random()<.5;
+    t.wealth=clamp(t.wealth+(boom?12:-12),0,100);
+    worldHeadline(`${t.island}'s economy ${boom?"booms":"declines"}. Wealth now ${t.wealth}/100.`,"Economy");
+  }
+}
+function releaseFruitFromNPC(holder){
+  const fruit=pick(p.world.fruitsInCirculation);
+  fruit.status="re-entered circulation";
+  fruit.holder=null;
+  fruit.location=pick(DATA.islands).name;
+  worldHeadline(`After ${holder}'s fall, the ${fruit.name} may have re-entered circulation near ${fruit.location}.`,"Devil Fruit");
+}
+function worldEngineMenu(){
+  ensureWorld();
+  $("screen").innerHTML=`<h2>🌎 World Engine</h2>
+  <p>The Grand Line now moves without you. Factions rise, islands change, fruits circulate, and newspapers report global events.</p>
+  <div class="worldGrid">
+    <div class="worldCard"><h4>World Clock</h4><p>Year ${p.world.year}, Month ${p.world.month}</p></div>
+    <div class="worldCard"><h4>Chaos</h4><p>Pirates ${p.world.chaos.pirate}<br>Marines ${p.world.chaos.marine}<br>Revolutionaries ${p.world.chaos.revolutionary}<br>Instability ${p.world.chaos.instability}</p></div>
+  </div>
+  <div class="choices">
+    <button onclick="newspaperMenu()">📰 Newspaper</button>
+    <button onclick="rivalCrewsMenu()">☠️ Rival Crews</button>
+    <button onclick="marineWorldMenu()">🛡️ Marine Officers</button>
+    <button onclick="territoryMenu()">🏝 Territories</button>
+    <button onclick="fruitCirculationMenu()">🍎 Fruit Circulation</button>
+    <button onclick="manualWorldTick()">Advance World Manually</button>
+    <button class="primary" onclick="mainMenu()">Back</button>
+  </div>`;
+  render();
+}
+function manualWorldTick(){if(!spendAction())return;worldTickV8("manual");major("The world moved forward.");worldEngineMenu()}
+function newspaperMenu(){
+  ensureWorld();
+  $("screen").innerHTML=`<h2>📰 World Economic Journal</h2>
+  <div class="newsFront"><h3>Front Page</h3>${p.world.newspaper.slice(0,8).map(n=>`<p><b>${n.category}</b> — ${n.text}</p>`).join("")||"<p>No world news yet. Advance time or age up.</p>"}</div>
+  <div class="choices"><button onclick="worldEngineMenu()">Back</button></div>`;
+  render();
+}
+function rivalCrewsMenu(){
+  ensureWorld();
+  $("screen").innerHTML=`<h2>☠️ Rival Pirate Crews</h2>
+  <div class="cardGrid">${p.world.crews.map((c,i)=>`<div class="worldCard"><h4>${c.name}</h4><p>Captain: ${c.captain}<br>Ambition: ${c.ambition}<br>Style: ${c.style}<br>Strength: ${c.strength}<br>Bounty: ฿${fmt(c.bounty)}<br>Fruit: ${c.fruit}<br>Status: ${c.alive?"Active":"Defeated"}</p><button onclick="interactRivalCrew(${i})">Interact</button></div>`).join("")}</div>
+  <button onclick="worldEngineMenu()">Back</button>`;
+  render();
+}
+function interactRivalCrew(i){
+  const c=p.world.crews[i];
+  $("screen").innerHTML=`<h2>${c.name}</h2><p>How do you want to deal with ${c.captain}?</p>
+  <div class="choices">
+    <button onclick="allyRival(${i})">Seek Alliance</button>
+    <button onclick="huntRival(${i})">Hunt Them</button>
+    <button onclick="spyRival(${i})">Spy on Them</button>
+    <button onclick="rivalCrewsMenu()">Back</button>
+  </div>`;
+}
+function allyRival(i){if(!spendAction())return;const c=p.world.crews[i];c.relationship="ally";apply({charisma:1,infamy:1});major(`You opened alliance talks with ${c.name}.`);rivalCrewsMenu()}
+function huntRival(i){if(!spendAction())return;const c=p.world.crews[i];p.battleTargetCrew=i;startBattle("rival","hard")}
+function spyRival(i){if(!spendAction())return;const c=p.world.crews[i];apply({sneak:1,intelligence:1});major(`You learned ${c.name}'s current strength: ${c.strength}.`);rivalCrewsMenu()}
+function marineWorldMenu(){
+  ensureWorld();
+  $("screen").innerHTML=`<h2>🛡️ Marine Officers</h2>
+  <div class="cardGrid">${p.world.marines.map((m,i)=>`<div class="worldCard"><h4>${m.rank} ${m.name}</h4><p>Justice: ${m.justice}<br>Strength: ${m.strength}<br>Hunts: ${m.hunts}<br>Status: ${m.alive?"Active":"Defeated"}</p><button onclick="interactMarine(${i})">Interact</button></div>`).join("")}</div>
+  <button onclick="worldEngineMenu()">Back</button>`;
+  render();
+}
+function interactMarine(i){
+  const m=p.world.marines[i];
+  $("screen").innerHTML=`<h2>${m.rank} ${m.name}</h2><div class="choices">
+  <button onclick="if(spendAction()){apply({marineRep:1,intelligence:1});major('You sent information to the Marines.');marineWorldMenu()}">Tip Them Off</button>
+  <button onclick="if(spendAction()){p.heat+=2;startBattle('marine','hard')}">Attack / Ambush</button>
+  <button onclick="if(spendAction()){apply({sneak:1,heat:-1});major('You avoided Marine attention.');marineWorldMenu()}">Avoid</button>
+  <button onclick="marineWorldMenu()">Back</button>
+  </div>`;
+}
+function territoryMenu(){
+  ensureWorld();
+  $("screen").innerHTML=`<h2>🏝 Territories</h2>
+  <div class="cardGrid">${p.world.territories.map((t,i)=>`<div class="worldCard"><h4>${t.island}</h4><span class="territoryOwner ${ownerClass(t.owner)}">${t.owner}</span><p>Region: ${t.region}<br>Wealth: ${t.wealth}<br>Stability: ${t.stability}<br>Corruption: ${t.corruption}<br>Danger: ${t.danger}<br>Crisis: ${t.crisis||"None"}</p><button onclick="territoryAction(${i})">Act Here</button></div>`).join("")}</div><button onclick="worldEngineMenu()">Back</button>`;
+  render();
+}
+function territoryAction(i){
+  const t=p.world.territories[i];
+  $("screen").innerHTML=`<h2>${t.island}</h2><p>Owner: ${t.owner}. What do you do?</p><div class="choices">
+  <button onclick="if(spendAction()){t.stability=clamp(t.stability+8,0,100);apply({honor:1,charisma:1});major('You helped stabilize '+p.world.territories[${i}].island+'.');territoryMenu()}">Help Civilians</button>
+  <button onclick="if(spendAction()){t.wealth=clamp(t.wealth-8,0,100);apply({berries:6000,infamy:1,heat:1});major('You exploited '+p.world.territories[${i}].island+'.');territoryMenu()}">Exploit Chaos</button>
+  <button onclick="if(spendAction()){t.owner=p.path==='Marine'?'Marine':p.path==='Revolutionary'?'Revolutionary':'Pirate';t.stability=clamp(t.stability-10,0,100);major('You shifted control of '+p.world.territories[${i}].island+'.');territoryMenu()}">Challenge Control</button>
+  <button onclick="territoryMenu()">Back</button>
+  </div>`;
+}
+function fruitCirculationMenu(){
+  ensureWorld();
+  $("screen").innerHTML=`<h2>🍎 Devil Fruit Circulation</h2>
+  <p>Fruits can be rumored, auctioned, hidden, held by NPCs, or re-enter circulation after deaths.</p>
+  <div class="cardGrid">${p.world.fruitsInCirculation.map(f=>`<div class="worldCard rarity${f.rarity}"><h4>${f.name}</h4><p>${f.type} · ${f.rarity}<br>Status: ${f.status}<br>Location: ${f.location||"Unknown"}<br>Holder: ${f.holder||"None known"}</p></div>`).join("")}</div><button onclick="worldEngineMenu()">Back</button>`;
+  render();
+}
+
+/* Override old world tick so v8 engine runs with aging */
+const oldWorldTick_v80 = typeof worldTick==="function" ? worldTick : null;
+function worldTick(){
+  if(oldWorldTick_v80)oldWorldTick_v80();
+  worldTickV8("age");
+}
+
+/* Add World Engine button to main menu without deleting sandbox freedom */
+const oldMainMenu_v80 = mainMenu;
+function mainMenu(){
+  oldMainMenu_v80();
+  const grid=$("screen")?.querySelector(".menuGrid");
+  if(grid && !grid.querySelector("[data-world-engine]")){
+    const b=document.createElement("button");
+    b.textContent="🌎 World Engine";
+    b.setAttribute("data-world-engine","1");
+    b.onclick=worldEngineMenu;
+    grid.insertBefore(b, grid.children[2]||null);
+  }
+}
+
+/* Add World tab */
+const oldShowTab_v80 = showTab;
+function showTab(tab,silent=false){
+  if(tab!=="world")return oldShowTab_v80(tab,silent);
+  ensureWorld();
+  $("tab").innerHTML=`<h3>World</h3>
+  <div class="worldGrid">
+    <div class="worldCard"><h4>Clock</h4><p>Year ${p.world.year}, Month ${p.world.month}</p></div>
+    <div class="worldCard"><h4>Global Chaos</h4><p>Pirate ${p.world.chaos.pirate}<br>Marine ${p.world.chaos.marine}<br>Revolutionary ${p.world.chaos.revolutionary}<br>Instability ${p.world.chaos.instability}</p></div>
+  </div>
+  <h4>Latest Headlines</h4>${p.world.newspaper.slice(0,5).map(n=>`<div class="line"><span>${n.category}</span><b>${n.text}</b></div>`).join("")||"<p>No headlines yet.</p>"}`;
+}
+const oldRenderTabs_v80 = renderTabs;
+function renderTabs(){
+  oldRenderTabs_v80();
+  if($("tabs") && !$("tabs").querySelector("[data-world-tab]")){
+    const b=document.createElement("button");
+    b.textContent="World";
+    b.setAttribute("data-world-tab","1");
+    b.onclick=()=>showTab("world");
+    $("tabs").appendChild(b);
+  }
 }
