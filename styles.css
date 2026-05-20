@@ -403,3 +403,14 @@ body{
 @media(max-width:720px){
   .v88OptionGrid{grid-template-columns:1fr}
 }
+
+
+/* v8.9 Core Bugfix */
+.v89DebugNotice{
+  border:1px solid var(--green);
+  background:rgba(99,210,151,.08);
+  color:var(--muted);
+  border-radius:14px;
+  padding:10px;
+  margin:10px 0;
+}

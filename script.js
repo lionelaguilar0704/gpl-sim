@@ -1,7 +1,7 @@
 
 "use strict";
 
-const SAVE_KEY = "gpls_save_v88";
+const SAVE_KEY = "gpls_save_v89";
 const OLD_KEYS = ["gpls_save_v70","gpls_save_v68","gpls_save_v67","gpls_save_v66","gpls_save_v65","gpls_save_v61","gpls_save_v52","gpls_save_v42"];
 let p = null;
 let currentTab = "feed";
@@ -31,7 +31,7 @@ function silent(msg){ log(msg); toast(msg,false); render(); }
 
 function newPlayer(){
   return {
-    build:"v8.8", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
+    build:"v8.9", name:"Rookie", age:10, origin:"Unknown", dream:"Unknown", path:"Undecided", rank:"None",
     portrait:"🙂", epithet:"No Epithet", region:"Home Sea", island:"Syrup Harbor",
     health:100, mood:55, energy:5, actionsLeft:5, berries:0, debt:0, bounty:0, heat:0, infamy:0, honor:0,
     strength:1, speed:1, durability:1, intelligence:1, charisma:1, sneak:1, discipline:1, leadership:0,
@@ -103,7 +103,7 @@ function checkUnlocks(){
 
 function save(){
   ensure();
-  p.build="v8.8";
+  p.build="v8.9";
   localStorage.setItem(SAVE_KEY,JSON.stringify(p));
   toast("Game saved.");
 }
@@ -115,7 +115,7 @@ function load(){
   if(!data){ setup(); return; }
   p=JSON.parse(data);
   ensure();
-  p.build="v8.8";
+  p.build="v8.9";
   save();
   mainMenu();
 }
@@ -191,7 +191,7 @@ function baseShowTab_v81(tab,silent=false){
     <h3>Inventory</h3><div class="cardGrid">${p.loot.slice(-8).map(l=>`<div class="miniCard rarity${l.rarity}"><h4>${l.rarity} ${l.name}</h4><p>Value ฿${fmt(l.value)}</p></div>`).join("")||"<p>No loot yet.</p>"}</div>`;
   if(tab==="codex")$("tab").innerHTML=`<h3>Codex</h3><div class="choices"><button onclick="fruitCodex()">Devil Fruits</button><button onclick="weaponCodex()">Weapons</button><button onclick="ownedWeapons()">Owned Weapons</button></div>`;
   if(tab==="map")$("tab").innerHTML=`<h3>Map</h3>${DATA.islands.map(i=>`<div class="line"><span>${i.name}</span><b>${i.region} · Danger ${i.danger}</b></div>`).join("")}`;
-  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.8<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
+  if(tab==="log")$("tab").innerHTML=`<h3>Game Info</h3><div class="notice">Version: v8.9<br>Save Build: ${p.build}<br>Cache-busted files: yes<br>Current URL tip: add ?v=70 if needed.</div>`;
 }
 
 function roleSummary(){
@@ -211,7 +211,7 @@ function baseSetup_v81(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Start a New Life</h2>
-    <p><b>v8.8 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
+    <p><b>v8.9 Remaster</b> rebuilds the game for stability, cleaner UI, and fewer freezes.</p>
     <div class="safeNotice notice">This version uses a clean save slot. Old saves can still be loaded, but a new life is recommended for testing.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -626,7 +626,7 @@ boot();
 
 
 /* =========================
-   v8.8 Narrative Foundation — Birth to Legend
+   v8.9 Narrative Foundation — Birth to Legend
    ========================= */
 
 const LIFE_FAMILIES=[
@@ -749,7 +749,7 @@ function v81Ensure(){
   if(!p.lifeFlags)p.lifeFlags={dreamChosen:false,traitMilestones:{},birthGenerated:false};
   if(!p.chapterLog)p.chapterLog=[];
   if(p.potential===undefined)p.potential=1;
-  p.build="v8.8";
+  p.build="v8.9";
 }
 function trait(k,v=1){
   v81Ensure();
@@ -795,7 +795,7 @@ function setup(){
   p=newPlayer();
   render();
   $("screen").innerHTML=`<h2>Begin a New Life</h2>
-    <p><b>v8.8 Narrative Foundation</b> starts at birth and builds your legend through age-up life events.</p>
+    <p><b>v8.9 Narrative Foundation</b> starts at birth and builds your legend through age-up life events.</p>
     <div class="chapterCard"><b>Concept:</b> BitLife-style aging at the core, with One Piece dreams, powers, combat, crew, rivals, and fate layered on top.</div>
     <input id="nameInput" placeholder="Character name, or leave blank for random">
     <div class="choices">
@@ -1007,7 +1007,7 @@ function showTab(tab,silent=false){
     return;
   }
   if(tab==="log"){
-    $("tab").innerHTML=`<h3>Life Chapters</h3>${(p.chapterLog||[]).slice(0,12).map(c=>`<div class="line"><span>Age ${c.age}: ${c.title}</span><b>${c.choice}</b></div>`).join("")||"<p>No chapters yet.</p>"}<h3>Game Info</h3><div class="notice">Version: v8.8<br>Save Build: ${p.build}<br>Core: BitLife-style aging, One Piece narrative systems.</div>`;
+    $("tab").innerHTML=`<h3>Life Chapters</h3>${(p.chapterLog||[]).slice(0,12).map(c=>`<div class="line"><span>Age ${c.age}: ${c.title}</span><b>${c.choice}</b></div>`).join("")||"<p>No chapters yet.</p>"}<h3>Game Info</h3><div class="notice">Version: v8.9<br>Save Build: ${p.build}<br>Core: BitLife-style aging, One Piece narrative systems.</div>`;
     return;
   }
   return baseShowTab_v81(tab,silent);
@@ -1015,7 +1015,7 @@ function showTab(tab,silent=false){
 
 
 /* =========================
-   v8.8 UI Stability Fix
+   v8.9 UI Stability Fix
    Safe mockup-style layout without render override
    ========================= */
 function v84Bar(label,val,max=100,icon=""){
@@ -1161,7 +1161,7 @@ function setup(){
 
 
 /* =========================
-   v8.8 Age-Based Energy + Life Stage Limits
+   v8.9 Age-Based Energy + Life Stage Limits
    ========================= */
 function ageEnergyLimit(age){
   if(age<=2)return 1;      // baby/toddler: tiny influence
@@ -1319,7 +1319,7 @@ function mainMenu(){
 
 
 /* =========================
-   v8.8 Fixed Action Limit
+   v8.9 Fixed Action Limit
    Keeps original-feeling set actions while age gates options.
    ========================= */
 const FIXED_YEARLY_ACTIONS_V86 = 5;
@@ -1364,7 +1364,7 @@ function mainMenu(){
 
 
 /* =========================
-   v8.8 Life Stage Action Growth
+   v8.9 Life Stage Action Growth
    Childhood 5, Teen 8, Adult 12
    ========================= */
 function ageEnergyLimit(age){
@@ -1413,7 +1413,7 @@ function mainMenu(){
 
 
 /* =========================
-   v8.8 Visible Progression + Locked Options
+   v8.9 Visible Progression + Locked Options
    ========================= */
 function v88StatPhysical(){
   return Math.floor(((p.strength||0)+(p.speed||0)+(p.durability||0))/3);
@@ -1537,3 +1537,271 @@ function visibleProgressionMenu(){
 function lifeActionsMenu(){
   visibleProgressionMenu();
 }
+
+
+/* =========================
+   v8.9 Core Bugfix + Stable Birth Flow
+   This final layer deliberately replaces fragile start/load/birth/menu helpers.
+   ========================= */
+
+function v89SafePick(arr, fallback=null){
+  return Array.isArray(arr)&&arr.length ? arr[Math.floor(Math.random()*arr.length)] : fallback;
+}
+function v89SafeEnsure(){
+  if(!p) p=newPlayer();
+  ensure();
+  if(!p.hiddenTraits)p.hiddenTraits={compassion:0,ruthless:0,greed:0,courage:0,caution:0,curiosity:0,leadership:0,ambition:0,willpower:0,fear:0,confidence:0,independence:0,luck:0,reckless:0};
+  if(!p.lifeFlags)p.lifeFlags={dreamChosen:false,traitMilestones:{},birthGenerated:false};
+  if(!p.chapterLog)p.chapterLog=[];
+  if(!p.codex)p.codex={fruits:[],weapons:[]};
+  if(!p.codex.fruits)p.codex.fruits=[];
+  if(!p.codex.weapons)p.codex.weapons=[];
+  if(!p.weapons)p.weapons=[];
+  if(!p.loot)p.loot=[];
+  if(!p.relationships)p.relationships=[];
+  if(!p.crew)p.crew=[];
+  if(!p.kingTraits)p.kingTraits={leadership:0,ambition:0,defiance:0,courage:0,presence:0,sacrifice:0,independence:0};
+  if(p.potential===undefined)p.potential=1;
+  p.build="v8.9";
+}
+function ageEnergyLimit(age){
+  if(age < 13) return 5;
+  if(age < 18) return 8;
+  if(age < 55) return 12;
+  if(age < 70) return 10;
+  return 8;
+}
+function ageStageLabel(age){
+  if(age<=2)return "Infant / Toddler";
+  if(age<=4)return "Early Childhood";
+  if(age<=8)return "Childhood";
+  if(age<=12)return "Foundation Years";
+  if(age<=17)return "Teen Identity Years";
+  if(age<=49)return "Open Sea Prime";
+  if(age<=64)return "Veteran Years";
+  return "Elder Legend";
+}
+function v85SyncEnergy(){
+  if(!p)return;
+  const limit=ageEnergyLimit(p.age||0);
+  p.energy=limit;
+  if(p.actionsLeft===undefined || p.actionsLeft>limit)p.actionsLeft=limit;
+}
+function v89ResetYearActions(){
+  if(!p)return;
+  const limit=ageEnergyLimit(p.age||0);
+  p.energy=limit;
+  p.actionsLeft=limit;
+}
+function lifePhaseName(){
+  if(!p)return "Unknown";
+  if(p.age<=4)return "Early Childhood";
+  if(p.age<=12)return "Foundation Years";
+  if(p.age<=18)return "Identity Years";
+  return "Open Sea";
+}
+function setup(){
+  p=newPlayer();
+  v89SafeEnsure();
+  render();
+  const loadBtn = hasSave()?'<button onclick="load()">Load Saved Life</button>':'';
+  $("screen").innerHTML=`
+  <div class="v84Scene">
+    <div class="v84SceneHeader">
+      <div>
+        <div class="v84Age">BEGIN LIFE</div>
+        <div class="v84Location">🌊 A new legend is about to be born</div>
+      </div>
+    </div>
+    <div class="v84EventWrap">
+      <div class="v84Parchment">
+        <h2>Great Pirate Life Sim</h2>
+        <p>Start at birth. Grow through choices. Let the sea shape your story.</p>
+        <div class="v89DebugNotice">v8.9 fixes the Be Born/startup flow and stabilizes the action menu.</div>
+        <input id="nameInput" placeholder="Character name, or leave blank for random">
+        <div class="choices">
+          <button class="primary" onclick="createBirth()">Be Born</button>
+          ${loadBtn}
+          <button onclick="clearSave()">Clear Save</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function createBirth(){
+  try{
+    p=newPlayer();
+    v89SafeEnsure();
+    const seas=["East Blue","West Blue","North Blue","South Blue"];
+    const families=[
+      {name:"Poor Dock Workers",wealth:"Poor",bonus:{berries:50,strength:1},text:"Your family survives on dock labor and favors."},
+      {name:"Working Fisher Family",wealth:"Working",bonus:{health:4,navigation:1},text:"Your family knows the sea better than most."},
+      {name:"Merchant Family",wealth:"Comfortable",bonus:{berries:1200,charisma:1},text:"Your family trades goods between islands."},
+      {name:"Marine Family",wealth:"Stable",bonus:{discipline:2,marineRep:1},text:"Justice is discussed at your dinner table."},
+      {name:"Criminal Family",wealth:"Unstable",bonus:{sneak:2,heat:1},text:"You learn early that law and survival are not the same."},
+      {name:"Noble Household",wealth:"Rich",bonus:{berries:3000,charisma:2,mood:-4},text:"You are born with status, but expectations follow you."},
+      {name:"Unknown Parents",wealth:"Unknown",bonus:{freedom:1},text:"No one knows where you came from. Maybe that matters."}
+    ];
+    const sea=v89SafePick(seas,"East Blue");
+    const family=v89SafePick(families,families[0]);
+    const nameInput=$("nameInput");
+    p.name=(nameInput&&nameInput.value&&nameInput.value.trim())||v89SafePick(DATA.names,"Rookie");
+    p.age=0;
+    p.region=sea;
+    const homeIslands=(DATA.islands||[]).filter(x=>x.region==="Home Sea");
+    p.island=(v89SafePick(homeIslands,DATA.islands[0])||{name:"Syrup Harbor"}).name;
+    p.origin=family.name;
+    p.family=family;
+    p.dream="Undiscovered";
+    p.portrait=v89SafePick(["👶","🍼","🌊","⭐"],"👶");
+    p.potential=1+Math.floor(Math.random()*5);
+    p.hiddenTraits.luck=Math.floor(Math.random()*3);
+    p.hiddenTraits.willpower=Math.floor(Math.random()*3);
+    p.hiddenTraits.ambition=Math.floor(Math.random()*2);
+    apply(family.bonus||{});
+    p.lifeFlags.birthGenerated=true;
+    p.feed.unshift(`Born in ${sea}. Family: ${family.name}. ${family.text}`);
+    v89ResetYearActions();
+    save();
+    mainMenu();
+  }catch(err){
+    console.error("Birth failed",err);
+    alert("Birth error fixed path caught: "+err.message);
+  }
+}
+function save(){
+  v89SafeEnsure();
+  localStorage.setItem(SAVE_KEY,JSON.stringify(p));
+  toast("Game saved.");
+}
+function load(){
+  let data=localStorage.getItem(SAVE_KEY);
+  if(!data){
+    const old=["gpls_save_v88","gpls_save_v87","gpls_save_v86","gpls_save_v85","gpls_save_v84","gpls_save_v81","gpls_save_v70"];
+    for(const k of old){data=localStorage.getItem(k);if(data)break;}
+  }
+  if(!data)return setup();
+  p=JSON.parse(data);
+  v89SafeEnsure();
+  v85SyncEnergy();
+  save();
+  mainMenu();
+}
+function clearSave(){
+  ["gpls_save_v89","gpls_save_v88","gpls_save_v87","gpls_save_v86","gpls_save_v85","gpls_save_v84","gpls_save_v81","gpls_save_v70"].forEach(k=>localStorage.removeItem(k));
+  setup();
+}
+function renderDashboard(){
+  if(!p){$("dashboard").innerHTML="<h2>Character</h2><p>No life started.</p>";return;}
+  v89SafeEnsure();
+  const physical=Math.floor(((p.strength||0)+(p.speed||0)+(p.durability||0))/3);
+  $("dashboard").innerHTML=`
+  <div class="v84Card">
+    <h3 class="v84Title">Character</h3>
+    <div class="v84PortraitRow">
+      <div class="v84Portrait">${p.portrait||"🙂"}</div>
+      <div>
+        <h2 style="margin:0">${p.name}</h2>
+        <div>Age: ${p.age}</div>
+        <div>${p.region}</div>
+        <div>${lifePhaseName()}</div>
+        <div>Bounty: ฿${fmt(p.bounty)}</div>
+      </div>
+    </div>
+  </div>
+  <div class="v84Card" style="margin-top:10px">
+    <h3 class="v84Title">Stats</h3>
+    ${v84Bar("Health",p.health,100,"❤️")}
+    ${v84Bar("Morale",p.mood,100,"😊")}
+    ${v84Bar("Intelligence",(p.intelligence||0)*10,100,"📘")}
+    ${v84Bar("Physical",physical*10,100,"💪")}
+    ${v84Bar("Charisma",(p.charisma||0)*10,100,"✨")}
+    ${v84Bar("Potential",(p.potential||1)*15,100,"⚡")}
+  </div>`;
+}
+function mainMenu(){
+  v89SafeEnsure();
+  v85SyncEnergy();
+  render();
+  if(p.dead)return deathScreen();
+  $("screen").innerHTML=`
+  <div class="v84Scene">
+    <div class="v84SceneHeader">
+      <div>
+        <div class="v84Age">AGE ${p.age}</div>
+        <div>${ageStageLabel(p.age)}</div>
+        <div class="v84Location">📍 ${p.island||"Unknown Island"}, ${p.region||"Unknown Sea"}</div>
+      </div>
+      <div style="text-align:right">
+        <div>Dream: <b>${p.dream||"Undiscovered"}</b></div>
+        <div>Actions: <b>${p.actionsLeft}/${p.energy}</b></div>
+        <div>Bounty: <b>฿${fmt(p.bounty)}</b></div>
+      </div>
+    </div>
+    <div class="v84EventWrap">
+      <div class="v84Parchment">
+        <div class="energyNote"><span class="lifeStageTag">${ageStageLabel(p.age)}</span><span class="lifeStageTag">Actions ${p.actionsLeft}/${p.energy}</span><br>Actions grow as you mature: Childhood 5 · Teen 8 · Adult 12. Locked options stay visible in Activities.</div>
+        <h2>${(p.chapterLog&&p.chapterLog[0])?p.chapterLog[0].title:"Life Begins"}</h2>
+        <p>${(p.chapterLog&&p.chapterLog[0])?p.chapterLog[0].result:"You have been born into the world. The sea does not know your name yet."}</p>
+        <div class="choices">
+          <button onclick="ageUp()">⭐ Continue Life / Age Up</button>
+          <button onclick="visibleProgressionMenu()">Activities</button>
+          <button onclick="showTab('life')">Review your life</button>
+        </div>
+      </div>
+    </div>
+    <div class="v84History">
+      <h3>Recent History</h3>
+      ${(p.feed||[]).slice(0,5).map(x=>`<div>• ${x}</div>`).join("")||"<div>No history yet.</div>"}
+    </div>
+  </div>
+  <div class="v84BottomActions">
+    <button onclick="visibleProgressionMenu()">🧭<br>Activities</button>
+    <button onclick="relationshipsMenu()">👥<br>Relationships</button>
+    <button onclick="ownedWeapons()">🎒<br>Inventory</button>
+    <button class="v84AgeButton" onclick="ageUp()">⭐<br>Age Up</button>
+    <button onclick="crewMenu()">☠️<br>Crew</button>
+    <button onclick="trainingMenu()">🏋️<br>Training</button>
+    <button onclick="assetsMenu()">🏠<br>Assets</button>
+    <button onclick="travelMenu()">⛵<br>Travel</button>
+  </div>`;
+  if(typeof v84RefreshRightPanel==="function")v84RefreshRightPanel();
+}
+function ageUp(){
+  if(!p||p.dead)return;
+  v89SafeEnsure();
+  p.age++;
+  v89ResetYearActions();
+  p.mood=clamp((p.mood||50)+v89SafePick([-4,-2,0,1,3],0),0,100);
+  if(p.injuries&&p.injuries.length&&Math.random()<0.35){const healed=p.injuries.shift();log(`Recovered from ${healed}.`);}
+  if(typeof worldTick==="function")worldTick();
+  const event=v89PickLifeEvent();
+  save();
+  if(event&&event.dreamEvent)return dreamChoiceEvent();
+  if(event)return showLifeEvent(event);
+  mainMenu();
+}
+function v89PickLifeEvent(){
+  if(typeof getLifePool==="function"){
+    const pool=getLifePool();
+    if(pool&&pool.length)return v89SafePick(pool);
+  }
+  return null;
+}
+function visibleProgressionMenu(){
+  v89SafeEnsure();v85SyncEnergy();
+  if(typeof v88AllOptions==="undefined"){
+    $("screen").innerHTML=`<h2>Activities</h2><div class="v88Preview">Activity system is loading. Try returning home and reopening.</div><button onclick="mainMenu()">Back</button>`;
+    return;
+  }
+  const cats=["General","Social","Combat","Crew / Career","Exploration / Power","Underworld"];
+  $("screen").innerHTML=`<h2>Activities</h2>
+  <div class="v88Preview">
+    All options are visible. Locked options show what you need, like BitLife-style progression.
+    <br><b>Age:</b> ${p.age} · <b>Actions:</b> ${p.actionsLeft}/${p.energy}
+  </div>
+  ${cats.map(cat=>v88Section(cat,v88AllOptions.filter(o=>o.cat===cat))).join("")}
+  <div class="choices"><button class="primary" onclick="mainMenu()">Back Home</button></div>`;
+  render();
+}
+function lifeActionsMenu(){visibleProgressionMenu();}

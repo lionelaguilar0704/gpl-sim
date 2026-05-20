@@ -91,3 +91,10 @@ This is a clean rebuild of the core game files to reduce freezing, duplicate sta
 - Categories: General, Social, Combat, Crew/Career, Exploration/Power, Underworld.
 - More BitLife-like progression visibility.
 - Age and stats unlock options instead of hiding them.
+
+
+## v8.9 Core Bugfix + Stable Birth Flow
+- Fixes Be Born/startup failure.
+- Replaces fragile layered birth/setup/load with stable final overrides.
+- Keeps v8.8 visible progression and v8.7 life-stage action counts.
+- Stabilizes main menu, dashboard, save/load, and age-up.
