@@ -35,3 +35,10 @@ Major cohesive build:
 - Continue now always closes modal and forces dashboard render.
 - Adds tap-outside emergency escape.
 - Adds old save fallback from v10.2/v10.1/v10.0.
+
+
+## v10.4 Safari top() Fix
+- Fixes iPad/Safari error: "top is not a function".
+- Renames the topbar helper away from protected browser window.top.
+- Replaces render with a Safari-safe version.
+- Continue from Birth now routes to dashboard.
