@@ -9,3 +9,7 @@
 /* v10.2 Start Flow Hotfix */
 .v102Start .startPanel button{display:block;width:100%;margin:8px 0}
 #createLifePanel{scroll-margin-top:20px}
+
+/* v10.3 Modal Continue Hotfix */
+#continueModalBtn{touch-action:manipulation; -webkit-tap-highlight-color: transparent;}
+.modalCard{max-height:82vh; overflow:auto;}

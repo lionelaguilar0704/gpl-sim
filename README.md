@@ -28,3 +28,10 @@ Major cohesive build:
 - Begin Life has safer fallback handling.
 - Premium origins/races stay visible but locked.
 - Keeps v10.0/v10.1 systems.
+
+
+## v10.3 Modal Continue Hotfix
+- Fixes Birth popup Continue trapping the player.
+- Continue now always closes modal and forces dashboard render.
+- Adds tap-outside emergency escape.
+- Adds old save fallback from v10.2/v10.1/v10.0.
