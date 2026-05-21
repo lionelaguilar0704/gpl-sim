@@ -1,5 +1,5 @@
 
-const SAVE_KEY="gpls_save_v100";let s=null,currentScreen="dashboard",filter="All",selectedOrigin="dock",selectedRace="human",selectedIsland=null,selectedAction=null,battle=null;
+const SAVE_KEY="gpls_save_v102";let s=null,currentScreen="dashboard",filter="All",selectedOrigin="dock",selectedRace="human",selectedIsland=null,selectedAction=null,battle=null;
 const $=id=>document.getElementById(id),pick=a=>a[Math.floor(Math.random()*a.length)],clamp=(n,a,b)=>Math.max(a,Math.min(b,n)),fmt=n=>Math.round(n||0).toLocaleString();
 function toast(m){let t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
 function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(s))}
@@ -12,7 +12,7 @@ function start(){let app=$("app");app.innerHTML=`<div class="startHero"><div><di
 function choiceHTML(o,type){let locked=o.cost>0;return `<div class="choice ${type==='origin'&&o.id===selectedOrigin||type==='race'&&o.id===selectedRace?'active':''}" onclick="selectChoice('${type}','${o.id}')"><div class="icon">${o.icon}</div><div><b>${o.name}</b><div class="small">${o.desc}</div><div class="${locked?'req':'small'}">${locked?'💎 '+o.cost+' Gems':'Free'} · ${bonusText(o.bonus)}</div></div><div>${locked?'🔒':''}</div></div>`}
 function bonusText(b){return Object.entries(b||{}).map(([k,v])=>`+${v} ${k}`).join(" · ")}
 function selectChoice(type,id){if(type==="origin")selectedOrigin=id;else selectedRace=id;start();setTimeout(()=>document.querySelector('#create')?.scrollIntoView(),0)}
-function newLife(){let o=DATA.origins.find(x=>x.id===selectedOrigin),r=DATA.races.find(x=>x.id===selectedRace);if((o.cost||0)>0)return toast("Origin locked. Earn gems by playing.");if((r.cost||0)>0)return toast("Race locked. Earn gems by playing.");let island=chooseIsland(o,r);s={version:"v10.1",name:$("nm").value||"Rookie",nick:$("nick").value,gender:$("gender").value,origin:o.name,race:r.name,age:0,sea:island.sea,island:island.name,dream:"Undiscovered",title:"Child",beli:0,gems:0,fame:0,bounty:0,infamy:0,hp:100,maxHp:100,energy:5,mood:80,hunger:85,exp:0,level:1,actionsLeft:5,actionsMax:5,stats:{strength:5,speed:5,stamina:5,defense:5,haki:0,devilFruit:0,intelligence:5,charisma:5,willpower:5,discipline:0,sneak:0,navigation:0,perception:0,crafting:0,medicine:0,sword:0},reps:{marines:0,pirates:0,revolutionaries:0,underworld:0,civilians:0},crew:[],relationships:[],inventory:[...DATA.items],weapons:[DATA.weapons[0]],fruits:[],news:DATA.news.map((text,i)=>({text,day:i+1})),log:[],effects:[],settings:{difficulty:$("diff").value,eventFrequency:$("freq").value,permadeath:$("pd").value},unlocks:{origins:[],races:[]}};applyBonus(o.bonus);applyBonus(r.bonus);s.maxHp+=(r.bonus.hp||0);s.hp=s.maxHp;s.log.unshift(`Born in ${s.sea} at ${s.island}. Origin: ${o.name}. Race: ${r.name}.`);save();modal("Birth",`You were born in ${s.sea}. Your home is ${s.island}. Your path has not been chosen yet.`,[{icon:"⚓",text:`Origin: ${o.name}`},{icon:r.icon,text:`Race: ${r.name}`},{icon:"💎",text:"+2 Gems",apply:()=>s.gems+=2}],()=>render())}
+function newLife(){let o=DATA.origins.find(x=>x.id===selectedOrigin),r=DATA.races.find(x=>x.id===selectedRace);if((o.cost||0)>0)return toast("Origin locked. Earn gems by playing.");if((r.cost||0)>0)return toast("Race locked. Earn gems by playing.");let island=chooseIsland(o,r);s={version:"v10.2",name:$("nm").value||"Rookie",nick:$("nick").value,gender:$("gender").value,origin:o.name,race:r.name,age:0,sea:island.sea,island:island.name,dream:"Undiscovered",title:"Child",beli:0,gems:0,fame:0,bounty:0,infamy:0,hp:100,maxHp:100,energy:5,mood:80,hunger:85,exp:0,level:1,actionsLeft:5,actionsMax:5,stats:{strength:5,speed:5,stamina:5,defense:5,haki:0,devilFruit:0,intelligence:5,charisma:5,willpower:5,discipline:0,sneak:0,navigation:0,perception:0,crafting:0,medicine:0,sword:0},reps:{marines:0,pirates:0,revolutionaries:0,underworld:0,civilians:0},crew:[],relationships:[],inventory:[...DATA.items],weapons:[DATA.weapons[0]],fruits:[],news:DATA.news.map((text,i)=>({text,day:i+1})),log:[],effects:[],settings:{difficulty:$("diff").value,eventFrequency:$("freq").value,permadeath:$("pd").value},unlocks:{origins:[],races:[]}};applyBonus(o.bonus);applyBonus(r.bonus);s.maxHp+=(r.bonus.hp||0);s.hp=s.maxHp;s.log.unshift(`Born in ${s.sea} at ${s.island}. Origin: ${o.name}. Race: ${r.name}.`);save();modal("Birth",`You were born in ${s.sea}. Your home is ${s.island}. Your path has not been chosen yet.`,[{icon:"⚓",text:`Origin: ${o.name}`},{icon:r.icon,text:`Race: ${r.name}`},{icon:"💎",text:"+2 Gems",apply:()=>s.gems+=2}],()=>render())}
 function chooseIsland(o,r){if(o.id==="marinefam")return DATA.islands.find(i=>i.id==="shells");if(o.id==="dock")return pick(DATA.islands.filter(i=>["foosha","orange","syrup"].includes(i.id)));return pick(DATA.islands.filter(i=>i.sea==="East Blue"))}
 function topbar(){return `<div class="topbar"><div class="logo"><div class="logoIcon">☠️</div><div><div class="title">Great Pirate Life Sim <span class="ver">v10.0</span></div><div class="small">Living World Remaster Hotfix</div></div></div><div class="topStats"><span>฿ <b>${fmt(s.beli)}</b></span><span>💎 <b>${s.gems}</b></span><span>🗽 <b>${s.fame}</b></span><button onclick="save();toast('Saved')">Save</button></div></div>`}
 function nav(){return `<div class="nav">${[["dashboard","🏠 Dashboard"],["actions","⚔️ Actions"],["crew","☠️ Crew"],["world","🌎 World"],["inventory","🎒 Inventory"],["logbook","📖 Logbook"],["relationships","❤️ Relationships"],["settings","⚙️ Settings"]].map(t=>`<button class="${currentScreen===t[0]?'active':''}" onclick="currentScreen='${t[0]}';render()">${t[1]}</button>`).join("")}</div>`}
@@ -71,7 +71,7 @@ function randomEvent(){if(s.age<13)return pick(["You heard sailors tell stories 
 function render(){if(!s)return start();norm();let main=currentScreen==="battle"?battleScreen():currentScreen==="dashboard"?dashboard():currentScreen==="actions"?actions():currentScreen==="crew"?crew():currentScreen==="world"?world():currentScreen==="inventory"?inventory():currentScreen==="logbook"?logbook():currentScreen==="relationships"?relationships():settings();let full=currentScreen==="battle";$("app").innerHTML=top()+(!full?nav():"")+`<div class="layout">${full?main:left()+main+(currentScreen==="world"?"":right())}</div>`+(!full?`<button class="bottomAge gold" onclick="ageUp()">⭐ AGE UP<br><span class="small">Next Year</span></button>`:"")}
 
 
-/* v10.1 Boot Hotfix
+/* v10.2 Boot Hotfix
    Fixes browser-global conflicts and prevents blank startup screens.
 */
 function safeDefaults(){
@@ -121,5 +121,215 @@ try{
   const app=document.getElementById("app");
   if(app && app.textContent.includes("Loading Great Pirate Life Sim")) bootSafe();
 }catch(e){console.error(e);}
+
+
+
+/* =========================
+   v10.2 Start Flow Hotfix
+   Stable first screen + direct character creation.
+   ========================= */
+
+let createVisible_v102 = false;
+
+function start(){
+  safeDefaults();
+  const app=document.getElementById("app");
+  if(!app) return;
+  app.innerHTML = `
+  <div class="startHero v102Start">
+    <div class="startPanel">
+      <h2>☠️ Menu</h2>
+      <button class="primary" onclick="showCreateLife()">New Life</button>
+      <button onclick="load()">Load Game</button>
+      <button onclick="showCreateLife()">Settings</button>
+      <button onclick="alert('Great Pirate Life Sim v10.2')">Credits</button>
+    </div>
+
+    <div class="bigLogo">
+      <div class="logoIcon">☠️</div>
+      <h1>GREAT<br>PIRATE<br>LIFE SIM</h1>
+      <h2>Live Your Legend</h2>
+      <p class="small">You begin at birth. Your path is shaped by life, not chosen at the menu.</p>
+    </div>
+
+    <div class="startPanel">
+      <h3>The Sea Is Calling...</h3>
+      <p>• Choose your name, origin, race, and settings.</p>
+      <p>• Your island is chosen based on your life.</p>
+      <p>• Pirate, Marine, Revolutionary, or Wanderer emerges through play.</p>
+      <button class="gold" onclick="showCreateLife()">Create Character</button>
+    </div>
+
+    <div id="createLifePanel" class="startCreate" style="display:${createVisible_v102?'grid':'none'}">
+      ${createLifeHTML()}
+    </div>
+  </div>`;
+}
+
+function showCreateLife(){
+  createVisible_v102 = true;
+  start();
+  setTimeout(()=>document.getElementById("createLifePanel")?.scrollIntoView({behavior:"smooth",block:"start"}),50);
+}
+
+function createLifeHTML(){
+  const originCards = DATA.origins.map(o=>choiceHTML_v102(o,"origin")).join("");
+  const raceCards = DATA.races.map(r=>choiceHTML_v102(r,"race")).join("");
+  return `
+    <div class="startPanel">
+      <h3>1. Who are you?</h3>
+      <div class="portrait">🙂</div>
+      <label>Name</label>
+      <input id="nm" value="Lionel Aguilar">
+      <label>Nickname</label>
+      <input id="nick" placeholder="Optional">
+      <label>Gender</label>
+      <select id="gender"><option>Male</option><option>Female</option><option>Other</option></select>
+    </div>
+    <div class="startPanel">
+      <h3>2. Origin</h3>
+      <div id="originList">${originCards}</div>
+    </div>
+    <div class="startPanel">
+      <h3>3. Race</h3>
+      <div id="raceList">${raceCards}</div>
+    </div>
+    <div class="startPanel">
+      <h3>4. Life Settings</h3>
+      <label>Difficulty</label>
+      <select id="diff"><option>Normal</option><option>Easy</option><option>Hard</option></select>
+      <label>Event Frequency</label>
+      <select id="freq"><option>High</option><option>Normal</option><option>Low</option></select>
+      <label>Permadeath</label>
+      <select id="pd"><option>Off</option><option>On</option></select>
+      <button class="gold" onclick="newLife()">BEGIN LIFE</button>
+      <p class="small">Premium origins/races are visible but locked until you earn enough gems.</p>
+    </div>`;
+}
+
+function choiceHTML_v102(o,type){
+  const active = (type==="origin" && o.id===selectedOrigin) || (type==="race" && o.id===selectedRace);
+  const locked = (o.cost||0)>0;
+  return `<div class="choice ${active?'active':''}" onclick="selectChoice_v102('${type}','${o.id}')">
+    <div class="icon">${o.icon}</div>
+    <div>
+      <b>${o.name}</b>
+      <div class="small">${o.desc}</div>
+      <div class="${locked?'req':'small'}">${locked?'🔒 💎 '+o.cost+' Gems':'Free'} · ${bonusText(o.bonus)}</div>
+    </div>
+    <div>${active?'✓':locked?'🔒':''}</div>
+  </div>`;
+}
+
+function selectChoice_v102(type,id){
+  if(type==="origin") selectedOrigin=id;
+  if(type==="race") selectedRace=id;
+  createVisible_v102 = true;
+  start();
+  setTimeout(()=>document.getElementById(type==="origin"?"originList":"raceList")?.scrollIntoView({behavior:"smooth",block:"center"}),30);
+}
+
+// Replace newLife with safer version that never silently fails.
+function newLife(){
+  try{
+    safeDefaults();
+    const origin = DATA.origins.find(x=>x.id===selectedOrigin) || DATA.origins[0];
+    const race = DATA.races.find(x=>x.id===selectedRace) || DATA.races[0];
+
+    if((origin.cost||0)>0) return toast("Origin locked. Earn gems by playing.");
+    if((race.cost||0)>0) return toast("Race locked. Earn gems by playing.");
+
+    const nameEl=document.getElementById("nm");
+    const nickEl=document.getElementById("nick");
+    const genderEl=document.getElementById("gender");
+    const diffEl=document.getElementById("diff");
+    const freqEl=document.getElementById("freq");
+    const pdEl=document.getElementById("pd");
+
+    const home = chooseIsland(origin,race) || DATA.islands[0];
+
+    s = {
+      version:"v10.2",
+      name:(nameEl&&nameEl.value.trim()) || "Rookie",
+      nick:(nickEl&&nickEl.value.trim()) || "",
+      gender:(genderEl&&genderEl.value) || "Unknown",
+      origin:origin.name,
+      race:race.name,
+      age:0,
+      sea:home.sea,
+      island:home.name,
+      dream:"Undiscovered",
+      title:"Child",
+      beli:0,
+      gems:2,
+      fame:0,
+      bounty:0,
+      infamy:0,
+      hp:100,
+      maxHp:100,
+      energy:5,
+      mood:80,
+      hunger:85,
+      exp:0,
+      level:1,
+      actionsLeft:5,
+      actionsMax:5,
+      stats:{strength:5,speed:5,stamina:5,defense:5,haki:0,devilFruit:0,intelligence:5,charisma:5,willpower:5,discipline:0,sneak:0,navigation:0,perception:0,crafting:0,medicine:0,sword:0,survival:0,swimming:0,engineering:0,luck:0,potential:0,reflex:0},
+      reps:{marines:0,pirates:0,revolutionaries:0,underworld:0,civilians:0},
+      crew:[],
+      relationships:[],
+      inventory:[...DATA.items],
+      weapons:[DATA.weapons[0]],
+      fruits:[],
+      news:DATA.news.map((text,i)=>({text,day:i+1})),
+      log:[],
+      effects:[],
+      settings:{difficulty:(diffEl&&diffEl.value)||"Normal",eventFrequency:(freqEl&&freqEl.value)||"High",permadeath:(pdEl&&pdEl.value)||"Off"},
+      unlocks:{origins:[],races:[]}
+    };
+
+    applyBonus(origin.bonus);
+    applyBonus(race.bonus);
+    s.maxHp += (race.bonus && race.bonus.hp) ? race.bonus.hp : 0;
+    s.hp = s.maxHp;
+    s.log.unshift(`Born in ${s.sea} at ${s.island}. Origin: ${origin.name}. Race: ${race.name}.`);
+
+    save();
+
+    modal("Birth",`You were born in ${s.sea}. Your home is ${s.island}. Your path has not been chosen yet.`,[
+      {icon:"⚓",text:`Origin: ${origin.name}`},
+      {icon:race.icon,text:`Race: ${race.name}`},
+      {icon:"💎",text:"+2 Starting Gems"}
+    ],()=>{screen="dashboard";render();});
+  }catch(err){
+    console.error("newLife failed",err);
+    alert("Start error: "+err.message);
+  }
+}
+
+function bootSafe(){
+  try{
+    safeDefaults();
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(raw){
+      try{ s=JSON.parse(raw); norm(); render(); return; }
+      catch(e){ localStorage.removeItem(SAVE_KEY); }
+    }
+    start();
+  }catch(err){
+    console.error("Boot failed:", err);
+    const app=document.getElementById("app");
+    if(app){
+      app.innerHTML=`<div class="startHero" style="display:block;min-height:100vh;padding:20px">
+        <div class="startPanel" style="max-width:680px;margin:60px auto">
+          <h1>☠️ Great Pirate Life Sim</h1>
+          <h2>Startup Recovery</h2>
+          <p>${err.message}</p>
+          <button class="primary" onclick="localStorage.removeItem('${SAVE_KEY}'); s=null; createVisible_v102=true; start()">Start New Life</button>
+        </div>
+      </div>`;
+    }
+  }
+}
 
 bootSafe();

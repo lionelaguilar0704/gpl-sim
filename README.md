@@ -20,3 +20,11 @@ Major cohesive build:
 - Adds startup recovery screen instead of blank page.
 - Hardens save normalization.
 - Keeps v10.0 Living World Remaster features.
+
+
+## v10.2 Start Flow Hotfix
+- Fixes being stuck on first screen.
+- New Life now directly reveals character creation.
+- Begin Life has safer fallback handling.
+- Premium origins/races stay visible but locked.
+- Keeps v10.0/v10.1 systems.
