@@ -12,3 +12,11 @@ Major cohesive build:
 - Crew/Marine state changes after joining.
 - Quick move-based combat screen.
 - Stable save/load/start flow.
+
+
+## v10.1 Boot Hotfix
+- Fixes blank gradient startup screen.
+- Renames risky browser globals that may crash Safari/iPad browsers.
+- Adds startup recovery screen instead of blank page.
+- Hardens save normalization.
+- Keeps v10.0 Living World Remaster features.
