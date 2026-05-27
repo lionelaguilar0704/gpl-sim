@@ -63,3 +63,54 @@
   color:#9fd5ff;
   font-weight:900;
 }
+
+/* v14.1 Stable Core Integration */
+.shipStat,.factionLine{
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.shipCard2,.factionCard,.territoryCard{
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  padding:12px;
+  background:rgba(255,255,255,.035);
+  margin-bottom:10px;
+}
+.controlBar{
+  height:12px;
+  border-radius:999px;
+  background:#050914;
+  border:1px solid rgba(255,255,255,.12);
+  overflow:hidden;
+  display:flex;
+  margin:8px 0;
+}
+.controlBar span{display:block;height:100%}
+.controlMarine{background:#5aa7ff}
+.controlPirate{background:#ff5c5c}
+.controlCivilian{background:#64d879}
+.controlUnderworld{background:#b66cff}
+.territoryGrid,.shipInventory{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.seaEvent{
+  border-left:4px solid #5aa7ff;
+  background:rgba(90,167,255,.08);
+  border-radius:10px;
+  padding:12px;
+  margin:10px 0;
+}
+.integrationNote{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+  background:rgba(244,196,91,.08);
+  color:var(--gold);
+}
+@media(max-width:650px){
+  .territoryGrid,.shipInventory{grid-template-columns:1fr}
+}

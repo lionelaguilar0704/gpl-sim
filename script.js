@@ -1,5 +1,5 @@
 
-const SAVE_KEY="gpls_save_v120";
+const SAVE_KEY="gpls_save_v141";
 const DATA={names:["Lionel","Kaid","Lian","Nero","Ember","Mako","Orion","Cale","Riven","Sora","Vale","Juno","Kai","Amanda","Riku","Luna"],origins:[["dock","Dock Rat","⚓",0,"You grew up around docks.",{strength:1,beli:50,survival:1}],["marinefam","Marine Family","🛡️",0,"Justice shaped your home.",{discipline:1,intelligence:1,marineRep:1}],["noble","Noble Runaway","👑",0,"You fled comfort.",{charisma:1,beli:100,luck:1}],["shipwright","Shipwright Family","⚒️",0,"Builders raised you.",{intelligence:1,crafting:1,engineering:1}],["fisher","Fisher Family","🌊",0,"The sea raised you.",{stamina:1,swimming:1,perception:1}],["unknown","Unknown Past","❓",0,"Your past is a mystery.",{potential:2,luck:1}],["performer","Street Performer","🎭",0,"Crowds taught you charm.",{charisma:2,beli:80}],["scholar","Scholar Family","📚",0,"Books shaped you.",{intelligence:2,perception:1}],["merchant","Merchant Child","💰",0,"You learned trade.",{beli:300,charisma:1}],["doctor","Doctor Apprentice","🏥",0,"You learned medicine.",{medicine:2,intelligence:1}],["blacksmith","Blacksmith Child","🔨",0,"Steel surrounded you.",{crafting:1,strength:1}],["wano","Wano Exile","⚔️",600,"A blade follows you.",{sword:3,willpower:1,beli:200}],["piratechild","Pirate Captain Child","☠️",800,"Your name worries Marines.",{fame:5,infamy:2,charisma:1}],["godvalley","Survivor of God Valley","🔥",750,"The world remembers.",{potential:5,willpower:3}],["celestial","Celestial Dragon Escapee","🌟",1500,"You escaped the untouchable.",{charisma:4,potential:3,heat:5}],["ancient","Ancient Bloodline","🌑",2500,"???",{potential:6,willpower:4,luck:2}]].map(x=>({id:x[0],name:x[1],icon:x[2],cost:x[3],desc:x[4],bonus:x[5]})),races:[["human","Human","👤",0,"Adaptable growth.",{potential:1,xpBoost:5}],["fishman","Fishman","🐟",0,"Sea-born power.",{strength:3,stamina:2,swimming:3}],["skypiean","Skypiean","☁️",0,"Sky perception.",{perception:2,speed:1}],["mink","Mink","🦴",0,"Fast Electro warriors.",{speed:2,reflex:2}],["halfgiant","Half Giant","⚔️",750,"Large but mobile.",{strength:3,stamina:3}],["giant","Giant","🗿",1500,"Monster strength.",{strength:6,stamina:5,hp:30}],["buccaneer","Buccaneer","💪",1800,"Impossible endurance.",{strength:4,stamina:4,willpower:3}],["lunarian","Lunarian","🔥",3000,"Flame and defense.",{strength:4,stamina:4,haki:3}],["hybrid","Ancient Hybrid","🌑",5000,"Unknown power.",{potential:8,luck:3}]].map(x=>({id:x[0],name:x[1],icon:x[2],cost:x[3],desc:x[4],bonus:x[5]})),islands:[["foosha","Foosha Village","East Blue",1,1200,1,2,"Clear","Peaceful village where legends begin.",["Tavern","Docks","Market","Hill Path"]],["shells","Shells Town","East Blue",2,4000,7,2,"Sunny","Marine-controlled town.",["Marine Base","Docks","Market","Training Yard"]],["orange","Orange Town","East Blue",3,3500,3,6,"Windy","Lively port with pirate trouble.",["Tavern","Market","Alleys","Docks"]],["syrup","Syrup Village","East Blue",2,900,1,3,"Cloudy","Quiet hills and rumors.",["Mansion Road","Village Square","Forest","Docks"]],["loguetown","Loguetown","East Blue",5,12000,6,7,"Rainy","Town of beginnings and endings.",["Execution Square","Weapon Shop","Tavern","Docks"]],["moonveil","Moonveil Island","Grand Line",6,5000,4,8,"Stormy","Mysterious storm island.",["Ruins","Black Market","Port","Wilderness"]]].map(x=>({id:x[0],name:x[1],sea:x[2],danger:x[3],pop:x[4],marine:x[5],pirate:x[6],weather:x[7],desc:x[8],places:x[9]})),weapons:[{name:"Rusty Sword",type:"Weapon",rarity:"Common",power:4,equip:true,desc:"A worn sword."},{name:"Iron Sword",type:"Weapon",rarity:"Common",power:8,equip:true,desc:"A sturdy blade."},{name:"Flintlock Pistol",type:"Weapon",rarity:"Common",power:6,equip:true,desc:"A simple pistol."},{name:"Graded Blade III",type:"Weapon",rarity:"Rare",power:18,equip:true,desc:"A reliable graded blade."}],items:[{name:"Small Med Kit",type:"Consumable",rarity:"Common",qty:2,desc:"Restores 20 HP.",effect:"heal"},{name:"Energy Meat",type:"Consumable",rarity:"Common",qty:3,desc:"Restores 1 action.",effect:"energy"},{name:"Treasure Map",type:"Map",rarity:"Uncommon",qty:1,desc:"Starts a treasure event.",effect:"map"},{name:"Rumor Sheet",type:"Rumor",rarity:"Common",qty:1,desc:"Reveals an island event.",effect:"rumor"},{name:"Mystery Box",type:"Box",rarity:"Rare",qty:1,desc:"Open for a random reward.",effect:"box"},{name:"Log Pose",type:"Key Item",rarity:"Rare",qty:1,desc:"Unlocks dangerous travel.",effect:"key"}],fruits:[{name:"Smoke Body Fruit",type:"Logia",rarity:"Epic",power:28,desc:"Become smoke."},{name:"Wolf-Wolf Fruit",type:"Zoan",rarity:"Uncommon",power:13,desc:"Wolf transformation."},{name:"Barrier-Barrier Fruit",type:"Paramecia",rarity:"Rare",power:20,desc:"Create barriers."}],news:["Marine patrols increased near Shells Town.","A rare fruit merchant was seen near Orange Town.","Pirates have been extorting merchants.","Strange weather patterns are forming near the Grand Line.","A bounty hunter was spotted asking questions."]};
 let S=null,page="dashboard",actionFilter="All",selectedOrigin="dock",selectedRace="human",selectedIsland=null,currentBattle=null;
 const $=id=>document.getElementById(id),pick=a=>a[Math.floor(Math.random()*a.length)],clamp=(n,a,b)=>Math.max(a,Math.min(b,n)),fmt=n=>Math.round(n||0).toLocaleString();
@@ -9,18 +9,18 @@ function normalize(){if(!S)return;S.actionsMax=actionsMax();if(S.actionsLeft==nu
 function actionsMax(){if(!S)return 5;if(S.age<13)return 5;if(S.age<18)return 8;if(S.age<55)return 12;if(S.age<70)return 10;return 8}
 function applyBonus(o){Object.entries(o||{}).forEach(([k,v])=>{if(k in S.stats)S.stats[k]+=v;else S[k]=(S[k]||0)+v})}
 function bonusText(b){return Object.entries(b||{}).map(([k,v])=>`+${v} ${k}`).join(" · ")}
-function start(){document.getElementById("app").innerHTML=`<div class="startHero"><div><div class="startPanel"><button class="primary" onclick="showCreate()">☠️ New Life</button><button onclick="load()">🧭 Load Game</button><button>⚙️ Settings</button></div><div class="startPanel" style="margin-top:10px"><h3>The Sea Is Calling...</h3><p>You start at birth. Your path is earned through choices.</p></div></div><div class="bigLogo"><div class="logoIcon">☠️</div><h1>GREAT<br>PIRATE<br>LIFE SIM</h1><h2>Living World Foundation</h2></div><div class="startPanel"><h3>v12.0</h3><p>Purpose-based inventory.</p><p>Meaningful levels.</p><p>Outcome popups.</p><p>Stable rebuilt foundation.</p><button class="gold" onclick="showCreate()">Create Character</button></div><div id="create" class="startCreate" style="display:none">${createHTML()}</div></div>`}
+function start(){document.getElementById("app").innerHTML=`<div class="startHero"><div><div class="startPanel"><button class="primary" onclick="showCreate()">☠️ New Life</button><button onclick="load()">🧭 Load Game</button><button>⚙️ Settings</button></div><div class="startPanel" style="margin-top:10px"><h3>The Sea Is Calling...</h3><p>You start at birth. Your path is earned through choices.</p></div></div><div class="bigLogo"><div class="logoIcon">☠️</div><h1>GREAT<br>PIRATE<br>LIFE SIM</h1><h2>Living World Foundation</h2></div><div class="startPanel"><h3>v14.1</h3><p>Purpose-based inventory.</p><p>Meaningful levels.</p><p>Outcome popups.</p><p>Stable rebuilt foundation.</p><button class="gold" onclick="showCreate()">Create Character</button></div><div id="create" class="startCreate" style="display:none">${createHTML()}</div></div>`}
 function showCreate(){document.getElementById("create").style.display="grid";document.getElementById("create").scrollIntoView({behavior:"smooth"})}
 function createHTML(){return `<div class="startPanel"><h3>1. Identity</h3><div class="portrait">🙂</div><label>Name</label><input id="nm" value="Lionel Aguilar"><label>Nickname</label><input id="nick" placeholder="Optional"><label>Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Other</option></select></div><div class="startPanel"><h3>2. Origin</h3>${DATA.origins.map(o=>choice(o,"origin")).join("")}</div><div class="startPanel"><h3>3. Race</h3>${DATA.races.map(r=>choice(r,"race")).join("")}</div><div class="startPanel"><h3>4. Settings</h3><label>Difficulty</label><select id="diff"><option>Normal</option><option>Easy</option><option>Hard</option></select><button class="gold" onclick="newLife()">BEGIN LIFE</button><p class="small">Locked races/origins are earned with gems from play.</p></div>`}
 function choice(o,t){let active=(t==="origin"&&o.id===selectedOrigin)||(t==="race"&&o.id===selectedRace),locked=o.cost>0;return `<div class="choice ${active?'active':''}" onclick="selectChoice('${t}','${o.id}')"><div class="icon">${o.icon}</div><div><b>${o.name}</b><div class="small">${o.desc}</div><div class="${locked?'req':'small'}">${locked?'🔒 💎 '+o.cost:'Free'} · ${bonusText(o.bonus)}</div></div><div>${active?'✓':locked?'🔒':''}</div></div>`}
 function selectChoice(t,id){if(t==="origin")selectedOrigin=id;else selectedRace=id;start();showCreate()}
 function chooseIsland(o){if(o.id==="marinefam")return DATA.islands.find(i=>i.id==="shells");if(o.id==="dock")return DATA.islands.find(i=>i.id==="foosha");return DATA.islands.find(i=>i.sea==="East Blue")}
-function newLife(){let o=DATA.origins.find(x=>x.id===selectedOrigin)||DATA.origins[0],r=DATA.races.find(x=>x.id===selectedRace)||DATA.races[0];if(o.cost>0)return alert("Origin locked. Earn gems.");if(r.cost>0)return alert("Race locked. Earn gems.");let home=chooseIsland(o);S={version:"v12.0",name:document.getElementById("nm").value||"Rookie",nick:document.getElementById("nick").value||"",gender:document.getElementById("gender").value,origin:o.name,race:r.name,age:0,sea:home.sea,island:home.name,dream:"Undiscovered",title:"Child",beli:0,gems:2,fame:0,bounty:0,infamy:0,hp:100,maxHp:100,mood:80,exp:0,level:1,actionsLeft:5,actionsMax:5,equipped:"Rusty Sword",stats:{strength:5,speed:5,stamina:5,defense:5,haki:0,devilFruit:0,intelligence:5,charisma:5,willpower:5,discipline:0,sneak:0,navigation:0,perception:0,crafting:0,medicine:0,sword:0,survival:0,swimming:0,engineering:0,luck:0,potential:0,reflex:0},reps:{marines:0,pirates:0,revolutionaries:0,underworld:0,civilians:0},crew:[],relationships:[],inventory:JSON.parse(JSON.stringify(DATA.items)),weapons:[DATA.weapons[0]],fruits:[],news:DATA.news.map((text,i)=>({text,day:i+1})),log:[],effects:[],settings:{difficulty:document.getElementById("diff").value},unlocks:{origins:[],races:[]}};applyBonus(o.bonus);applyBonus(r.bonus);S.maxHp+=(r.bonus.hp||0);S.hp=S.maxHp;S.log.unshift(`Born in ${S.sea} at ${S.island}. Origin: ${o.name}. Race: ${r.name}.`);save();popup("Birth",`You were born in ${S.sea}. Your path has not been chosen yet.`,[{icon:"⚓",text:`Origin: ${o.name}`},{icon:r.icon,text:`Race: ${r.name}`},{icon:"💎",text:"+2 Starting Gems"}],()=>render())}
+function newLife(){let o=DATA.origins.find(x=>x.id===selectedOrigin)||DATA.origins[0],r=DATA.races.find(x=>x.id===selectedRace)||DATA.races[0];if(o.cost>0)return alert("Origin locked. Earn gems.");if(r.cost>0)return alert("Race locked. Earn gems.");let home=chooseIsland(o);S={version:"v14.1",name:document.getElementById("nm").value||"Rookie",nick:document.getElementById("nick").value||"",gender:document.getElementById("gender").value,origin:o.name,race:r.name,age:0,sea:home.sea,island:home.name,dream:"Undiscovered",title:"Child",beli:0,gems:2,fame:0,bounty:0,infamy:0,hp:100,maxHp:100,mood:80,exp:0,level:1,actionsLeft:5,actionsMax:5,equipped:"Rusty Sword",stats:{strength:5,speed:5,stamina:5,defense:5,haki:0,devilFruit:0,intelligence:5,charisma:5,willpower:5,discipline:0,sneak:0,navigation:0,perception:0,crafting:0,medicine:0,sword:0,survival:0,swimming:0,engineering:0,luck:0,potential:0,reflex:0},reps:{marines:0,pirates:0,revolutionaries:0,underworld:0,civilians:0},crew:[],relationships:[],inventory:JSON.parse(JSON.stringify(DATA.items)),weapons:[DATA.weapons[0]],fruits:[],news:DATA.news.map((text,i)=>({text,day:i+1})),log:[],effects:[],settings:{difficulty:document.getElementById("diff").value},unlocks:{origins:[],races:[]}};applyBonus(o.bonus);applyBonus(r.bonus);S.maxHp+=(r.bonus.hp||0);S.hp=S.maxHp;S.log.unshift(`Born in ${S.sea} at ${S.island}. Origin: ${o.name}. Race: ${r.name}.`);save();popup("Birth",`You were born in ${S.sea}. Your path has not been chosen yet.`,[{icon:"⚓",text:`Origin: ${o.name}`},{icon:r.icon,text:`Race: ${r.name}`},{icon:"💎",text:"+2 Starting Gems"}],()=>render())}
 function popup(title,body,rewards=[],cb=()=>render()){let m=$("modal");m.innerHTML=`<div class="modalWrap"><div class="modalCard"><h2>${title}</h2><p>${body}</p><h3>Outcome</h3>${rewards.map(r=>`<div class="reward"><span>${r.icon||"⭐"}</span><span>${r.text}</span><b></b></div>`).join("")||"<p class='small'>No reward.</p>"}<button class="primary" id="cont">Continue</button></div></div>`;document.getElementById("cont").onclick=()=>{m.innerHTML="";cb()}}
 function reward(title,body,items=[],free=false){items.forEach(x=>x.apply&&x.apply());if(!free)S.actionsLeft=Math.max(0,S.actionsLeft-1);S.log.unshift(body);if(Math.random()<.25)S.log.unshift("Bonus event: "+pick(["A stranger noticed your effort.","You heard a rumor nearby.","You found a small pouch of coins."]));save();popup(title,body,items)}
 function xp(n){S.exp+=n;if(S.exp>=100){S.level++;S.exp-=100;let u=levelUnlock(S.level);S.log.unshift(`Reached level ${S.level}. ${u}`);S.gems+=5;popup("Level Up",`You reached level ${S.level}.`,[{icon:"⭐",text:u},{icon:"💎",text:"+5 Gems"}],()=>render())}}
 function levelUnlock(l){if(l===5)return"Unlocked: nearby travel, street events, rumors.";if(l===10)return"Unlocked: arena, fruit searching, Haki basics.";if(l===15)return"Unlocked: crews, Marines, ship ownership.";if(l===25)return"Unlocked: Grand Line, recruiting, underworld.";if(l===40)return"Unlocked: territory and legendary events.";return"Your reputation grows."}
-function topbar(){return `<div class="topbar"><div class="title">☠️ Great Pirate Life Sim <span class="ver">v12.0</span></div><div class="topStats"><span>฿ <b>${fmt(S.beli)}</b></span><span>💎 <b>${S.gems}</b></span><span>🗽 <b>${S.fame}</b></span><button onclick="save();alert('Saved')">Save</button></div></div>`}
+function topbar(){return `<div class="topbar"><div class="title">☠️ Great Pirate Life Sim <span class="ver">v14.1</span></div><div class="topStats"><span>฿ <b>${fmt(S.beli)}</b></span><span>💎 <b>${S.gems}</b></span><span>🗽 <b>${S.fame}</b></span><button onclick="save();alert('Saved')">Save</button></div></div>`}
 function nav(){return `<div class="nav">${[["dashboard","🏠 Dashboard"],["actions","⚔️ Actions"],["crew","☠️ Crew"],["world","🌎 World"],["inventory","🎒 Inventory"],["logbook","📖 Logbook"],["relationships","❤️ Relationships"],["settings","⚙️ Settings"]].map(t=>`<button class="${page===t[0]?'active':''}" onclick="page='${t[0]}';render()">${t[1]}</button>`).join("")}</div>`}
 function bar(l,v,m=100){return `<div class="line"><span>${l}</span><b>${Math.round(v)}/${m}</b></div><div class="meter"><i style="width:${clamp(v/m*100,0,100)}%"></i></div>`}
 function left(){return `<aside><div class="card"><h2>${S.name}</h2><div class="small">${S.race} · ${S.origin}</div><div class="portrait">🙂</div><div class="line"><span>Age</span><b>${S.age}</b></div><div class="line"><span>Island</span><b>${S.island}</b></div><div class="line"><span>Equipped</span><b>${S.equipped}</b></div></div><div class="card"><h3>Vitality</h3>${bar("HP",S.hp,S.maxHp)}${bar("Actions",S.actionsLeft,S.actionsMax)}${bar("Mood",S.mood)}${bar("EXP",S.exp,100)}</div><div class="card"><h3>Attributes</h3>${Object.entries(S.stats).slice(0,10).map(([k,v])=>`<div class="line"><span>${k}</span><b>${v}</b></div>`).join("")}</div></aside>`}
@@ -65,7 +65,7 @@ function render(){try{if(!S)return start();normalize();let main=page==="battle"?
 load();
 
 
-/* v12.0 Inventory Realism + Rarity Colors */
+/* v14.1 Inventory Realism + Rarity Colors */
 function rarityClass(r){return String(r||"Common").toLowerCase();}
 function rarityTag(r){let rr=r||"Common";return `<span class="rarityTag rarity-${rarityClass(rr)}">${rr}</span>`;}
 
@@ -74,7 +74,7 @@ function newLife(){
   if(o.cost>0)return alert("Origin locked. Earn gems.");
   if(r.cost>0)return alert("Race locked. Earn gems.");
   let home=chooseIsland(o);
-  S={version:"v12.0",name:document.getElementById("nm").value||"Rookie",nick:document.getElementById("nick").value||"",gender:document.getElementById("gender").value,origin:o.name,race:r.name,age:0,sea:home.sea,island:home.name,dream:"Undiscovered",title:"Infant",beli:0,gems:2,fame:0,bounty:0,infamy:0,hp:100,maxHp:100,mood:80,exp:0,level:1,actionsLeft:5,actionsMax:5,equipped:"None",stats:{strength:5,speed:5,stamina:5,defense:5,haki:0,devilFruit:0,intelligence:5,charisma:5,willpower:5,discipline:0,sneak:0,navigation:0,perception:0,crafting:0,medicine:0,sword:0,survival:0,swimming:0,engineering:0,luck:0,potential:0,reflex:0},reps:{marines:0,pirates:0,revolutionaries:0,underworld:0,civilians:0},crew:[],relationships:[],inventory:[],weapons:[],fruits:[],news:DATA.news.map((text,i)=>({text,day:i+1})),log:[],effects:[],settings:{difficulty:document.getElementById("diff").value},unlocks:{origins:[],races:[]}};
+  S={version:"v14.1",name:document.getElementById("nm").value||"Rookie",nick:document.getElementById("nick").value||"",gender:document.getElementById("gender").value,origin:o.name,race:r.name,age:0,sea:home.sea,island:home.name,dream:"Undiscovered",title:"Infant",beli:0,gems:2,fame:0,bounty:0,infamy:0,hp:100,maxHp:100,mood:80,exp:0,level:1,actionsLeft:5,actionsMax:5,equipped:"None",stats:{strength:5,speed:5,stamina:5,defense:5,haki:0,devilFruit:0,intelligence:5,charisma:5,willpower:5,discipline:0,sneak:0,navigation:0,perception:0,crafting:0,medicine:0,sword:0,survival:0,swimming:0,engineering:0,luck:0,potential:0,reflex:0},reps:{marines:0,pirates:0,revolutionaries:0,underworld:0,civilians:0},crew:[],relationships:[],inventory:[],weapons:[],fruits:[],news:DATA.news.map((text,i)=>({text,day:i+1})),log:[],effects:[],settings:{difficulty:document.getElementById("diff").value},unlocks:{origins:[],races:[]}};
   applyBonus(o.bonus);applyBonus(r.bonus);S.maxHp+=(r.bonus.hp||0);S.hp=S.maxHp;
   S.log.unshift(`Born in ${S.sea} at ${S.island}. Origin: ${o.name}. Race: ${r.name}.`);
   S.log.unshift("You begin life with nothing. Everything you own must be earned, gifted, bought, stolen, or discovered.");
@@ -128,7 +128,7 @@ ACTIONS.push(
 
 
 /* =========================
-   v12.0 Living World Update
+   v14.1 Living World Update
    ========================= */
 
 const WEATHER_V120 = ["Clear","Rain","Fog","Storm","Heat Wave","Calm Seas"];
@@ -344,7 +344,7 @@ function ageUp(){
 }
 
 /* Replace topbar for v12 */
-function topbar(){return `<div class="topbar"><div class="title">☠️ Great Pirate Life Sim <span class="ver">v12.0</span></div><div class="topStats"><span>฿ <b>${fmt(S.beli)}</b></span><span>💎 <b>${S.gems}</b></span><span>🏆 <b>${S.achievements?.length||0}</b></span><span>👑 <b>${S.activeTitle||"None"}</b></span><button onclick="save();alert('Saved')">Save</button></div></div>`}
+function topbar(){return `<div class="topbar"><div class="title">☠️ Great Pirate Life Sim <span class="ver">v14.1</span></div><div class="topStats"><span>฿ <b>${fmt(S.beli)}</b></span><span>💎 <b>${S.gems}</b></span><span>🏆 <b>${S.achievements?.length||0}</b></span><span>👑 <b>${S.activeTitle||"None"}</b></span><button onclick="save();alert('Saved')">Save</button></div></div>`}
 
 /* Replace right panel to show world state */
 function right(){
@@ -396,4 +396,336 @@ function logbook(){
 function settings(){
   ensureV120();
   return `<main><div class="card"><h2>Settings</h2><div class="line"><span>Difficulty</span><b>${S.settings.difficulty}</b></div><h3>Active Title</h3><select onchange="S.activeTitle=this.value;save();render()"><option ${S.activeTitle==="None"?"selected":""}>None</option>${S.titles.map(t=>`<option ${S.activeTitle===t?"selected":""}>${t}</option>`).join("")}</select><button onclick="save();alert('Saved')">Save Game</button><button class="danger" onclick="localStorage.removeItem(SAVE_KEY);S=null;start()">New Save</button></div></main>`;
+}
+
+
+/* =========================
+   v14.1 Stable Core Integration
+   Clean v13 Sea + v14 Factions without recursive oldFunction overrides.
+   ========================= */
+
+const FACTIONS_141 = [
+  {id:"marines",name:"Marines",icon:"🛡️",color:"controlMarine",desc:"Law, patrols, orders, arrests, and government influence."},
+  {id:"pirates",name:"Pirates",icon:"☠️",color:"controlPirate",desc:"Freedom, raids, treasure, bounties, and infamy."},
+  {id:"civilians",name:"Civilians",icon:"🏘️",color:"controlCivilian",desc:"Local people, merchants, families, and public trust."},
+  {id:"underworld",name:"Underworld",icon:"🕶️",color:"controlUnderworld",desc:"Smugglers, brokers, criminals, and black market deals."}
+];
+
+function ensureStable141(){
+  if(!S)return;
+  // v12 systems
+  S.personality=S.personality||{honor:0,aggression:0,greed:0,courage:0,discipline:0,kindness:0};
+  S.memories=S.memories||[];
+  S.achievements=S.achievements||[];
+  S.world=S.world||{year:0,weather:{},events:[],pirateHeat:2,marinePressure:2};
+  S.titles=S.titles||[];
+  S.activeTitle=S.activeTitle||"None";
+
+  // v13 systems
+  S.shipInventory=S.shipInventory||[];
+  S.shipLogs=S.shipLogs||[];
+  S.career=S.career||{type:"None",rank:"Civilian",rep:0};
+  if(S.ship && !S.ship.maxHull)S.ship.maxHull=S.ship.hull||40;
+
+  // v14 systems
+  S.factions=S.factions||{
+    marines:{rep:S.reps?.marines||0,rank:"Neutral"},
+    pirates:{rep:S.reps?.pirates||0,rank:"Neutral"},
+    civilians:{rep:S.reps?.civilians||0,rank:"Neutral"},
+    underworld:{rep:S.reps?.underworld||0,rank:"Neutral"}
+  };
+  S.territories=S.territories||{};
+  DATA.islands.forEach(i=>{
+    if(!S.world.weather[i.name])S.world.weather[i.name]=i.weather||"Clear";
+    if(!S.territories[i.name]){
+      S.territories[i.name]={
+        marines:i.marine||2,
+        pirates:i.pirate||2,
+        civilians:Math.max(1,10-(i.marine||2)-(i.pirate||2)),
+        underworld:Math.floor((i.danger||1)/2),
+        owner:"Contested",
+        stability:50
+      };
+      recalcTerritory141(i.name);
+    }
+  });
+  S.territoryLog=S.territoryLog||[];
+  updateFactionRanks141();
+}
+
+// Single non-recursive normalize
+function normalize(){
+  if(!S)return;
+  S.actionsMax=actionsMax();
+  if(S.actionsLeft==null || S.actionsLeft>S.actionsMax)S.actionsLeft=S.actionsMax;
+  ["crew","relationships","inventory","weapons","fruits","news","log","effects"].forEach(k=>S[k]=S[k]||[]);
+  S.gems=S.gems||0;
+  if(!S.equipped)S.equipped=(S.weapons&&S.weapons[0])?S.weapons[0].name:"None";
+  S.unlocks=S.unlocks||{origins:[],races:[]};
+  ensureStable141();
+}
+
+function factionRank141(rep){
+  if(rep>=50)return"Legendary Ally";
+  if(rep>=30)return"Trusted";
+  if(rep>=15)return"Known Ally";
+  if(rep>=5)return"Friendly";
+  if(rep<=-30)return"Enemy";
+  if(rep<=-10)return"Hostile";
+  return"Neutral";
+}
+function updateFactionRanks141(){
+  if(!S || !S.factions)return;
+  Object.keys(S.factions).forEach(k=>S.factions[k].rank=factionRank141(S.factions[k].rep||0));
+}
+function addFactionRep141(id,amount,reason=""){
+  ensureStable141();
+  S.factions[id].rep=(S.factions[id].rep||0)+amount;
+  S.factions[id].rank=factionRank141(S.factions[id].rep);
+  if(S.reps && S.reps[id]!==undefined)S.reps[id]+=amount;
+  if(reason)S.log.unshift(`${FACTIONS_141.find(f=>f.id===id)?.name||id} reputation ${amount>=0?"+":""}${amount}: ${reason}`);
+}
+function territoryOwner141(t){
+  let entries=[["Marines",t.marines],["Pirates",t.pirates],["Civilians",t.civilians],["Underworld",t.underworld]];
+  entries.sort((a,b)=>b[1]-a[1]);
+  if(entries[0][1]-entries[1][1]<2)return"Contested";
+  return entries[0][0];
+}
+function recalcTerritory141(name){
+  if(!S || !S.territories || !S.territories[name])return;
+  let t=S.territories[name];
+  t.marines=clamp(t.marines,0,10);
+  t.pirates=clamp(t.pirates,0,10);
+  t.civilians=clamp(t.civilians,0,10);
+  t.underworld=clamp(t.underworld,0,10);
+  t.owner=territoryOwner141(t);
+  t.stability=clamp(100-(Math.abs(t.marines-t.pirates)*4)-(t.underworld*4),0,100);
+}
+function influenceIsland141(name,delta,reason){
+  ensureStable141();
+  let t=S.territories[name];
+  Object.entries(delta).forEach(([k,v])=>t[k]+=v);
+  recalcTerritory141(name);
+  S.territoryLog.unshift({age:S.age,island:name,reason,owner:t.owner});
+  S.territoryLog=S.territoryLog.slice(0,30);
+}
+function controlBar141(t){
+  let total=Math.max(1,t.marines+t.pirates+t.civilians+t.underworld);
+  return `<div class="controlBar"><span class="controlMarine" style="width:${t.marines/total*100}%"></span><span class="controlPirate" style="width:${t.pirates/total*100}%"></span><span class="controlCivilian" style="width:${t.civilians/total*100}%"></span><span class="controlUnderworld" style="width:${t.underworld/total*100}%"></span></div>`;
+}
+
+// Single nav including factions
+function nav(){
+  return `<div class="nav">${[
+    ["dashboard","🏠 Dashboard"],["actions","⚔️ Actions"],["crew","☠️ Crew"],["world","🌎 World"],["inventory","🎒 Inventory"],["logbook","📖 Logbook"],["relationships","❤️ Relationships"],["factions","🏴 Factions"],["settings","⚙️ Settings"]
+  ].map(t=>`<button class="${page===t[0]?'active':''}" onclick="page='${t[0]}';render()">${t[1]}</button>`).join("")}</div>`;
+}
+
+function topbar(){
+  ensureStable141();
+  return `<div class="topbar"><div class="title">☠️ Great Pirate Life Sim <span class="ver">v14.1</span></div><div class="topStats"><span>฿ <b>${fmt(S.beli)}</b></span><span>💎 <b>${S.gems}</b></span><span>🏆 <b>${S.achievements?.length||0}</b></span><span>👑 <b>${S.activeTitle||"None"}</b></span><button onclick="save();alert('Saved')">Save</button></div></div>`;
+}
+
+// Stable dashboard, no oldDashboard recursion
+function dashboard(){
+  ensureStable141();
+  let p=progress();
+  return `<main>
+    <div class="card heroDream"><h3>⭐ Dream</h3><h2>“${S.dream}”</h2><p>${S.dream==="Undiscovered"?"Your dream awakens through life choices.":"Your life is bending toward this dream."}</p><div class="line"><span>Overall Power</span><b>${fmt(power())} · Rank ${rank(power())}</b></div><div class="line"><span>Career</span><b>${S.career.type} · ${S.career.rank}</b></div><div>${S.titles.map(t=>`<span class="badge">${t}</span>`).join("")||"<span class='small'>No titles yet.</span>"}</div></div>
+
+    <div class="card"><h3>Progress Overview</h3><div class="grid grid5">${Object.entries(p).map(([k,v])=>`<div class="progressCard"><div class="circle">${Math.round(v.pct)}%</div><h4>${k}</h4><div>Rank: ${v.rank}</div></div>`).join("")}</div></div>
+
+    <div class="card"><h3>Sea Life</h3><div class="line"><span>Ship</span><b>${S.ship?S.ship.name:"None"}</b></div><div class="line"><span>Ship Rank</span><b>${S.ship?S.ship.rarity:"None"}</b></div><div class="line"><span>Career Reputation</span><b>${S.career.rep}</b></div></div>
+
+    ${S.ship?shipPanel141():""}
+
+    <div class="card"><h3>Faction Standing</h3>${FACTIONS_141.map(f=>`<div class="line"><span>${f.icon} ${f.name}</span><b>${S.factions[f.id].rep} · ${S.factions[f.id].rank}</b></div>`).join("")}</div>
+
+    <div class="card"><h3>Personality</h3><div class="personalityGrid">${Object.entries(S.personality).map(([k,v])=>`<div class="line"><span>${k}</span><b>${v}</b></div>`).join("")}</div></div>
+
+    <div class="card"><h3>Recent Events</h3>${S.log.slice(0,6).map(l=>`<div class="event"><span>${l}</span><b>Age ${S.age}</b></div>`).join("")}</div>
+  </main>`;
+}
+
+function shipPanel141(){
+  return `<div class="card shipCard2"><h3>Your Ship</h3><div class="shipStat"><span>Name</span><b>${S.ship.name}</b></div><div class="shipStat"><span>Rarity</span><b>${S.ship.rarity}</b></div><div class="shipStat"><span>Hull</span><b>${S.ship.hull}/${S.ship.maxHull||S.ship.hull}</b></div><div class="shipStat"><span>Speed</span><b>${S.ship.speed}</b></div><div class="shipStat"><span>Storage</span><b>${S.ship.storage}</b></div><div class="shipStat"><span>Crew Capacity</span><b>${S.ship.crewCap}</b></div><div class="shipStat"><span>Cannons</span><b>${S.ship.cannons}</b></div><button onclick="repairShip141()">Repair Ship</button><button onclick="upgradeShip141()">Upgrade Ship</button><button onclick="renameShip141()">Rename Ship</button></div>`;
+}
+function repairShip141(){
+  if(!S.ship)return alert("No ship.");
+  if(S.beli<200)return alert("Need 200 Beli.");
+  S.beli-=200;
+  S.ship.hull=S.ship.maxHull||S.ship.hull;
+  popup("Ship Repaired","Your ship has been repaired.",[{icon:"🔧",text:"Hull fully restored"},{icon:"💰",text:"Beli -200"}],()=>render());
+}
+function upgradeShip141(){
+  if(!S.ship)return alert("No ship.");
+  if(S.beli<1000)return alert("Need 1000 Beli.");
+  S.beli-=1000;
+  S.ship.maxHull=(S.ship.maxHull||S.ship.hull)+20;
+  S.ship.hull=S.ship.maxHull;
+  S.ship.speed=(S.ship.speed||1)+1;
+  popup("Ship Upgraded","Your ship feels sturdier and faster.",[{icon:"⚓",text:"+20 Hull"},{icon:"💨",text:"+1 Speed"}],()=>render());
+}
+function renameShip141(){
+  if(!S.ship)return alert("No ship.");
+  let nm=prompt("Ship name?",S.ship.name);
+  if(!nm)return;
+  S.ship.name=nm;
+  popup("Ship Renamed",`Your vessel is now called "${nm}".`,[],()=>render());
+}
+
+function factionsScreen(){
+  ensureStable141();
+  updateFactionRanks141();
+  return `<main>
+    <div class="card"><h2>Factions</h2><p class="small">Factions react to your choices. Reputation unlocks risks, opportunities, titles, and control.</p>
+    ${FACTIONS_141.map(f=>`<div class="factionCard"><h3>${f.icon} ${f.name}</h3><p>${f.desc}</p><div class="factionLine"><span>Reputation</span><b>${S.factions[f.id].rep}</b></div><div class="factionLine"><span>Status</span><b>${S.factions[f.id].rank}</b></div><button onclick="factionWork141('${f.id}')">Work With ${f.name}</button></div>`).join("")}
+    </div>
+    <div class="card"><h2>Territory Control</h2><div class="territoryGrid">
+    ${Object.entries(S.territories).map(([name,t])=>`<div class="territoryCard"><h3>${name}</h3>${controlBar141(t)}<div><span class="influenceTag">Owner: ${t.owner}</span><span class="influenceTag">Stability: ${Math.round(t.stability)}%</span></div><p class="small">Marines ${t.marines} · Pirates ${t.pirates} · Civilians ${t.civilians} · Underworld ${t.underworld}</p><button onclick="territoryAction141('${name}','help')">Help Locals</button><button onclick="territoryAction141('${name}','raid')">Raid Area</button><button onclick="territoryAction141('${name}','patrol')">Support Patrols</button><button onclick="territoryAction141('${name}','deal')">Underworld Deal</button></div>`).join("")}
+    </div></div>
+    <div class="card"><h2>Territory Log</h2>${S.territoryLog.slice(0,8).map(x=>`<div class="event"><span>${x.island}: ${x.reason}</span><b>${x.owner}</b></div>`).join("")||"<p>No territory changes yet.</p>"}</div>
+  </main>
+  <aside><div class="card"><h3>Integration Status</h3><div class="integrationNote">v13 sea systems and v14 faction systems are integrated into one stable render pipeline.</div></div></aside>`;
+}
+
+function factionWork141(id){
+  ensureStable141();
+  if(S.actionsLeft<=0)return alert("No actions left.");
+  const f=FACTIONS_141.find(x=>x.id===id);
+  if(id==="marines"){addFactionRep141("marines",2,"completed patrol work"); influenceIsland141(S.island,{marines:1,pirates:-1},"Marine patrol supported");}
+  if(id==="pirates"){addFactionRep141("pirates",2,"helped pirates"); S.bounty+=500; influenceIsland141(S.island,{pirates:1,marines:-1},"Pirate activity supported");}
+  if(id==="civilians"){addFactionRep141("civilians",2,"helped locals"); influenceIsland141(S.island,{civilians:1,underworld:-1},"Locals supported");}
+  if(id==="underworld"){addFactionRep141("underworld",2,"made a shady deal"); S.infamy+=1; influenceIsland141(S.island,{underworld:1,civilians:-1},"Underworld deal completed");}
+  reward(`${f.name} Work`,`You completed work for the ${f.name}.`,[{icon:f.icon,text:`${f.name} reputation +2`},{icon:"🌎",text:`${S.island} influence changed`}]);
+}
+function territoryAction141(name,type){
+  if(S.actionsLeft<=0)return alert("No actions left.");
+  let icon="🌎", text="Influence changed";
+  if(type==="help"){addFactionRep141("civilians",1,"helped locals"); influenceIsland141(name,{civilians:2,underworld:-1},"Helped locals"); icon="🏘️"; text="Civilian influence increased";}
+  if(type==="raid"){addFactionRep141("pirates",1,"raided territory"); S.bounty+=750; influenceIsland141(name,{pirates:2,civilians:-1,marines:-1},"Raid completed"); icon="☠️"; text="Pirate influence increased";}
+  if(type==="patrol"){addFactionRep141("marines",1,"supported patrols"); influenceIsland141(name,{marines:2,pirates:-1,underworld:-1},"Patrol supported"); icon="🛡️"; text="Marine influence increased";}
+  if(type==="deal"){addFactionRep141("underworld",1,"made underworld contact"); S.infamy+=1; influenceIsland141(name,{underworld:2,civilians:-1},"Underworld influence increased"); icon="🕶️"; text="Underworld influence increased";}
+  reward("Territory Action",`${text} in ${name}.`,[{icon,text},{icon:"🌎",text:`Owner now: ${S.territories[name].owner}`}]);
+}
+
+function seaTravelEvent141(){
+  if(!S.ship)return popup("No Ship","You need a ship before sea travel.",[],()=>render());
+  const events=[
+    {title:"Storm Ahead",text:"Dark clouds gather over the sea.",choices:[
+      {icon:"🌊",label:"Push Through",hint:"Hull damage, courage gain",title:"Storm",result:"You forced your way through the storm.",apply:()=>{S.ship.hull=clamp(S.ship.hull-10,0,S.ship.maxHull||40);S.stats.courage=(S.stats.courage||0)+1;},rewards:[{icon:"⚓",text:"Hull -10"},{icon:"🔥",text:"Courage +1"}]},
+      {icon:"⛵",label:"Avoid Storm",hint:"Navigation gain",title:"Safe Route",result:"You navigated around the worst of it.",apply:()=>{S.stats.navigation+=1;},rewards:[{icon:"🧭",text:"Navigation +1"}]}
+    ]},
+    {title:"Pirate Ship Spotted",text:"A hostile pirate vessel approaches.",choices:[
+      {icon:"⚔️",label:"Fight",hint:"Bounty and fame",title:"Naval Clash",result:"You survived a quick naval clash.",apply:()=>{S.fame+=2;S.bounty+=500;},rewards:[{icon:"☠️",text:"Bounty +500"},{icon:"⭐",text:"Fame +2"}]},
+      {icon:"🏃",label:"Flee",hint:"Hull damage",title:"Escaped",result:"You escaped, but the ship took damage.",apply:()=>{S.ship.hull=clamp(S.ship.hull-5,0,S.ship.maxHull||40);},rewards:[{icon:"⚓",text:"Hull -5"}]}
+    ]},
+    {title:"Floating Loot",text:"You discover drifting cargo at sea.",choices:[
+      {icon:"🎁",label:"Take Cargo",hint:"Beli and cargo",title:"Cargo Found",result:"You hauled cargo aboard.",apply:()=>{S.beli+=500;S.shipInventory.push("Trade Cargo");},rewards:[{icon:"💰",text:"Beli +500"},{icon:"📦",text:"Trade Cargo stored"}]},
+      {icon:"🚫",label:"Ignore",hint:"No risk",title:"Ignored Cargo",result:"You left the cargo behind.",rewards:[]}
+    ]}
+  ];
+  let ev=pick(events);
+  choicePopup(ev.title,ev.text,ev.choices);
+}
+
+function worldTick(){
+  ensureStable141();
+  DATA.islands.forEach(i=>{ if(Math.random()<0.35)S.world.weather[i.name]=pick(WEATHER_V120||["Clear","Rain","Fog","Storm"]); });
+  let island=pick(DATA.islands).name;
+  let event=pick(["marine","pirate","civilian","underworld"]);
+  if(event==="marine")influenceIsland141(island,{marines:1,pirates:-1},"Marine crackdown");
+  if(event==="pirate")influenceIsland141(island,{pirates:1,marines:-1},"Pirate crew activity");
+  if(event==="civilian")influenceIsland141(island,{civilians:1,underworld:-1},"Local rebuilding");
+  if(event==="underworld")influenceIsland141(island,{underworld:1,civilians:-1},"Underworld expansion");
+  let text=pick([`Marine patrols shifted near ${island}.`,`Pirate activity changed around ${island}.`,`Territory tensions rose in ${island}.`,`Rumors spread about faction movement near ${island}.`]);
+  S.world.events.unshift({age:S.age,text});
+  S.news.unshift({text,day:S.age});
+  S.news=S.news.slice(0,20);
+}
+
+// Single ageUp with v12+v13+v14
+function ageUp(){
+  ensureStable141();
+  let old=S.age;
+  S.age++;
+  S.actionsMax=actionsMax();
+  S.actionsLeft=S.actionsMax;
+  let g=1+Math.floor(Math.random()*3);
+  S.gems+=g;
+  worldTick();
+  let ev=randomEvent();
+  S.log.unshift(ev);
+  if(S.age===10&&S.dream==="Undiscovered")S.dream=pick(["Freedom","Become Pirate King","Justice","Knowledge","Riches","Strongest Swordsman"]);
+  if(S.age===13 && !S.ship){
+    S.ship={name:"Sea Wanderer",rarity:"Common",hull:40,maxHull:40,speed:3,storage:4,crewCap:2,cannons:0};
+    S.log.unshift("You gained access to a small ship: Sea Wanderer.");
+  }
+  save();
+  popup("Year Summary",`Age ${old} → ${S.age}. ${ev}`,[{icon:"💎",text:`Gems +${g}`},{icon:"📰",text:"World and territory updated"},{icon:"🌊",text:S.ship?`Ship: ${S.ship.name}`:"No ship yet"}],()=>render());
+}
+
+// Career join, nonrecursive
+function joinPath(type){
+  ensureStable141();
+  if(type==="pirate"){
+    S.title="Pirate Crew Member";S.reps.pirates+=5;S.career={type:"Pirate",rank:"Deckhand",rep:5};S.crewName=pick(["Crimson Tide Pirates","Black Fang Pirates","Storm Gull Pirates"]);addFactionRep141("pirates",5,"joined a pirate crew");
+    reward("Crew Joined",`You joined the ${S.crewName}.`,[{icon:"☠️",text:"Pirate Reputation +5"},{icon:"⚓",text:"Career: Deckhand"}]);
+  }else{
+    S.title="Marine Recruit";S.reps.marines+=5;S.career={type:"Marine",rank:"Recruit",rep:5};S.marineUnit="East Blue Patrol Squad 3";addFactionRep141("marines",5,"joined the Marines");
+    reward("Marine Enlistment",`You joined ${S.marineUnit}.`,[{icon:"🛡️",text:"Marine Reputation +5"},{icon:"🎖️",text:"Rank: Recruit"}]);
+  }
+}
+
+// Add v13/v14 actions only if not already present
+if(!ACTIONS.some(a=>a.id==="seatravel141")){
+  ACTIONS.push(
+    {id:"seatravel141",cat:"Exploration",icon:"🌊",name:"Sea Travel",desc:"Travel the sea and face naval events.",req:()=>S.ship!=null,txt:"Requires a ship.",do:()=>seaTravelEvent141()},
+    {id:"piratemission141",cat:"Crew / Career",icon:"☠️",name:"Pirate Raid",desc:"Grow pirate rank and bounty.",req:()=>S.career?.type==="Pirate",txt:"Must be a pirate.",do:()=>{S.career.rep+=2;S.bounty+=1000;if(S.career.rep>=10&&S.career.rank==="Deckhand")S.career.rank="Officer";addFactionRep141("pirates",2,"completed a raid");reward("Pirate Raid","Your raid increased your notoriety.",[{icon:"☠️",text:"Bounty +1000"},{icon:"⭐",text:"Pirate Reputation +2"}]);}},
+    {id:"marinemission141",cat:"Crew / Career",icon:"🛡️",name:"Marine Mission",desc:"Complete Marine assignments.",req:()=>S.career?.type==="Marine",txt:"Must be a Marine.",do:()=>{S.career.rep+=2;S.reps.marines+=2;if(S.career.rep>=10&&S.career.rank==="Recruit")S.career.rank="Seaman";addFactionRep141("marines",2,"completed a Marine mission");reward("Marine Mission","You completed a Marine assignment.",[{icon:"🛡️",text:"Marine Reputation +2"},{icon:"🎖️",text:`Rank: ${S.career.rank}`}]);}}
+  );
+}
+
+// Stable inventory includes ship cargo without wrapping oldInventory
+const baseInventory141 = inventory;
+function inventory(){
+  ensureStable141();
+  let base=baseInventory141();
+  let extra=`<div class="card"><h2>Ship Inventory</h2>${S.ship?`<div class="shipInventory">${S.shipInventory.length?S.shipInventory.map(i=>`<div class="shipSlot">${i}</div>`).join(""):"<p class='small'>No cargo stored.</p>"}</div>`:"<p>No ship owned.</p>"}</div>`;
+  return base.replace("</main>",extra+"</main>");
+}
+
+// Stable world page with territories
+const baseWorld141 = world;
+function world(){
+  ensureStable141();
+  selectedIsland=selectedIsland||island().id;
+  let si=DATA.islands.find(i=>i.id===selectedIsland)||island();
+  let t=S.territories[si.name];
+  let base=baseWorld141();
+  let territory=`<div class="card"><h2>Territory: ${si.name}</h2>${controlBar141(t)}<div class="line"><span>Owner</span><b>${t.owner}</b></div><div class="line"><span>Stability</span><b>${Math.round(t.stability)}%</b></div><p class="small">Marines ${t.marines} · Pirates ${t.pirates} · Civilians ${t.civilians} · Underworld ${t.underworld}</p></div>`;
+  return base.replace("</main>",territory+"</main>");
+}
+
+// Stable render, all pages included
+function render(){
+  try{
+    if(!S)return start();
+    normalize();
+    let main=page==="battle"?battleScreen()
+      :page==="dashboard"?dashboard()
+      :page==="actions"?actions()
+      :page==="crew"?crew()
+      :page==="world"?world()
+      :page==="inventory"?inventory()
+      :page==="logbook"?logbook()
+      :page==="relationships"?relationships()
+      :page==="factions"?factionsScreen()
+      :settings();
+    let full=page==="battle";
+    document.getElementById("app").innerHTML=topbar()+(!full?nav():"")+`<div class="layout">${full?main:left()+main+(page==="world"||page==="factions"?"":right())}</div>`+(!full?`<button class="bottomAge gold" onclick="ageUp()">⭐ AGE UP<br><span class="small">Next Year</span></button>`:"");
+  }catch(e){
+    document.getElementById("app").innerHTML=`<div class="startPanel" style="margin:60px auto;max-width:650px"><h2>Recovery</h2><p>${e.message}</p><button onclick="localStorage.removeItem(SAVE_KEY);S=null;start()">New Save</button></div>`;
+    console.error(e);
+  }
 }

@@ -28,3 +28,11 @@ Clean rebuild focused on stability and purpose.
 - Random event choice popups.
 - Early ship foundation unlocked at age 13.
 - World state panel for pirate heat and marine pressure.
+
+
+## v14.1 Stable Core Integration
+- Fixes maximum call stack / recursion crashes from stacked v13-v14 patches.
+- Integrates v13 Sea Life systems and v14 Faction/Territory systems into one stable render pipeline.
+- Adds ship management, sea travel, pirate raids, Marine missions.
+- Adds faction reputation, territory control, territory actions, and ownership.
+- Avoids recursive oldDashboard/oldInventory/oldRender override chains.
