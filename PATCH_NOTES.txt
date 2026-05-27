@@ -1,0 +1,28 @@
+v13.0 Sea Life Update
+
+Ships:
+- Hull
+- Speed
+- Storage
+- Crew Capacity
+- Cannons
+- Ship rarities
+
+Careers:
+Pirate:
+Deckhand -> Officer -> Captain
+
+Marine:
+Recruit -> Seaman -> Officer
+
+Sea Events:
+- Storms
+- Pirate attacks
+- Floating treasure
+- Marine inspections
+
+Gameplay:
+- Sea Travel action
+- Ship inventory
+- Repairs/upgrades
+- Dynamic naval decisions
